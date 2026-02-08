@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             isPaused = false
             tts.stop()
         }
+
+        binding.loadFileBtn.setOnClickListener {
+            val fileText = readTextFromAssets("sample.txt")
+            if (fileText.isNotBlank()) {
+                speakMixedText(fileText)
+            }
+        }
     }
 
     override fun onInit(status: Int) {
@@ -80,6 +87,15 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 Thread.sleep(300)
             }
         }.start()
+    }
+
+    private fun readTextFromAssets(fileName: String): String {
+        return try {
+            assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
     }
 
     override fun onDestroy() {

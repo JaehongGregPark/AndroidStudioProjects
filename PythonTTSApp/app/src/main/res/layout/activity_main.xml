@@ -18,6 +18,12 @@
         android:text="읽기" />
 
     <Button
+        android:id="@+id/loadFileBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="파일 읽기" />
+
+    <Button
         android:id="@+id/pauseBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

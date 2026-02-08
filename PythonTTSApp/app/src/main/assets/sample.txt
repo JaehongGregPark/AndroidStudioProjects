@@ -1,0 +1,95 @@
+자 이제 너는 [실무 중심 생성형 AI 마스터 클래스] 의 담당 교수야. 너는 AI 마스터이자 공학박사이며, 해당 분야 최고 권위자야. 
+
+교육생 선발을 할려고 해. 
+
+- 현재 130명이 지원을 한 상태이며, 선발할 인원은 70명이야. 
+- 클래스는  총 2개반으로 운영될 예정이야. 
+
+다음은 담당 매니저가 보내온 이메일이야. 확인하고 상황을 이해했으면, '예'라고 답해줘. 
+
+[이메일 내용] 
+
+대표님 안녕하세요
+한국SW산업협회 *** 입니다.
+
+ICT 이노베이션 스퀘어 사업 건으로 메일 송부드립니다.
+
+- 5/27(월) 부터 진행되는 실무 중심 생성형 AI 마스터 클래스(평일 야간)
+
+교육생 선발을 위해 평가를 요청드리려 합니다.
+
+첨부파일로 신청자 리스트와 교육생 선발 평가표를 보내드리니 확인 부탁드립니다.
+
+신청자 리스트 파일의 정보를 \ 기반으로,
+교육생 선발 평가표의 (실무 중심 생성형 AI 마스터클래스)에 교육생 선발 평가를 요청드립니다.
+
+- 실무 중싱 생성형 AI 마스터클래스: 선발 인원 70명, 예비명단 10명(2개반 운영)
+
+위와 같이 선발할 예정이니 참고 부탁드리겠습니다.
+
+
+1) 선발 평가표.pdf 업로드 (학습)
+지금 제공하는 파일은 [교육생 선발 평가표] 야. 이를 기반으로 선발을 할거야. 
+천천히 선발 평가 기준과 점수 등을 꼼꼼히 살펴보고 이해했으면, '예'라고 답해줘 
+
+2) 신청자 리스트.pdf (학습)
+이는 신청자 리스트야. 파일의 내용을 이해했으면 '예'라고 답해줘 
+
+
+오케이. 각 내용을 읽고 너가 각각 점수를 줄거야. 이해했지? 
+
+기본지식(관련학과) 유무 30점, 관련 경험 30점, 취창업의지 20점, 수업참여의지 20점이야. 
+지원자의 특성 등을 잘 읽고 지원자들을 순번으로 점수를 배정해줘. 
+
+- 다 점수를 배정했으면 EXCEL 파일형태로 다운 받을 수 있게 해줘  
+
+
+# Define functions to assign scores based on given criteria
+def assign_basic_knowledge_score(major_category):
+    if major_category == "공학계열":
+        return 30
+    elif major_category == "자연계열":
+        return 20
+    else:
+        return 10
+
+def assign_related_experience_score(it_level):
+    if it_level == "개발자 수준":
+        return 30
+    elif it_level == "보통":
+        return 20
+    else:
+        return 10
+
+def assign_entrepreneurship_intent_score(purpose):
+    if "개발역량확보" in purpose or "기초지식습득" in purpose:
+        return 20
+    elif "창업기회발굴" in purpose:
+        return 15
+    else:
+        return 10
+
+def assign_class_participation_intent_score(introduction):
+    if len(introduction) > 100:
+        return 20
+    elif 50 < len(introduction) <= 100:
+        return 15
+    else:
+        return 10
+
+# Apply scoring functions to each applicant
+applicant_data['기본지식(관련학과) 점수'] = applicant_data['Unnamed: 8'].apply(assign_basic_knowledge_score)
+applicant_data['관련 경험 점수'] = applicant_data['Unnamed: 10'].apply(assign_related_experience_score)
+applicant_data['취창업 의지 점수'] = applicant_data['Unnamed: 12'].apply(assign_entrepreneurship_intent_score)
+applicant_data['수업 참여 의지 점수'] = applicant_data['Unnamed: 14'].apply(assign_class_participation_intent_score)
+
+# Calculate total score
+applicant_data['총점'] = (applicant_data['기본지식(관련학과) 점수'] + applicant_data['관련 경험 점수'] +
+                          applicant_data['취창업 의지 점수'] + applicant_data['수업 참여 의지 점수'])
+
+# Save the updated applicant list with scores to an Excel file
+updated_applicant_list_path = "/mnt/data/Updated_Applicant_List_with_Scores.xlsx"
+applicant_data.to_excel(updated_applicant_list_path, index=False)
+
+updated_applicant_list_path
+
