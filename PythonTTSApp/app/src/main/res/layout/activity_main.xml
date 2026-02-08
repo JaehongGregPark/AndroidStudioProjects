@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/inputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine|textVisiblePassword"
-        android:textIsSelectable="true"
-        android:longClickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:hint="텍스트 입력" />
 
     <Button
         android:id="@+id/sendBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Python으로 보내기"/>
+        android:text="읽기" />
 
-    <TextView
-        android:id="@+id/resultText"
+    <Button
+        android:id="@+id/pauseBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:paddingTop="16dp"/>
+        android:text="일시정지" />
+
+    <Button
+        android:id="@+id/stopBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="정지" />
+
 </LinearLayout>
