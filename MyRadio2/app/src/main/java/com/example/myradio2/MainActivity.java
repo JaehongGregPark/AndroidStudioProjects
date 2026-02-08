@@ -26,7 +26,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,12 +103,23 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject obj = jsonArray.optJSONObject(i);
                             if (obj == null) continue;
 
+                            if (!isPlayable(obj)) continue; // ⭐⭐⭐ 핵심
+
                             String name = obj.optString("name");
                             String country = obj.optString("country");
                             String streamUrl = obj.optString("url_resolved");
 
                             if (streamUrl == null || streamUrl.isEmpty()) continue;
 
+                            String codec = obj.optString("codec");
+                            int bitrate = obj.optInt("bitrate", 0);
+
+                            if (bitrate <= 0) continue;
+
+                            // ExoPlayer 안정 조합
+                            if (!codec.equalsIgnoreCase("MP3")
+                                    && !codec.equalsIgnoreCase("AAC")
+                                    && !codec.equalsIgnoreCase("AAC+")) continue;
                             radioList.add(
                                     new RadioStation(name, country, streamUrl)
                             );
@@ -123,6 +133,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean isPlayable(JSONObject obj) {
+
+        String url = obj.optString("url_resolved");
+        String codec = obj.optString("codec");
+        int bitrate = obj.optInt("bitrate");
+
+        if (url == null || url.isEmpty()) return false;
+
+        // ExoPlayer 안정적인 코덱만
+        if (!codec.equalsIgnoreCase("MP3")
+                && !codec.equalsIgnoreCase("AAC")) {
+            return false;
+        }
+
+        // 너무 낮은 품질 제거 (끊김 방지)
+        if (bitrate > 0 && bitrate < 64) return false;
+
+        return true;
     }
 
     private void requestNotificationPermission() {

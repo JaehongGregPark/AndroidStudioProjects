@@ -11,10 +11,13 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+
 
 public class RadioService extends Service {
 
@@ -28,18 +31,20 @@ public class RadioService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        try {
-            player = new ExoPlayer.Builder(this).build();
+        startForeground(1, createNotification("초기화 중"));
 
-            startForeground(
-                    1,
-                    createNotification("초기화 중")
-            );
+        player = new ExoPlayer.Builder(this).build();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            stopSelf(); // 문제 생기면 즉시 종료
-        }
+        AudioAttributes audioAttributes =
+                new AudioAttributes.Builder()
+                        .setUsage(C.USAGE_MEDIA)
+                        .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                        .build();
+
+        player.setAudioAttributes(audioAttributes, true);
+
+
+
     }
 
     @Override
@@ -57,26 +62,20 @@ public class RadioService extends Service {
 
         if (player == null || url == null) return;
 
-        try {
-            DefaultHttpDataSource.Factory factory =
-                    new DefaultHttpDataSource.Factory()
-                            .setUserAgent("Mozilla/5.0");
+        android.util.Log.d("RADIO", "Play URL: " + url);
 
-            MediaSource mediaSource =
-                    new ProgressiveMediaSource.Factory(factory)
-                            .createMediaSource(MediaItem.fromUri(url));
+        DefaultHttpDataSource.Factory factory =
+                new DefaultHttpDataSource.Factory()
+                        .setUserAgent("Mozilla/5.0");
 
-            player.setMediaSource(mediaSource);
-            player.prepare();
-            player.play();
+        MediaSource mediaSource =
+                new ProgressiveMediaSource.Factory(factory)
+                        .createMediaSource(MediaItem.fromUri(url));
 
-            startForeground(1, createNotification("라디오 재생 중"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        player.setMediaSource(mediaSource);
+        player.prepare();
+        player.play();
     }
-
     private Notification createNotification(String text) {
 
         String channelId = "radio_channel";
