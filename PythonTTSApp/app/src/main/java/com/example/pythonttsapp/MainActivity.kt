@@ -3,10 +3,13 @@ package com.example.pythonttsapp
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.pythonttsapp.databinding.ActivityMainBinding
 import java.util.Locale
+
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
@@ -42,11 +45,15 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             tts.stop()
         }
 
-        binding.loadFileBtn.setOnClickListener {
-            val fileText = readTextFromAssets("sample.txt")
-            if (fileText.isNotBlank()) {
-                speakMixedText(fileText)
-            }
+       // binding.fileBtn.setOnClickListener {
+       //     val fileText = readTextFromAssets("sample.txt")
+       //     if (fileText.isNotBlank()) {
+       //         speakMixedText(fileText)
+       //     }
+       // }
+
+        binding.fileBtn.setOnClickListener {
+            filePickerLauncher.launch(arrayOf("text/plain"))
         }
     }
 
@@ -98,9 +105,32 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    private val filePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            uri?.let {
+                val text = readTextFromUri(it)
+                if (text.isNotBlank()) {
+                    speakMixedText(text)
+                }
+            }
+        }
+
+    private fun readTextFromUri(uri: Uri): String {
+        return try {
+            contentResolver.openInputStream(uri)?.bufferedReader().use {
+                it?.readText() ?: ""
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         tts.stop()
         tts.shutdown()
     }
+
+
 }

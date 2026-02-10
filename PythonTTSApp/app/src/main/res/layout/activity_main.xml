@@ -1,38 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/inputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="텍스트 입력" />
+        android:hint="텍스트 입력"
+        android:minHeight="120dp"
+        android:gravity="top"
+        android:inputType="textMultiLine"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/sendBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="읽기" />
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/round_play_arrow_24"
+        android:contentDescription="재생"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
 
-    <Button
-        android:id="@+id/loadFileBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="파일 읽기" />
-
-    <Button
+    <ImageButton
         android:id="@+id/pauseBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="일시정지" />
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/outline_auto_read_pause_24"
+        android:contentDescription="일시정지"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/stopBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="정지" />
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/outline_auto_read_pause_24"
+        android:contentDescription="정지"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
 
+    <ImageButton
+        android:id="@+id/fileBtn"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/outline_folder_open_24"
+        android:contentDescription="파일 선택"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
 </LinearLayout>
