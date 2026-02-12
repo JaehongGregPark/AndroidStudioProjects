@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =====================================================
+     Android Vector Drawable Icons
+     res/drawable/ 폴더에 각각 파일로 저장하세요
+     ===================================================== -->
+
+
+
+<!-- =====================================================
+     ⏸ 일시정지 아이콘 (ic_pause.xml)
+     ===================================================== -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#000000"
+        android:pathData="M6,19h4V5H6v14zm8,-14v14h4V5h-4z" />
+</vector>
+
