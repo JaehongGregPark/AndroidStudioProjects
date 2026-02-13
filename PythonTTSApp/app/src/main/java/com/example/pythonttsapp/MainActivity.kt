@@ -1,6 +1,32 @@
+package com.example.pythonttsapp
+
+/* =========================================================
+   MainActivity.kt
+   =========================================================
+
+   📌 기능 요약
+
+   1. TXT / PDF 파일 열기
+   2. 텍스트 미리보기 표시
+   3. 한국어 영어 혼합 TTS 재생
+   4. 문장 / 문단 읽기 모드
+   5. 현재 읽는 위치 하이라이트
+   6. 자동 스크롤
+   7. 문장 클릭하면 해당 위치부터 읽기
+   8. 재생 위치 자동 저장 (앱 꺼도 이어읽기)
+   9. 재생 속도 슬라이더
+   10. MP3 파일 저장 (PDF 포함)
+   11. 일시정지 / 정지
+
+========================================================= */
+
+
 /* =========================================================
    Android 기본 라이브러리
    ========================================================= */
+import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -9,21 +35,13 @@ import android.speech.tts.UtteranceProgressListener
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
-import android.graphics.Color
+import android.widget.SeekBar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import java.io.File
 import java.util.Locale
 
-/* =========================================================
-   AndroidX
-   ========================================================= */
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-
-/* =========================================================
-   Chaquopy Python
-   ========================================================= */
-import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
 
 /* =========================================================
    ViewBinding
@@ -31,78 +49,98 @@ import com.chaquo.python.android.AndroidPlatform
 import com.example.pythonttsapp.databinding.ActivityMainBinding
 
 
-/**
- * =========================================================
- * MainActivity
- * =========================================================
- *
- * 기능
- * 1. txt 파일 선택 후 미리보기
- * 2. 한국어 / 영어 혼합 TTS
- * 3. 현재 읽는 문장 하이라이트 표시
- * 4. 일시정지 / 정지
- * 5. MP3 파일 저장
- *
- */
+/* =========================================================
+   PDF 읽기 라이브러리
+   (build.gradle에 pdfbox-android 필요)
+   ========================================================= */
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.text.PDFTextStripper
+
+
+/* =========================================================
+   Chaquopy Python (언어 분리용)
+   ========================================================= */
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
+
+
+/* =========================================================
+   MainActivity
+   ========================================================= */
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
-    /* =========================================================
-       ViewBinding & 상태 변수
-       ========================================================= */
+    /* =====================================================
+       ViewBinding / TTS / 상태 변수
+       ===================================================== */
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var tts: TextToSpeech
 
+    private lateinit var prefs: SharedPreferences
+
+    private var loadedText = ""
+    private var readingUnits = listOf<String>()
+    private var currentIndex = 0
+
     private var isPaused = false
     private var isStopped = false
 
-    // 문장 리스트 (하이라이트용)
-    private var sentenceList = listOf<String>()
-    private var currentSentenceIndex = 0
+    private var speechRate = 1.0f
 
 
-    /* =========================================================
-       TXT 파일 선택 런처
-       ========================================================= */
+    /* =====================================================
+       읽기 모드
+       ===================================================== */
+    private val MODE_SENTENCE = 0
+    private val MODE_PARAGRAPH = 1
+    private var readMode = MODE_SENTENCE
+
+
+    /* =====================================================
+       파일 선택 런처
+       ===================================================== */
     private val openFileLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-            uri?.let {
-                val text = readTextFromUri(it)
-                binding.previewTextView.text = text
-            }
+            uri?.let { loadFile(it) }
         }
 
 
-    /* =========================================================
-       Lifecycle
-       ========================================================= */
+    /* =====================================================
+       Activity 시작
+       ===================================================== */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // TTS 초기화
         tts = TextToSpeech(this, this)
 
-        // Python 초기화
+        prefs = getSharedPreferences("tts_state", Context.MODE_PRIVATE)
+
+        restoreState()
+
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
 
-        /* ===========================
-           버튼 이벤트
-           =========================== */
+        initUI()
+    }
 
-        // 파일 선택
+
+    /* =====================================================
+       UI 이벤트 설정
+       ===================================================== */
+    private fun initUI() {
+
+        // 파일 열기
         binding.fileBtn.setOnClickListener {
-            openFileLauncher.launch(arrayOf("text/plain"))
+            openFileLauncher.launch(arrayOf("*/*"))
         }
 
-        // TTS 재생
+        // 재생
         binding.sendBtn.setOnClickListener {
-            val text = binding.previewTextView.text.toString()
-            if (text.isNotBlank()) speakMixedText(text)
+            startReading()
         }
 
         // 일시정지
@@ -113,111 +151,158 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         // 정지
         binding.stopBtn.setOnClickListener {
             isStopped = true
-            isPaused = false
             tts.stop()
         }
 
         // MP3 저장
         binding.saveMp3Btn.setOnClickListener {
-            val text = binding.previewTextView.text.toString()
-            if (text.isNotBlank()) saveTtsAsMp3(text)
+            saveMp3(loadedText)
+        }
+
+        // 재생 속도
+        binding.speedSeekBar.progress = (speechRate * 100).toInt()
+        binding.speedSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(sb: SeekBar?, v: Int, f: Boolean) {
+                speechRate = (v / 100f).coerceAtLeast(0.2f)
+                tts.setSpeechRate(speechRate)
+                prefs.edit().putFloat("rate", speechRate).apply()
+            }
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+        })
+
+        // 읽기 모드
+        binding.readModeSwitch.setOnCheckedChangeListener { _, checked ->
+            readMode = if (checked) MODE_PARAGRAPH else MODE_SENTENCE
+            prefs.edit().putInt("mode", readMode).apply()
+        }
+
+        // 문장 클릭 재생
+        binding.previewTextView.setOnClickListener {
+            detectClickedPosition()
         }
     }
 
 
-    /* =========================================================
-       TTS 초기화 완료
-       ========================================================= */
+    /* =====================================================
+       TTS 초기화
+       ===================================================== */
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            tts.language = Locale.US
-            tts.setSpeechRate(0.85f)
+            tts.language = Locale.KOREAN
+            tts.setSpeechRate(speechRate)
         }
     }
 
 
-    /* =========================================================
-       TTS 재생 (하이라이트 포함)
-       ========================================================= */
-    private fun speakMixedText(inputText: String) {
+    /* =====================================================
+       파일 로드 (TXT / PDF)
+       ===================================================== */
+    private fun loadFile(uri: Uri) {
+
+        loadedText = if (uri.toString().endsWith(".pdf"))
+            readPdf(uri)
+        else
+            readText(uri)
+
+        binding.previewTextView.text = loadedText
+        buildReadingUnits()
+    }
+
+
+    /* =====================================================
+       TXT 읽기
+       ===================================================== */
+    private fun readText(uri: Uri): String {
+        return contentResolver.openInputStream(uri)?.bufferedReader()?.readText() ?: ""
+    }
+
+
+    /* =====================================================
+       PDF 읽기
+       ===================================================== */
+    private fun readPdf(uri: Uri): String {
+
+        val input = contentResolver.openInputStream(uri)
+        val doc = PDDocument.load(input)
+        val text = PDFTextStripper().getText(doc)
+        doc.close()
+        return text
+    }
+
+
+    /* =====================================================
+       문장 / 문단 분리
+       ===================================================== */
+    private fun buildReadingUnits() {
+
+        readingUnits =
+            if (readMode == MODE_PARAGRAPH)
+                loadedText.split(Regex("\\n\\s*\\n"))
+            else
+                loadedText.split(Regex("(?<=[.!?])\\s+"))
+    }
+
+
+    /* =====================================================
+       읽기 시작
+       ===================================================== */
+    private fun startReading() {
 
         isStopped = false
         isPaused = false
 
-        // 문장 분리 (간단 분리)
-        sentenceList = inputText.split(Regex("(?<=[.!?])\\s+"))
-        currentSentenceIndex = 0
-
-        Thread {
-
-            val py = Python.getInstance()
-            val module = py.getModule("tts_utils")
-
-            val result = module.callAttr("split_korean_english", inputText)
-
-            var utteranceIndex = 0
-
-            for (item in result.asList()) {
-
-                if (isStopped) break
-                while (isPaused) Thread.sleep(100)
-
-                val lang = item.asList()[0].toString()
-                val text = item.asList()[1].toString()
-
-                val utteranceId = "utt_$utteranceIndex"
-
-                runOnUiThread {
-
-                    // 언어 설정
-                    if (lang == "ko") {
-                        tts.language = Locale.KOREAN
-                        tts.setSpeechRate(0.9f)
-                    } else {
-                        tts.language = Locale.US
-                        tts.setSpeechRate(0.8f)
-                    }
-
-                    // 진행 리스너 (하이라이트)
-                    tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-
-                        override fun onStart(id: String?) {
-                            runOnUiThread {
-                                highlightSentence(currentSentenceIndex)
-                                currentSentenceIndex++
-                            }
-                        }
-
-                        override fun onDone(id: String?) {}
-                        override fun onError(id: String?) {}
-                    })
-
-                    tts.speak(text, TextToSpeech.QUEUE_ADD, null, utteranceId)
-                }
-
-                utteranceIndex++
-                Thread.sleep(200)
-            }
-
-        }.start()
+        speakNext()
     }
 
 
-    /* =========================================================
-       문장 하이라이트 UI
-       ========================================================= */
-    private fun highlightSentence(index: Int) {
+    /* =====================================================
+       다음 단위 읽기
+       ===================================================== */
+    private fun speakNext() {
 
-        val fullText = binding.previewTextView.text.toString()
-        val spannable = SpannableString(fullText)
+        if (currentIndex >= readingUnits.size || isStopped) return
 
-        if (index >= sentenceList.size) return
+        if (isPaused) {
+            binding.previewTextView.postDelayed({ speakNext() }, 200)
+            return
+        }
 
-        val target = sentenceList[index]
-        val start = fullText.indexOf(target)
+        val text = readingUnits[currentIndex]
+
+        highlight(currentIndex)
+        autoScroll(currentIndex)
+
+        tts.setOnUtteranceProgressListener(object: UtteranceProgressListener(){
+
+            override fun onStart(id: String?) {}
+
+            override fun onDone(id: String?) {
+                runOnUiThread {
+                    currentIndex++
+                    savePosition()
+                    speakNext()
+                }
+            }
+
+            override fun onError(id: String?) {}
+        })
+
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utt")
+    }
+
+
+    /* =====================================================
+       하이라이트 표시
+       ===================================================== */
+    private fun highlight(index: Int) {
+
+        val span = SpannableString(loadedText)
+        val target = readingUnits[index]
+        val start = loadedText.indexOf(target)
 
         if (start >= 0) {
-            spannable.setSpan(
+            span.setSpan(
                 BackgroundColorSpan(Color.YELLOW),
                 start,
                 start + target.length,
@@ -225,52 +310,77 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             )
         }
 
-        binding.previewTextView.text = spannable
+        binding.previewTextView.text = span
     }
 
 
-    /* =========================================================
-       MP3 파일 저장
-       ========================================================= */
-    private fun saveTtsAsMp3(text: String) {
+    /* =====================================================
+       자동 스크롤
+       ===================================================== */
+    private fun autoScroll(index: Int) {
 
-        val file = File(
-            getExternalFilesDir(Environment.DIRECTORY_MUSIC),
-            "tts_output.mp3"
-        )
+        val text = readingUnits[index]
+        val pos = loadedText.indexOf(text)
 
-        tts.synthesizeToFile(
-            text,
-            null,
-            file,
-            "save_mp3"
-        )
-
-        binding.previewTextView.text =
-            "MP3 저장 완료:\n${file.absolutePath}"
-    }
-
-
-    /* =========================================================
-       TXT 파일 읽기
-       ========================================================= */
-    private fun readTextFromUri(uri: Uri): String {
-        return try {
-            contentResolver.openInputStream(uri)?.bufferedReader()?.use {
-                it.readText()
-            } ?: "파일을 읽을 수 없습니다"
-        } catch (e: Exception) {
-            "파일 읽기 오류: ${e.message}"
+        binding.previewTextView.post {
+            binding.previewTextView.layout?.let {
+                val line = it.getLineForOffset(pos)
+                binding.scrollView.smoothScrollTo(0, it.getLineTop(line))
+            }
         }
     }
 
 
-    /* =========================================================
+    /* =====================================================
+       클릭 위치 찾기
+       ===================================================== */
+    private fun detectClickedPosition() {
+
+        val layout = binding.previewTextView.layout ?: return
+        val line = layout.getLineForVertical(binding.previewTextView.scrollY)
+        val offset = layout.getOffsetForHorizontal(line, 0f)
+
+        for (i in readingUnits.indices) {
+            val start = loadedText.indexOf(readingUnits[i])
+            if (offset >= start) currentIndex = i
+        }
+
+        startReading()
+    }
+
+
+    /* =====================================================
+       MP3 저장
+       ===================================================== */
+    private fun saveMp3(text: String) {
+
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_MUSIC), "tts_audio.mp3")
+
+        tts.synthesizeToFile(text, null, file, "save")
+
+        Toast.makeText(this,"MP3 저장 완료",Toast.LENGTH_LONG).show()
+    }
+
+
+    /* =====================================================
+       재생 위치 저장 / 복원
+       ===================================================== */
+    private fun savePosition() {
+        prefs.edit().putInt("index", currentIndex).apply()
+    }
+
+    private fun restoreState() {
+        currentIndex = prefs.getInt("index", 0)
+        speechRate = prefs.getFloat("rate", 1.0f)
+        readMode = prefs.getInt("mode", MODE_SENTENCE)
+    }
+
+
+    /* =====================================================
        종료 처리
-       ========================================================= */
+       ===================================================== */
     override fun onDestroy() {
         super.onDestroy()
-        tts.stop()
         tts.shutdown()
     }
 }
