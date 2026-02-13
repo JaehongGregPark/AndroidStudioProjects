@@ -1,7 +1,7 @@
 package com.example.pythonttsapp
 
 /* =========================================================
-   MainActivity.kt
+   MainActivity_.kt
    =========================================================
 
    📌 앱 기능
@@ -67,7 +67,7 @@ import com.tom_roush.pdfbox.text.PDFTextStripper
 /* =========================================================
    MainActivity
    ========================================================= */
-class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class MainActivity_ : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     /* =====================================================
        기본 변수
