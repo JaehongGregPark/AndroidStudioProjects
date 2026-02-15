@@ -1,85 +1,86 @@
 package com.example.pythonttsmvvmapp.tts
 
-
 import android.content.Context
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * 앱 전역에서 사용하는 TTS 엔진 매니저
- *
- * 특징:
- * - Hilt를 통해 Singleton 으로 관리
- * - TTS 초기화 이전 speak 요청을 안전하게 큐에 저장
- * - 초기화 완료되면 자동으로 대기중인 문장을 재생
- * - ApplicationContext 사용으로 메모리 누수 방지
+ * 앱 전체에서 사용하는 TTS 엔진 관리자
  */
 @Singleton
 class TtsManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) : TextToSpeech.OnInitListener {
 
+    /** 실제 TTS 객체 */
     private var tts: TextToSpeech? = null
 
-    /** TTS 엔진 준비 여부 */
-    private var isReady = false
+    /** 준비 완료 여부 */
+    private var ready = false
 
-    /** 초기화 전에 들어온 발화 요청을 임시 저장 */
-    private val pendingQueue = mutableListOf<String>()
+    /** 현재 읽는 위치를 전달할 콜백 */
+    private var rangeListener: ((Int, Int) -> Unit)? = null
 
     init {
         tts = TextToSpeech(context, this)
+
+        /**
+         * 읽는 위치 변화 감지
+         */
+        tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+
+            override fun onStart(utteranceId: String?) {}
+            override fun onDone(utteranceId: String?) {}
+            override fun onError(utteranceId: String?) {}
+
+            override fun onRangeStart(
+                utteranceId: String?,
+                start: Int,
+                end: Int,
+                frame: Int
+            ) {
+                rangeListener?.invoke(start, end)
+            }
+        })
     }
 
-    /**
-     * TTS 엔진 초기화 완료 콜백
-     */
+    /** 초기화 완료 */
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            isReady = true
-
+            ready = true
             tts?.language = Locale.KOREAN
-
-            // 대기 중이던 요청 처리
-            pendingQueue.forEach {
-                tts?.speak(it, TextToSpeech.QUEUE_ADD, null, "tts")
-            }
-            pendingQueue.clear()
         }
     }
 
-    /**
-     * 음성 출력 요청
-     *
-     * 초기화 전이면 큐에 저장하고,
-     * 준비 완료되면 자동 실행됨.
-     */
+    /** 읽기 */
     fun speak(text: String) {
-        if (!isReady) {
-            pendingQueue.add(text)
-            return
-        }
-
+        if (!ready) return
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "tts")
     }
 
-    /**
-     * 현재 재생 중지
-     */
+    /** 일시정지 (stop 으로 처리) */
+    fun pause() {
+        tts?.stop()
+    }
+
+    /** 정지 */
     fun stop() {
         tts?.stop()
     }
 
-    /**
-     * TTS 리소스 해제
-     * (앱 완전 종료 시 필요하면 사용)
-     */
+    /** 종료 */
     fun shutdown() {
         tts?.shutdown()
         tts = null
-        isReady = false
+        ready = false
+    }
+
+    /** 범위 리스너 등록 */
+    fun setOnRangeChanged(listener: (Int, Int) -> Unit) {
+        rangeListener = listener
     }
 }

@@ -46,6 +46,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
+    implementation("androidx.activity:activity-compose:1.9.0")
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -60,5 +61,7 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.51.1")
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
 }
