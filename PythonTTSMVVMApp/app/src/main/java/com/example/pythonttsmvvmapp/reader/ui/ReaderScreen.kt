@@ -161,7 +161,7 @@ fun ReaderScreen(
             when (state) {
 
                 TtsState.Idle -> {
-                    Button(onClick = { viewModel.speak(context) }) {
+                    Button(onClick = { viewModel.speak() }) {
                         Text("재생")
                     }
                 }
@@ -173,7 +173,7 @@ fun ReaderScreen(
                 }
 
                 TtsState.Paused -> {
-                    Button(onClick = { viewModel.speak(context) }) {
+                    Button(onClick = { viewModel.speak() }) {
                         Text("다시재생")
                     }
                 }
