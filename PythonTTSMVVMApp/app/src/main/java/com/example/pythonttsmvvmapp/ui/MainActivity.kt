@@ -6,9 +6,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.example.pythonttsmvvmapp.reader.ui.ReaderScreen
 import com.example.pythonttsmvvmapp.service.TtsForegroundService
 import com.example.pythonttsmvvmapp.ui.theme.PythonTTSMVVMAppTheme
-import com.example.pythonttsmvvmapp.viewmodel.ReaderViewModel
+import com.example.pythonttsmvvmapp.reader.viewmodel.ReaderViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.pythonttsmvvmapp.util.SampleFileInitializer
 

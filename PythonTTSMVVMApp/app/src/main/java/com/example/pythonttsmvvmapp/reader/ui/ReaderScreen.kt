@@ -1,20 +1,32 @@
-package com.example.pythonttsmvvmapp.ui
+package com.example.pythonttsmvvmapp.reader.ui
 
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import com.example.pythonttsmvvmapp.reader.viewmodel.ReaderViewModel
 import com.example.pythonttsmvvmapp.tts.TtsState
-import com.example.pythonttsmvvmapp.viewmodel.ReaderViewModel
+import com.example.pythonttsmvvmapp.ui.FilePicker
 
 /**
  * 📖 책을 읽는 메인 화면
@@ -45,7 +57,7 @@ fun ReaderScreen(
     val fileName = viewModel.fileName.value
 
     Column(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .fillMaxSize()
             .statusBarsPadding()
             .padding(16.dp)
@@ -61,20 +73,20 @@ fun ReaderScreen(
             Text(
                 text = if (fileName.isBlank()) "파일 없음" else fileName,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.Companion.weight(1f)
             )
 
             // 최근 파일 화면으로 이동
             Text(
                 text = "최근파일",
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .clickable { openRecent() }
                     .padding(8.dp)
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.Companion.height(12.dp))
 
         // ==================================================
         // ⭐ 파일 선택 버튼
@@ -84,7 +96,7 @@ fun ReaderScreen(
             viewModel.openFile(context, uri)
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.Companion.height(20.dp))
 
         // ==================================================
         // ⭐ 본문 텍스트
@@ -94,7 +106,7 @@ fun ReaderScreen(
 
             // 파일이 아직 없을 때
             Box(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxWidth()
                     .weight(1f)
             ) {
@@ -109,7 +121,7 @@ fun ReaderScreen(
 
                 if (start >= 0 && end > start && end <= text.length) {
                     addStyle(
-                        SpanStyle(background = Color.Yellow),
+                        SpanStyle(background = Color.Companion.Yellow),
                         start,
                         end
                     )
@@ -118,13 +130,13 @@ fun ReaderScreen(
 
             Text(
                 text = annotated,
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
             )
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.Companion.height(16.dp))
 
         // ==================================================
         // ⭐ 상태 표시
@@ -138,7 +150,7 @@ fun ReaderScreen(
             }
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.Companion.height(12.dp))
 
         // ==================================================
         // ⭐ 재생 컨트롤 버튼
