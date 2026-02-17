@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# PDFBox
+-keep class com.tom_roush.** { *; }
+
+# Apache POI
+-keep class org.apache.poi.** { *; }
+-dontwarn org.apache.poi.**
+
+# ML Kit
+-keep class com.google.mlkit.** { *; }
