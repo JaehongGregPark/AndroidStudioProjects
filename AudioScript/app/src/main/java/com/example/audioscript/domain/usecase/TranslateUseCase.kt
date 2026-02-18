@@ -4,14 +4,25 @@ import com.example.audioscript.domain.repository.TextRepository
 import javax.inject.Inject
 
 /**
- * 번역 유즈케이스
+ * ===============================
+ * Domain Layer - UseCase
+ * ===============================
  *
- * - 추후 OpenAI API 등 외부 API 연결 시
- * - 이 레이어만 수정하면 됨
+ * ✔ 하나의 유즈케이스는 하나의 비즈니스 기능만 담당
+ * ✔ ViewModel은 Repository에 직접 접근하지 않음
+ * ✔ 테스트가 쉬워짐
+ *
+ * 역할:
+ *  - 번역 비즈니스 로직 수행
  */
 class TranslateUseCase @Inject constructor(
     private val repository: TextRepository
 ) {
+
+    /**
+     * operator invoke 사용 이유:
+     * translateUseCase(text) 형태로 호출 가능
+     */
     suspend operator fun invoke(text: String): String {
         return repository.translate(text)
     }

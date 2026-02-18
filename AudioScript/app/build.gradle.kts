@@ -55,33 +55,31 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.activity.compose)
+    // Compose
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.activity:activity-compose:1.9.0")
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.graphics)
-    implementation(libs.compose.tooling.preview)
-    implementation(libs.compose.material3)
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
 
-    debugImplementation(libs.compose.tooling)
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.51")
+    ksp("com.google.dagger:hilt-android-compiler:2.51")
 
-    implementation(libs.pdfbox.android)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    implementation(libs.mlkit.language.id)
-    implementation(libs.mlkit.translate)
+    // ML Kit Translation
+    implementation("com.google.mlkit:translate:17.0.2")
+    implementation("com.google.mlkit:language-id:17.0.4")
 
-    implementation(libs.coroutines.play.services)
+    // PDFBox Android
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
-    // 🔥 Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)   // 🔥 kapt → ksp 로 변경
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
-    // Compose + Hilt
-    implementation(libs.hilt.navigation.compose)
-
-    testImplementation("junit:junit:4.13.2")
+    // 🔥 반드시 추가
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 }

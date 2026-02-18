@@ -1,28 +1,35 @@
 package com.example.audioscript.domain.repository
 
-import android.net.Uri
-
 /**
- * Domain Layer Repository 인터페이스
+ * ===============================
+ * Domain Layer - Repository Interface
+ * ===============================
  *
- * - 데이터의 출처를 모른다.
- * - 무엇을 할 수 있는지만 정의한다.
- * - Data Layer가 이 인터페이스를 구현한다.
+ * ✔ Domain은 외부 구현(Data, Android, MLKit 등)을 모른다.
+ * ✔ 오직 '기능의 계약(Contract)'만 정의한다.
+ *
+ * Clean Architecture 규칙:
+ *  - Domain은 어떤 프레임워크에도 의존하지 않는다.
+ *  - 구현은 Data Layer에서 수행한다.
  */
 interface TextRepository {
 
     /**
-     * 외부 파일에서 텍스트를 읽는다.
+     * 초기 텍스트 로드
+     * (향후 DB / 파일 / 네트워크 등 확장 가능)
      */
-    suspend fun loadText(uri: Uri): String
+    suspend fun loadText(): String
 
     /**
      * 텍스트 번역
+     * 실제 구현은 MLKit 사용 (Data Layer)
      */
     suspend fun translate(text: String): String
 
     /**
      * 소설 생성
+     * 현재는 더미 로직
+     * 추후 AI API 연결 가능
      */
     suspend fun generateStory(
         title: String,
