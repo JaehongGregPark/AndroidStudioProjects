@@ -6,60 +6,87 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * 설정 패널
+ *
+ * 기능:
+ * ✔ TXT 저장
+ * ✔ PDF 저장
+ * ✔ TTS 속도 / 피치 조절
+ * ✔ 음성 출력
+ */
 @Composable
-fun SettingPanel(
-    title: String,
-    onTitleChange: (String) -> Unit,
-    isKorean: Boolean,
-    onLanguageChange: (Boolean) -> Unit,
-    onGenerateClick: () -> Unit
+fun SettingsPanel(
+    speechRate: Float,
+    pitch: Float,
+
+    onSpeechRateChange: (Float) -> Unit,
+    onPitchChange: (Float) -> Unit,
+
+    onSpeak: () -> Unit,
+    onExportPdf: () -> Unit,
+    onExportTxt: () -> Unit
 ) {
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+    Column {
+
+        // ===============================
+        // TXT 저장
+        // ===============================
+
+        Button(
+            onClick = onExportTxt,
+            modifier = Modifier.fillMaxWidth()
         ) {
-
-            Text(
-                text = "소설 생성 설정",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = title,
-                onValueChange = onTitleChange,
-                label = { Text("제목 입력") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("한국어")
-
-                Switch(
-                    checked = isKorean,
-                    onCheckedChange = onLanguageChange
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onGenerateClick,
-                enabled = title.isNotBlank(),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("소설 생성")
-            }
+            Text("📄 TXT 저장")
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // ===============================
+        // PDF 저장
+        // ===============================
+
+        Button(
+            onClick = onExportPdf,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("📄 PDF 저장")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // ===============================
+        // TTS 설정
+        // ===============================
+
+        Text("🔊 음성 속도: ${"%.2f".format(speechRate)}")
+
+        Slider(
+            value = speechRate,
+            onValueChange = onSpeechRateChange,
+            valueRange = 0.5f..2.0f
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text("🎵 음성 톤: ${"%.2f".format(pitch)}")
+
+        Slider(
+            value = pitch,
+            onValueChange = onPitchChange,
+            valueRange = 0.5f..2.0f
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Button(
+            onClick = onSpeak,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("🔊 읽기")
+        }
+
     }
+
 }
