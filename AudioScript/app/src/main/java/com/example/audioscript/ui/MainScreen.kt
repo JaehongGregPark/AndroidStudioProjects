@@ -13,32 +13,37 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.audioscript.viewmodel.MainViewModel
-
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun MainScreen(viewModel: MainViewModel = viewModel()) {
 
     val context = LocalContext.current
-    val text by viewModel.text.collectAsState()
+    val text by viewModel.text.collectAsState(initial = "")
     val scrollState = rememberScrollState()
+    val fileName by viewModel.fileName.collectAsState(initial = "")
+    val translatedText by viewModel.translatedText.collectAsState(initial = "")
 
-    // 📂 파일 선택 런처
-    val filePickerLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.OpenDocument()
-        ) { uri: Uri? ->
-            uri?.let {
-                viewModel.loadTextFromFile(
-                    context.contentResolver,
-                    it
-                )
-            }
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.loadFromUri(context, it)
         }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        if (fileName.isNotEmpty()) {
+            Text(
+                text = "파일: $fileName",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         Text(
             text = text,
@@ -48,42 +53,44 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                 .fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                viewModel.createSampleFileAndLoad(context)
-            }
-        ) {
-            Text("샘플 파일 생성")
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Button(onClick = { viewModel.createSampleTxt(context) }) {
+            Text("샘플 TXT 생성")
         }
 
-        Button(
-            onClick = {
-                viewModel.createSamplePdfAndLoad(context)
-            }
-        ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = { viewModel.createSamplePdf(context) }) {
             Text("샘플 PDF 생성")
         }
-        Button(
-            onClick = {
-                filePickerLauncher.launch(
-                    arrayOf("text/plain", "application/pdf")
-                )
-            }
-        ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = { viewModel.createFiveMinuteSamples(context) }) {
+            Text("5분 분량 10개 생성 (TXT+PDF)")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = { viewModel.checkStorySamples(context) }) {
+            Text("생성 파일 확인")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = {
+            launcher.launch(arrayOf("*/*"))
+        }) {
             Text("파일 불러오기")
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = { viewModel.speakOriginal() }) {
-            Text("원문 읽기")
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = { viewModel.translateText(context) },
+            enabled = text.isNotEmpty()
+        ) {
+            Text("번역 + TTS")
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = { viewModel.speakTranslated() }) {
-            Text("번역 읽기")
+        Button(onClick = { viewModel.speak(context) }) {
+            Text("읽기")
         }
     }
 }
