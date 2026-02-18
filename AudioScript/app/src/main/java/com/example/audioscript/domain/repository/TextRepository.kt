@@ -35,4 +35,12 @@ interface TextRepository {
         title: String,
         isKorean: Boolean
     ): String
+
+    /**
+     * TXT 파일 저장
+     */
+    suspend fun exportTxt(
+        fileName: String,
+        content: String
+    )
 }
