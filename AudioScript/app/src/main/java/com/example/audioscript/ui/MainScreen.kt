@@ -11,24 +11,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.audioscript.viewmodel.MainViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.audioscript.ui.SettingPanel
+
 @Composable
-fun MainScreen(viewModel: MainViewModel = viewModel()) {
+fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel()
+) {
 
     val context = LocalContext.current
     val text by viewModel.text.collectAsState(initial = "")
     val scrollState = rememberScrollState()
-    val fileName by viewModel.fileName.collectAsState(initial = "")
-    val translatedText by viewModel.translatedText.collectAsState(initial = "")
+
+    var storyTitle by remember { mutableStateOf("") }
+    var isKorean by remember { mutableStateOf(true) }
 
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let {
-            viewModel.loadFromUri(context, it)
+            viewModel.load(it)
         }
     }
 
@@ -37,14 +40,8 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        if (fileName.isNotEmpty()) {
-            Text(
-                text = "파일: $fileName",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
 
+        // 📄 텍스트 영역
         Text(
             text = text,
             modifier = Modifier
@@ -55,42 +52,36 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Button(onClick = { viewModel.createSampleTxt(context) }) {
-            Text("샘플 TXT 생성")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = { viewModel.createSamplePdf(context) }) {
-            Text("샘플 PDF 생성")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = { viewModel.createFiveMinuteSamples(context) }) {
-            Text("5분 분량 10개 생성 (TXT+PDF)")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = { viewModel.checkStorySamples(context) }) {
-            Text("생성 파일 확인")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            launcher.launch(arrayOf("*/*"))
-        }) {
+        // 📂 파일 불러오기
+        Button(
+            onClick = { launcher.launch(arrayOf("*/*")) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("파일 불러오기")
         }
 
-
         Spacer(modifier = Modifier.height(8.dp))
+
+        // 🌍 번역
         Button(
-            onClick = { viewModel.translateText(context) },
-            enabled = text.isNotEmpty()
+            onClick = { viewModel.translate() },
+            enabled = text.isNotEmpty(),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text("번역 + TTS")
+            Text("번역")
         }
-        Button(onClick = { viewModel.speak(context) }) {
-            Text("읽기")
-        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // ⚙ 설정 패널 호출
+        SettingPanel(
+            title = storyTitle,
+            onTitleChange = { storyTitle = it },
+            isKorean = isKorean,
+            onLanguageChange = { isKorean = it },
+            onGenerateClick = {
+                viewModel.generateStory(storyTitle, isKorean)
+            }
+        )
     }
 }
