@@ -5,9 +5,6 @@ import androidx.navigation.compose.*
 import com.example.scriptaudio.ui.main.MainScreen
 import com.example.scriptaudio.ui.settings.SettingsScreen
 
-/**
- * 앱 전체 Navigation 관리
- */
 @Composable
 fun NavGraph() {
 
@@ -16,14 +13,10 @@ fun NavGraph() {
     NavHost(
 
         navController = navController,
-
         startDestination = "main"
 
     ) {
 
-        /**
-         * 메인 화면
-         */
         composable("main") {
 
             MainScreen(
@@ -38,9 +31,6 @@ fun NavGraph() {
 
         }
 
-        /**
-         * 설정 화면
-         */
         composable("settings") {
 
             SettingsScreen(
