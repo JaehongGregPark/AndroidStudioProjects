@@ -2,14 +2,20 @@ package com.example.scriptaudio.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.scriptaudio.data.local.ScriptDao
-import com.example.scriptaudio.data.local.ScriptDatabase
+
+import com.example.scriptaudio.data.local.*
+
+import com.example.scriptaudio.tts.TTSManager
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -38,16 +44,37 @@ object AppModule {
 
 
     /**
-     * DAO 제공
+     * Repository 제공
      */
     @Provides
-    fun provideDao(
+    @Singleton
+    fun provideRepository(
 
         db: ScriptDatabase
 
-    ): ScriptDao {
+    ): ScriptRepository {
 
-        return db.scriptDao()
+        return ScriptRepositoryImpl(
+
+            db.scriptDao()
+
+        )
+
+    }
+
+
+    /**
+     * TTS 제공
+     */
+    @Provides
+    @Singleton
+    fun provideTTS(
+
+        @ApplicationContext context: Context
+
+    ): TTSManager {
+
+        return TTSManager(context)
 
     }
 

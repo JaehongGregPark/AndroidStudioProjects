@@ -1,24 +1,17 @@
 package com.example.scriptaudio.data.local
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
 /**
- * Repository
+ * Repository 인터페이스
  *
  * ViewModel → Repository → DAO
+ *
+ * 구조를 사용하면
+ *
+ * 유지보수 쉬워짐
+ *
  */
-@Singleton
-class ScriptRepository @Inject constructor(
+interface ScriptRepository {
 
-    private val dao: ScriptDao
-
-) {
-
-    suspend fun insert(script: ScriptEntity) {
-
-        dao.insert(script)
-
-    }
+    suspend fun insert(script: ScriptEntity)
 
 }
