@@ -3,63 +3,57 @@ package com.example.audioscript.ui
 /**
  * MainScreen.kt
  *
- * 메인 화면 (Compose UI)
+ * 추가 기능:
  *
- * 역할:
+ * ✔ 파일읽기 버튼
+ * ✔ 설정 버튼 (SettingsPanel 표시 / 숨김)
  *
- * ✔ 텍스트 입력 및 편집
- * ✔ 번역 기능
+ * 기존 기능:
+ *
+ * ✔ 텍스트 입력
+ * ✔ 번역
  * ✔ 소설 생성
- * ✔ SettingsPanel 호출
- *
- * SettingsPanel 에서 처리하는 기능:
  * ✔ TXT 저장
  * ✔ PDF 저장
- * ✔ TTS 속도 조절
- * ✔ TTS 피치 조절
- * ✔ 음성 출력
- *
- * 아키텍처:
- *
- * MainScreen
- *  ├ Text Input
- *  ├ Translate
- *  ├ Story Generate
- *  └ SettingsPanel
- *
- * ViewModel:
- * MainViewModel 사용 (Hilt DI)
+ * ✔ TTS
  */
+
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+
 import androidx.compose.material3.*
+
 import androidx.compose.runtime.*
+
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.example.audioscript.viewmodel.MainViewModel
 
-/**
- * 메인 화면 Composable
- */
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
+
 @Composable
 fun MainScreen(
 
-    /**
-     * Hilt 를 통해 ViewModel 주입
-     */
     viewModel: MainViewModel = hiltViewModel()
 
 ) {
 
+    val context = LocalContext.current
+
+
     /**
-     * ===============================
-     * ViewModel State
-     * ===============================
+     * ViewModel 상태
      */
 
     val text by viewModel.text.collectAsState()
@@ -69,37 +63,55 @@ fun MainScreen(
     val pitch by viewModel.pitch.collectAsState()
 
 
+
     /**
-     * ===============================
-     * Local UI State
-     * ===============================
+     * 로컬 상태
      */
 
-    var storyTitle by remember {
+    var storyTitle by remember { mutableStateOf("") }
 
-        mutableStateOf("")
+    var isKorean by remember { mutableStateOf(true) }
 
-    }
+    var showSettings by remember { mutableStateOf(false) }
 
-    var isKorean by remember {
-
-        mutableStateOf(true)
-
-    }
 
 
     /**
-     * Scroll State
+     * 파일 선택 Launcher
      */
 
-    val scrollState = rememberScrollState()
+    val fileLauncher =
+        rememberLauncherForActivityResult(
+
+            contract = ActivityResultContracts.GetContent()
+
+        ) { uri: Uri? ->
+
+            uri?.let {
+
+                val inputStream =
+                    context.contentResolver.openInputStream(it)
+
+                val reader =
+                    BufferedReader(
+                        InputStreamReader(inputStream)
+                    )
+
+                val fileText =
+                    reader.readText()
+
+                viewModel.updateText(fileText)
+
+            }
+
+        }
 
 
-    /**
-     * ===============================
-     * UI Layout
-     * ===============================
-     */
+
+    val scrollState =
+        rememberScrollState()
+
+
 
     Column(
 
@@ -111,9 +123,63 @@ fun MainScreen(
 
 
         /**
-         * ===============================
-         * 텍스트 입력 영역
-         * ===============================
+         * =========================
+         * 파일읽기 버튼
+         * =========================
+         */
+
+        Button(
+
+            onClick = {
+
+                fileLauncher.launch("*/*")
+
+            },
+
+            modifier = Modifier.fillMaxWidth()
+
+        ) {
+
+            Text("📂 파일읽기")
+
+        }
+
+
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+
+
+        /**
+         * =========================
+         * 설정 버튼
+         * =========================
+         */
+
+        Button(
+
+            onClick = {
+
+                showSettings = !showSettings
+
+            },
+
+            modifier = Modifier.fillMaxWidth()
+
+        ) {
+
+            Text("⚙ 설정")
+
+        }
+
+
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+
+
+        /**
+         * 텍스트 입력
          */
 
         OutlinedTextField(
@@ -140,14 +206,13 @@ fun MainScreen(
         )
 
 
+
         Spacer(modifier = Modifier.height(12.dp))
 
 
 
         /**
-         * ===============================
-         * 번역 버튼
-         * ===============================
+         * 번역
          */
 
         Button(
@@ -167,14 +232,13 @@ fun MainScreen(
         }
 
 
+
         Spacer(modifier = Modifier.height(12.dp))
 
 
 
         /**
-         * ===============================
-         * 소설 제목 입력
-         * ===============================
+         * 소설 생성
          */
 
         OutlinedTextField(
@@ -199,17 +263,12 @@ fun MainScreen(
 
 
 
-        /**
-         * ===============================
-         * 언어 선택 Switch
-         * ===============================
-         */
-
         Row(
 
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth(),
 
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement =
+                Arrangement.SpaceBetween
 
         ) {
 
@@ -230,12 +289,6 @@ fun MainScreen(
         }
 
 
-
-        /**
-         * ===============================
-         * 소설 생성 버튼
-         * ===============================
-         */
 
         Button(
 
@@ -265,58 +318,57 @@ fun MainScreen(
 
 
         /**
-         * ===============================
-         * Settings Panel
-         *
-         * TXT 저장
-         * PDF 저장
-         * TTS 설정
-         * 음성 출력
-         * ===============================
+         * =========================
+         * SettingsPanel
+         * =========================
          */
 
-        SettingsPanel(
+        if (showSettings) {
 
-            speechRate = speechRate,
+            SettingsPanel(
 
-            pitch = pitch,
+                speechRate = speechRate,
 
-
-            onSpeechRateChange = {
-
-                viewModel.setSpeechRate(it)
-
-            },
+                pitch = pitch,
 
 
-            onPitchChange = {
+                onSpeechRateChange = {
 
-                viewModel.setPitch(it)
+                    viewModel.setSpeechRate(it)
 
-            },
-
-
-            onSpeak = {
-
-                viewModel.speak()
-
-            },
+                },
 
 
-            onExportPdf = {
+                onPitchChange = {
 
-                viewModel.exportPdf("GeneratedStory")
+                    viewModel.setPitch(it)
 
-            },
+                },
 
 
-            onExportTxt = {
+                onSpeak = {
 
-                viewModel.exportTxt("GeneratedStory")
+                    viewModel.speak()
 
-            }
+                },
 
-        )
+
+                onExportPdf = {
+
+                    viewModel.exportPdf("GeneratedStory")
+
+                },
+
+
+                onExportTxt = {
+
+                    viewModel.exportTxt("GeneratedStory")
+
+                }
+
+            )
+
+        }
 
     }
 
