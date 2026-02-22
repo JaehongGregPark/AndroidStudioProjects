@@ -5,34 +5,60 @@ package com.example.audioscript.domain.repository
  * Domain Layer - Repository Interface
  * ===============================
  *
- * ✔ Domain은 외부 구현(Data, Android, MLKit 등)을 모른다.
- * ✔ 오직 '기능의 계약(Contract)'만 정의한다.
+ * ✔ Domain은 구현을 모른다.
+ * ✔ 기능 정의만 담당한다.
  *
- * Clean Architecture 규칙:
- *  - Domain은 어떤 프레임워크에도 의존하지 않는다.
- *  - 구현은 Data Layer에서 수행한다.
+ * 구현 위치:
+ * Data Layer → TextRepositoryImpl
  */
 interface TextRepository {
 
     /**
-     * 초기 텍스트 로드
-     * (향후 DB / 파일 / 네트워크 등 확장 가능)
+     * 앱 시작 시 텍스트 로드
+     *
+     * 향후 확장 가능:
+     * - Room DB
+     * - 내부 파일
+     * - 클라우드
      */
     suspend fun loadText(): String
 
+
     /**
      * 텍스트 번역
-     * 실제 구현은 MLKit 사용 (Data Layer)
+     *
+     * 구현:
+     * - MLKit
+     * - Google Translate API
      */
     suspend fun translate(text: String): String
 
+
     /**
      * 소설 생성
-     * 현재는 더미 로직
-     * 추후 AI API 연결 가능
+     *
+     * 향후 확장:
+     * - OpenAI
+     * - Gemini
      */
     suspend fun generateStory(
         title: String,
         isKorean: Boolean
     ): String
+
+
+    /**
+     * TXT 파일 저장 기능
+     *
+     * Clean Architecture 원칙:
+     * Domain은 파일 시스템을 모르지만
+     * 기능 정의는 가능하다.
+     */
+    suspend fun exportTxt(
+
+        fileName: String,
+
+        content: String
+
+    )
 }
