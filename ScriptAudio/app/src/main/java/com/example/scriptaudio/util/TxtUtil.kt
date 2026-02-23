@@ -26,5 +26,14 @@ object TxtUtil {
         ).writeText(text)
 
     }
+    fun write(
+        file: File,
+        content: String
+    ) {
+
+        file.writeText(content)
+
+    }
+
 
 }

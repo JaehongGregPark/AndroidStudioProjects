@@ -1,5 +1,7 @@
 package com.example.scriptaudio.viewmodel
 
+import android.app.Application
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
@@ -7,11 +9,16 @@ import com.example.scriptaudio.data.local.ScriptEntity
 import com.example.scriptaudio.data.local.ScriptRepository
 import com.example.scriptaudio.tts.TTSManager
 
+import com.example.scriptaudio.util.FileUtil
+import com.example.scriptaudio.util.TxtUtil
+import com.example.scriptaudio.util.PdfUtil
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
@@ -21,25 +28,28 @@ import javax.inject.Inject
  *
  * MainViewModel
  *
- * 앱의 핵심 로직 담당
+ * HiltViewModel 에서는
+ * getApplication() 사용하지 않고
  *
- * 기능:
- *
- * ✔ 텍스트 상태 관리
- * ✔ TTS 실행
- * ✔ TTS 속도 조절
- * ✔ TTS Pitch 조절
- * ✔ Room DB 저장
+ * Application 을 직접 주입 받아야 함
  *
  */
-
 @HiltViewModel
 class MainViewModel @Inject constructor(
+
+    /**
+     * Application Context
+     *
+     * ✔ getApplication 대신 사용
+     */
+    private val application: Application,
+
 
     /**
      * Room Repository
      */
     private val repository: ScriptRepository,
+
 
     /**
      * TTS Manager
@@ -47,6 +57,7 @@ class MainViewModel @Inject constructor(
     private val tts: TTSManager
 
 ) : ViewModel() {
+
 
 
     /**
@@ -77,9 +88,7 @@ class MainViewModel @Inject constructor(
 
 
     /**
-     *
      * 텍스트 변경
-     *
      */
     fun updateScript(text: String) {
 
@@ -90,9 +99,7 @@ class MainViewModel @Inject constructor(
 
 
     /**
-     *
      * 속도 변경
-     *
      */
     fun setSpeechRate(rate: Float) {
 
@@ -103,9 +110,7 @@ class MainViewModel @Inject constructor(
 
 
     /**
-     *
      * Pitch 변경
-     *
      */
     fun setPitch(value: Float) {
 
@@ -116,9 +121,7 @@ class MainViewModel @Inject constructor(
 
 
     /**
-     *
      * TTS 실행
-     *
      */
     fun speak() {
 
@@ -137,9 +140,7 @@ class MainViewModel @Inject constructor(
 
 
     /**
-     *
      * Room DB 저장
-     *
      */
     fun saveDB() {
 
@@ -158,5 +159,103 @@ class MainViewModel @Inject constructor(
         }
 
     }
+
+
+
+    /**
+     *
+     * 신규 소설 샘플 생성 함수
+     *
+     * 한국소설 3개
+     * 미국소설 2개
+     *
+     * txt + pdf 생성
+     *
+     */
+    fun createSampleNovels() {
+
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+
+
+            val novelList = listOf(
+
+                Pair(
+                    "한국소설_1_구름위의약속",
+                    "그녀는 구름 위에 앉아 있었다.\n서울의 밤은 조용했고, 그녀의 마음은 더 조용했다."
+                ),
+
+                Pair(
+                    "한국소설_2_시간의끝",
+                    "시간은 끝나지 않는다.\n우리가 끝날 뿐이다."
+                ),
+
+                Pair(
+                    "한국소설_3_달빛거리",
+                    "달빛이 거리를 비췄다.\n그의 그림자는 길게 늘어졌다."
+                ),
+
+                Pair(
+                    "미국소설_1_The_Last_Promise",
+                    "He stood alone in New York.\nThe city never cared."
+                ),
+
+                Pair(
+                    "미국소설_2_Silent_Road",
+                    "The road was silent.\nBut his mind was loud."
+                )
+
+            )
+
+
+
+            novelList.forEach {
+
+
+
+                val fileName = it.first
+
+                val content = it.second
+
+
+
+                /**
+                 * txt 생성
+                 */
+                val txtFile =
+                    FileUtil.createTxtFile(application, fileName)
+
+                TxtUtil.write(
+                    txtFile,
+                    content
+                )
+
+
+
+                /**
+                 * pdf 생성
+                 */
+                val pdfFile =
+                    FileUtil.createPdfFile(application, fileName)
+
+                PdfUtil.write(
+                    pdfFile,
+                    content
+                )
+
+
+
+            }
+
+
+
+        }
+
+
+
+    }
+
 
 }

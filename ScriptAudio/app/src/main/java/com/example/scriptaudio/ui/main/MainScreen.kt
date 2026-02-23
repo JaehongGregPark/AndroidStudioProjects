@@ -76,5 +76,30 @@ fun MainScreen(
         }
 
     }
+    /**
+     * 신규소설 생성 버튼
+     *
+     * 클릭 시
+     *
+     * txt 5개
+     * pdf 5개
+     *
+     * 총 10개 생성
+     */
+    Button(
 
+        onClick = {
+
+            /**
+             * ViewModel 함수 호출
+             */
+            viewModel.createSampleNovels()
+
+        }
+
+    ) {
+
+        Text("신규소설 생성")
+
+    }
 }
