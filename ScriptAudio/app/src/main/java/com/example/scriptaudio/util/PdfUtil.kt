@@ -1,75 +1,30 @@
 package com.example.scriptaudio.util
 
-import android.content.Context
+import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
+
 import java.io.File
 import java.io.FileOutputStream
+
+
 /**
- * PDF 저장 유틸
+ *
+ * PDF 유틸
  *
  */
 object PdfUtil {
 
-    fun save(
-
-        context: Context,
-
-        text: String
-
-    ) {
-
-        val doc = PdfDocument()
-
-        val page = doc.startPage(
-
-            PdfDocument.PageInfo.Builder(
-
-                300,
-                600,
-                1
-
-            ).create()
-
-        )
 
 
-        /**
-         * 텍스트 작성
-         */
-        page.canvas.drawText(
-
-            text,
-            10f,
-            25f,
-            android.graphics.Paint()
-
-        )
-
-
-        doc.finishPage(page)
-
-
-        doc.writeTo(
-
-            context.openFileOutput(
-
-                "script.pdf",
-
-                Context.MODE_PRIVATE
-
-            )
-
-        )
-
-        doc.close()
-
-    }
-
+    /**
+     * PDF 쓰기
+     */
     fun write(
         file: File,
         content: String
     ) {
-
 
         val document = PdfDocument()
 
@@ -86,6 +41,11 @@ object PdfUtil {
             document.startPage(pageInfo)
 
 
+        val paint = Paint()
+
+        paint.textSize = 12f
+
+
         page.canvas.drawText(
 
             content,
@@ -94,7 +54,7 @@ object PdfUtil {
 
             25f,
 
-            android.graphics.Paint()
+            paint
 
         )
 
@@ -111,6 +71,48 @@ object PdfUtil {
 
         document.close()
 
+    }
+
+
+
+
+    /**
+     * PDF 읽기
+     *
+     * 샘플용
+     */
+    fun read(
+        file: File
+    ): String {
+
+
+        val fd =
+            ParcelFileDescriptor.open(
+                file,
+                ParcelFileDescriptor.MODE_READ_ONLY
+            )
+
+
+        val renderer =
+            PdfRenderer(fd)
+
+
+        val page =
+            renderer.openPage(0)
+
+
+        val result =
+            "PDF 파일 열림: ${file.name}"
+
+
+        page.close()
+
+        renderer.close()
+
+        fd.close()
+
+
+        return result
 
     }
 

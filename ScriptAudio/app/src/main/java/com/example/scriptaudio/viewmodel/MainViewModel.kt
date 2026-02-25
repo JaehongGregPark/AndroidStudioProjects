@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+import java.io.File
 import javax.inject.Inject
 
 
@@ -209,17 +209,10 @@ class MainViewModel @Inject constructor(
 
             )
 
-
-
             novelList.forEach {
 
-
-
                 val fileName = it.first
-
                 val content = it.second
-
-
 
                 /**
                  * txt 생성
@@ -231,10 +224,7 @@ class MainViewModel @Inject constructor(
                     txtFile,
                     content
                 )
-
-
-
-                /**
+              /**
                  * pdf 생성
                  */
                 val pdfFile =
@@ -244,18 +234,41 @@ class MainViewModel @Inject constructor(
                     pdfFile,
                     content
                 )
+         }
+        }
+    }
+    /**
+     * 파일 내용 열기
+     *
+     * txt / pdf 모두 지원
+     */
+    fun openFile(file: File) {
 
+        viewModelScope.launch(Dispatchers.IO) {
 
+            val content = when {
+
+                file.extension.lowercase() == "txt" -> {
+
+                    TxtUtil.read(file)
+
+                }
+
+                file.extension.lowercase() == "pdf" -> {
+
+                    PdfUtil.read(file)
+
+                }
+
+                else -> ""
 
             }
 
 
+            _script.value = content
 
         }
 
-
-
     }
-
 
 }

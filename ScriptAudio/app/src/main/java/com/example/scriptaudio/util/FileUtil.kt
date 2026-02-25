@@ -128,6 +128,30 @@ object FileUtil {
         )
 
     }
+    /**
+     * ScriptAudio 폴더 파일 목록
+     */
+    fun getFileList(
+        context: Context
+    ): List<File> {
 
+        val dir =
+            File(
+                context.getExternalFilesDir(null),
+                "ScriptAudio"
+            )
+
+
+        if (!dir.exists()) {
+
+            dir.mkdirs()
+
+        }
+
+
+        return dir.listFiles()?.toList()
+            ?: emptyList()
+
+    }
 
 }

@@ -35,5 +35,15 @@ object TxtUtil {
 
     }
 
+    /**
+     * txt 파일 읽기
+     */
+    fun read(
+        file: File
+    ): String {
+
+        return file.readText()
+
+    }
 
 }
