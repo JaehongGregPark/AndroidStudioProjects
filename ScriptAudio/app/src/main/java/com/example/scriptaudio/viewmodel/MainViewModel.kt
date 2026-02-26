@@ -270,5 +270,45 @@ class MainViewModel @Inject constructor(
         }
 
     }
+    /**
+     * 파일 목록 상태
+     */
+    private val _fileList =
+        MutableStateFlow<List<File>>(emptyList())
 
+    val fileList: StateFlow<List<File>> =
+        _fileList
+
+
+
+    /**
+     * 파일 목록 로드
+     */
+    fun loadFiles() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            _fileList.value =
+                FileUtil.getFileList(application)
+
+        }
+
+    }
+
+
+
+    /**
+     * 파일 삭제
+     */
+    fun deleteFile(file: File) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            FileUtil.delete(file)
+
+            loadFiles()
+
+        }
+
+    }
 }

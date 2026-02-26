@@ -1,19 +1,16 @@
 package com.example.scriptaudio.ui.main
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
+import androidx.compose.material3.*
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
-import androidx.compose.ui.platform.LocalContext
 
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -22,9 +19,6 @@ import com.example.scriptaudio.viewmodel.MainViewModel
 import java.io.File
 
 
-/**
- * 메인 화면
- */
 @Composable
 fun MainScreen(
 
@@ -36,39 +30,18 @@ fun MainScreen(
 
     val script by viewModel.script.collectAsState()
 
-    val context = LocalContext.current
+    val fileList by viewModel.fileList.collectAsState()
 
 
 
     /**
-     *
-     * 파일 선택 런처
-     *
+     * 최초 실행시 파일 로드
      */
-    val filePickerLauncher = rememberLauncherForActivityResult(
+    LaunchedEffect(Unit) {
 
-        contract =
-            ActivityResultContracts.GetContent()
-
-    ) { uri: Uri? ->
-
-        uri ?: return@rememberLauncherForActivityResult
-
-
-        /**
-         * URI → File 변환
-         */
-        val file =
-            File(uri.path ?: return@rememberLauncherForActivityResult)
-
-
-        /**
-         * ViewModel 호출
-         */
-        viewModel.openFile(file)
+        viewModel.loadFiles()
 
     }
-
 
 
 
@@ -79,11 +52,6 @@ fun MainScreen(
     ) {
 
 
-        /**
-         *
-         * 텍스트 표시
-         *
-         */
         TextField(
 
             value = script,
@@ -94,7 +62,8 @@ fun MainScreen(
 
             },
 
-            modifier = Modifier.fillMaxWidth()
+            modifier =
+                Modifier.fillMaxWidth()
 
         )
 
@@ -104,9 +73,6 @@ fun MainScreen(
 
 
 
-        /**
-         * TTS 버튼
-         */
         Button(
 
             onClick = {
@@ -115,7 +81,8 @@ fun MainScreen(
 
             },
 
-            modifier = Modifier.fillMaxWidth()
+            modifier =
+                Modifier.fillMaxWidth()
 
         ) {
 
@@ -129,43 +96,18 @@ fun MainScreen(
 
 
 
-        /**
-         * 파일 열기 버튼
-         */
-        Button(
-
-            onClick = {
-
-                filePickerLauncher.launch("*/*")
-
-            },
-
-            modifier = Modifier.fillMaxWidth()
-
-        ) {
-
-            Text("파일 열기")
-
-        }
-
-
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-
-
-        /**
-         * 신규소설 생성
-         */
         Button(
 
             onClick = {
 
                 viewModel.createSampleNovels()
 
+                viewModel.loadFiles()
+
             },
 
-            modifier = Modifier.fillMaxWidth()
+            modifier =
+                Modifier.fillMaxWidth()
 
         ) {
 
@@ -175,26 +117,85 @@ fun MainScreen(
 
 
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
 
 
-        /**
-         * 설정 버튼
-         */
-        Button(
+        Text("파일 목록")
 
-            onClick = onSettingsClick,
 
-            modifier = Modifier.fillMaxWidth()
 
-        ) {
+        LazyColumn {
 
-            Text("설정")
+
+            items(fileList) { file ->
+
+                FileItem(
+                    file,
+                    viewModel
+                )
+
+            }
 
         }
 
 
+
+    }
+
+}
+
+
+
+@Composable
+fun FileItem(
+
+    file: File,
+
+    viewModel: MainViewModel
+
+) {
+
+    Row(
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+
+                viewModel.openFile(file)
+
+            }
+            .padding(10.dp),
+
+        horizontalArrangement =
+            Arrangement.SpaceBetween
+
+    ) {
+
+        Text(
+
+            file.name,
+
+            modifier =
+                Modifier.weight(1f)
+
+        )
+
+
+
+        Button(
+
+            onClick = {
+
+                viewModel.deleteFile(file)
+
+            }
+
+        ) {
+
+            Text("삭제")
+
+        }
 
     }
 
