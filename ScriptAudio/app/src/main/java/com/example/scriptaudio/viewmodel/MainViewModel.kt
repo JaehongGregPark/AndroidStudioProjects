@@ -22,7 +22,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import android.content.ContentResolver
+import android.net.Uri
 
+import kotlinx.coroutines.withContext
 
 /**
  *
@@ -311,4 +314,31 @@ class MainViewModel @Inject constructor(
         }
 
     }
+
+    /**
+     * SAF 기반 파일 열기 (완전 안전 버전)
+     */
+    fun openFileFromUri(
+        resolver: ContentResolver,
+        uri: Uri
+    ) {
+
+        viewModelScope.launch {
+
+            val content = withContext(Dispatchers.IO) {
+
+                resolver.openInputStream(uri)?.bufferedReader()?.use {
+
+                    it.readText()
+
+                } ?: ""
+
+            }
+
+            _script.value = content
+
+        }
+
+    }
+
 }
