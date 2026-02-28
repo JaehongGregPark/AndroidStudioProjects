@@ -26,6 +26,11 @@ import android.content.ContentResolver
 import android.net.Uri
 
 import kotlinx.coroutines.withContext
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.TranslatorOptions
+import com.google.mlkit.nl.translate.Translator
+import kotlinx.coroutines.tasks.await
 
 /**
  *
@@ -340,5 +345,166 @@ class MainViewModel @Inject constructor(
         }
 
     }
+    /**
+     * 번역 기능
+     *
+     * 한글 포함 → 영어
+     * 영어만 → 한글
+     */
+    fun translate_() {
 
+        viewModelScope.launch {
+
+            val originalText = script.value
+
+            val translated = withContext(Dispatchers.Default) {
+
+                if (containsKorean_(originalText)) {
+
+                    translateToEnglish_(originalText)
+
+                } else {
+
+                    translateToKorean_(originalText)
+
+                }
+
+            }
+
+            _script.value = translated
+
+        }
+
+    }
+
+
+
+    /**
+     * 한글 포함 여부 확인
+     */
+    private fun containsKorean_(text: String): Boolean {
+
+        val regex = Regex("[ㄱ-ㅎㅏ-ㅣ가-힣]")
+
+        return regex.containsMatchIn(text)
+
+    }
+
+
+
+    /**
+     * 한글 → 영어 (데모 번역)
+     */
+    private fun translateToEnglish_(text: String): String {
+
+        return text
+            .replace("안녕하세요", "Hello")
+            .replace("서울", "Seoul")
+            .replace("사랑", "Love")
+            .replace("시간", "Time")
+            .replace("달빛", "Moonlight")
+    }
+
+
+
+    /**
+     * 영어 → 한글 (데모 번역)
+     */
+    private fun translateToKorean_(text: String): String {
+
+        return text
+            .replace("Hello", "안녕하세요")
+            .replace("Seoul", "서울")
+            .replace("Love", "사랑")
+            .replace("Time", "시간")
+            .replace("Moonlight", "달빛")
+    }
+
+    /**
+     * 실제 ML Kit 번역
+     *
+     * 한글 ↔ 영어 자동 감지
+     */
+    fun translate() {
+
+        viewModelScope.launch(Dispatchers.IO) {   // 🔥 IO로 변경
+
+            val originalText = script.value
+
+            val sourceLang =
+                if (containsKorean(originalText))
+                    TranslateLanguage.KOREAN
+                else
+                    TranslateLanguage.ENGLISH
+
+            val targetLang =
+                if (sourceLang == TranslateLanguage.KOREAN)
+                    TranslateLanguage.ENGLISH
+                else
+                    TranslateLanguage.KOREAN
+
+
+            val options = TranslatorOptions.Builder()
+                .setSourceLanguage(sourceLang)
+                .setTargetLanguage(targetLang)
+                .build()
+
+            val translator = Translation.getClient(options)
+
+            try {
+
+                translator.downloadModelIfNeeded().await()
+
+                val result =
+                    translator.translate(originalText).await()
+
+                withContext(Dispatchers.Main) {
+                    _script.value = result   // 🔥 UI는 Main에서만
+                }
+
+            } catch (e: Exception) {
+
+                withContext(Dispatchers.Main) {
+                    _script.value = "번역 실패: ${e.message}"
+                }
+
+            } finally {
+
+                translator.close()
+
+            }
+
+        }
+
+    }
+
+
+
+    /**
+     * 한글 포함 여부 체크
+     */
+    private fun containsKorean(text: String): Boolean {
+
+        val regex = Regex("[ㄱ-ㅎㅏ-ㅣ가-힣]")
+        return regex.containsMatchIn(text)
+
+    }
+
+    fun preloadTranslationModel() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val options = TranslatorOptions.Builder()
+                .setSourceLanguage(TranslateLanguage.KOREAN)
+                .setTargetLanguage(TranslateLanguage.ENGLISH)
+                .build()
+
+            val translator = Translation.getClient(options)
+
+            translator.downloadModelIfNeeded().await()
+
+            translator.close()
+        }
+
+    }
 }

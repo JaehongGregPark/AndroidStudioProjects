@@ -67,6 +67,7 @@ fun MainScreen(
 
     LaunchedEffect(Unit) {
         viewModel.loadFiles()
+        viewModel.preloadTranslationModel()
     }
 
 
@@ -117,10 +118,19 @@ fun MainScreen(
             )
 
 
-
             Spacer(modifier = Modifier.height(10.dp))
 
+            Button(
+                onClick = {
+                    viewModel.translate()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("번역")
+            }
 
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             Button(
                 onClick = {
