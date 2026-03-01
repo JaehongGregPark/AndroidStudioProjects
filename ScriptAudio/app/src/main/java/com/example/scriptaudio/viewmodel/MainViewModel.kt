@@ -93,18 +93,33 @@ class MainViewModel @Inject constructor(
 
     val pitch: StateFlow<Float> = _pitch
 
+    /**
+     * 번역 로딩 상태
+     */
+    private val _isTranslating = MutableStateFlow(false)
+    val isTranslating: StateFlow<Boolean> = _isTranslating
+
+    /**
+     * 번역 전 텍스트
+     */
+    private val _originalText = MutableStateFlow("")
+    val originalText: StateFlow<String> = _originalText
+
+
+    /**
+     * 번역 후 텍스트
+     */
+    private val _translatedText = MutableStateFlow("")
+    val translatedText: StateFlow<String> = _translatedText
 
 
     /**
      * 텍스트 변경
      */
-    fun updateScript(text: String) {
-
-        _script.value = text
-
+      fun updateScript(text: String) {
+        //_script.value = text
+        _originalText.value = text
     }
-
-
 
     /**
      * 속도 변경
@@ -425,7 +440,7 @@ class MainViewModel @Inject constructor(
      *
      * 한글 ↔ 영어 자동 감지
      */
-    fun translate() {
+    fun translate__() {
 
         viewModelScope.launch(Dispatchers.IO) {   // 🔥 IO로 변경
 
@@ -478,7 +493,122 @@ class MainViewModel @Inject constructor(
 
     }
 
+    fun translate___() {
 
+        viewModelScope.launch(Dispatchers.IO) {
+
+            _isTranslating.value = true   // 🔥 로딩 시작
+
+            val originalText = script.value
+
+            val sourceLang =
+                if (containsKorean(originalText))
+                    TranslateLanguage.KOREAN
+                else
+                    TranslateLanguage.ENGLISH
+
+            val targetLang =
+                if (sourceLang == TranslateLanguage.KOREAN)
+                    TranslateLanguage.ENGLISH
+                else
+                    TranslateLanguage.KOREAN
+
+
+            val options = TranslatorOptions.Builder()
+                .setSourceLanguage(sourceLang)
+                .setTargetLanguage(targetLang)
+                .build()
+
+            val translator = Translation.getClient(options)
+
+            try {
+
+                translator.downloadModelIfNeeded().await()
+
+                val result =
+                    translator.translate(originalText).await()
+
+                withContext(Dispatchers.Main) {
+                    _script.value = result
+                }
+
+            } catch (e: Exception) {
+
+                withContext(Dispatchers.Main) {
+                    _script.value = "번역 실패: ${e.message}"
+                }
+
+            } finally {
+
+                translator.close()
+
+                withContext(Dispatchers.Main) {
+                    _isTranslating.value = false   // 🔥 로딩 종료
+                }
+
+            }
+
+        }
+
+    }
+
+    fun translate() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            _isTranslating.value = true
+
+            val original = originalText.value
+
+            val sourceLang =
+                if (containsKorean(original))
+                    TranslateLanguage.KOREAN
+                else
+                    TranslateLanguage.ENGLISH
+
+            val targetLang =
+                if (sourceLang == TranslateLanguage.KOREAN)
+                    TranslateLanguage.ENGLISH
+                else
+                    TranslateLanguage.KOREAN
+
+            val options = TranslatorOptions.Builder()
+                .setSourceLanguage(sourceLang)
+                .setTargetLanguage(targetLang)
+                .build()
+
+            val translator = Translation.getClient(options)
+
+            try {
+
+                translator.downloadModelIfNeeded().await()
+
+                val result =
+                    translator.translate(original).await()
+
+                withContext(Dispatchers.Main) {
+                    _translatedText.value = result
+                }
+
+            } catch (e: Exception) {
+
+                withContext(Dispatchers.Main) {
+                    _translatedText.value = "번역 실패: ${e.message}"
+                }
+
+            } finally {
+
+                translator.close()
+
+                withContext(Dispatchers.Main) {
+                    _isTranslating.value = false
+                }
+
+            }
+
+        }
+
+    }
 
     /**
      * 한글 포함 여부 체크

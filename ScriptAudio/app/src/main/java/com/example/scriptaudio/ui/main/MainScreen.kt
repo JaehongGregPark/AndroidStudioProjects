@@ -64,6 +64,9 @@ fun MainScreen(
         }
 
 
+    val originalText by viewModel.originalText.collectAsState()
+    val translatedText by viewModel.translatedText.collectAsState()
+    val isTranslating by viewModel.isTranslating.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadFiles()
@@ -109,24 +112,56 @@ fun MainScreen(
 
         ) {
 
+            Text("번역 전")
+
             TextField(
-                value = script,
+                value = originalText,
                 onValueChange = {
                     viewModel.updateScript(it)
                 },
                 modifier = Modifier.fillMaxWidth()
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("번역 후")
+
+            TextField(
+                value = translatedText,
+                onValueChange = {},
+                readOnly = true,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = {
-                    viewModel.translate()
-                },
+                onClick = { viewModel.translate() },
+                enabled = !isTranslating,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("번역")
+
+                if (isTranslating) {
+
+                    Row {
+
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text("번역 중...")
+
+                    }
+
+                } else {
+
+                    Text("번역")
+
+                }
+
             }
 
 
