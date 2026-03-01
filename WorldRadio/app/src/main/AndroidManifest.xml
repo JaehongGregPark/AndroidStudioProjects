@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.example.worldradio"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 인터넷 스트리밍 필수 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Foreground Service 필수 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- Android 13 이상 알림 권한 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".WorldRadioApp"
+        android:allowBackup="true"
+        android:theme="@style/Theme.WorldRadio"
+        android:usesCleartextTraffic="true"
+        android:supportsRtl="true">
+
+        <!-- ✅ 여기 반드시 MainActivity 여야 함 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".playback.RadioService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" />
+
+    </application>
+</manifest>
