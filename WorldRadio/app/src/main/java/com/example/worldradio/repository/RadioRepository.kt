@@ -21,4 +21,9 @@ class RadioRepository @Inject constructor(
     suspend fun getStations(): List<RadioStation> {
         return api.getTopStations()
     }
+
+
+    suspend fun getStations(country: String): List<RadioStation> {
+        return api.getStationsByCountry(country)
+    }
 }

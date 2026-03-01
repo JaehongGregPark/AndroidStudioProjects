@@ -30,4 +30,14 @@ class RadioViewModel @Inject constructor(
             }
         }
     }
+
+    fun searchStations(country: String) {
+        viewModelScope.launch {
+            try {
+                _stations.value = repository.getStations(country)
+            } catch (e: Exception) {
+                _stations.value = emptyList()
+            }
+        }
+    }
 }
