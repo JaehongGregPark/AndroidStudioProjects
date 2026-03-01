@@ -148,18 +148,16 @@ class MainViewModel @Inject constructor(
      */
     fun speak() {
 
+        val textToSpeak = originalText.value
+
+        if (textToSpeak.isBlank()) return
+
         tts.speak(
-
-            text = script.value,
-
+            text = textToSpeak,
             rate = speechRate.value,
-
             pitch = pitch.value
-
         )
-
     }
-
 
 
     /**
@@ -186,113 +184,131 @@ class MainViewModel @Inject constructor(
 
 
     /**
+     * 🔥 대용량 소설 자동 생성
      *
-     * 신규 소설 샘플 생성 함수
+     * ✔ 한국 10개
+     * ✔ 미국 10개
+     * ✔ txt + pdf 생성
+     * ✔ 약 50,000자 자동 확장
      *
-     * 한국소설 3개
-     * 미국소설 2개
-     *
-     * txt + pdf 생성
-     *
+     * ⚠ Settings 화면에서만 호출
      */
-    fun createSampleNovels() {
-
-
+    fun createLargeSampleNovels() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
+            val koreanTitles = (1..10).map {
+                "한국대작소설_$it"
+            }
 
+            val americanTitles = (1..10).map {
+                "American_Epic_Novel_$it"
+            }
 
-            val novelList = listOf(
+            koreanTitles.forEach { title ->
+                generateNovel(title, isKorean = true)
+            }
 
-                Pair(
-                    "한국소설_1_구름위의약속",
-                    "그녀는 구름 위에 앉아 있었다.\n서울의 밤은 조용했고, 그녀의 마음은 더 조용했다."
-                ),
-
-                Pair(
-                    "한국소설_2_시간의끝",
-                    "시간은 끝나지 않는다.\n우리가 끝날 뿐이다."
-                ),
-
-                Pair(
-                    "한국소설_3_달빛거리",
-                    "달빛이 거리를 비췄다.\n그의 그림자는 길게 늘어졌다."
-                ),
-
-                Pair(
-                    "미국소설_1_The_Last_Promise",
-                    "He stood alone in New York.\nThe city never cared."
-                ),
-
-                Pair(
-                    "미국소설_2_Silent_Road",
-                    "The road was silent.\nBut his mind was loud."
-                )
-
-            )
-
-            novelList.forEach {
-
-                val fileName = it.first
-                val content = it.second
-
-                /**
-                 * txt 생성
-                 */
-                val txtFile =
-                    FileUtil.createTxtFile(application, fileName)
-
-                TxtUtil.write(
-                    txtFile,
-                    content
-                )
-              /**
-                 * pdf 생성
-                 */
-                val pdfFile =
-                    FileUtil.createPdfFile(application, fileName)
-
-                PdfUtil.write(
-                    pdfFile,
-                    content
-                )
-         }
+            americanTitles.forEach { title ->
+                generateNovel(title, isKorean = false)
+            }
         }
     }
+
+    /**
+     * 소설 본문 자동 생성
+     */
+    private fun generateNovel(
+        title: String,
+        isKorean: Boolean
+    ) {
+
+        val content = buildLargeContent(isKorean)
+
+        // txt 생성
+        val txtFile =
+            FileUtil.createTxtFile(application, title)
+
+        TxtUtil.write(txtFile, content)
+
+        // pdf 생성
+        val pdfFile =
+            FileUtil.createPdfFile(application, title)
+
+        PdfUtil.write(pdfFile, content)
+    }
+
+    /**
+     * 🔥 50,000자 자동 생성기
+     */
+    private fun buildLargeContent(isKorean: Boolean): String {
+
+        val builder = StringBuilder()
+
+        val paragraph = if (isKorean) {
+            """
+        서울의 밤은 깊어가고 있었다.
+        바람은 차가웠고, 거리의 불빛은 흐릿했다.
+        그는 오래된 기억을 떠올리며 천천히 걸었다.
+        세상은 변했지만 그의 마음은 여전히 그 자리에 머물러 있었다.
+        
+        """.trimIndent()
+        } else {
+            """
+        The night in New York was heavy and silent.
+        The wind whispered through empty streets.
+        He walked slowly, remembering a past that refused to fade.
+        The world had changed, but his heart remained the same.
+        
+        """.trimIndent()
+        }
+
+        // 🔥 약 50,000자 되도록 반복 확장
+        while (builder.length < 50000) {
+            builder.append(paragraph)
+        }
+
+        return builder.toString()
+    }
+
     /**
      * 파일 내용 열기
      *
      * txt / pdf 모두 지원
+     *
+     * ✔ Application Context 사용
+     * ✔ PDFBox 기반 텍스트 추출
      */
     fun openFile(file: File) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val content = when {
+            val content = when (file.extension.lowercase()) {
 
-                file.extension.lowercase() == "txt" -> {
-
+                "txt" -> {
+                    // TXT 파일 읽기
                     TxtUtil.read(file)
-
                 }
 
-                file.extension.lowercase() == "pdf" -> {
-
-                    PdfUtil.read(file)
-
+                "pdf" -> {
+                    // 🔥 PDFBox 사용
+                    PdfUtil.extractTextFromPdf(
+                        application,   // ✔ Hilt로 주입된 Application 사용
+                        application.contentResolver,
+                        Uri.fromFile(file)
+                    )
                 }
 
                 else -> ""
-
             }
 
-
-            _script.value = content
-
+            // 🔥 UI 상태는 Main에서 변경
+            withContext(Dispatchers.Main) {
+                _originalText.value = content
+            }
         }
-
     }
+
     /**
      * 파일 목록 상태
      */
@@ -337,6 +353,9 @@ class MainViewModel @Inject constructor(
 
     /**
      * SAF 기반 파일 열기 (완전 안전 버전)
+     *
+     * ✔ txt
+     * ✔ pdf
      */
     fun openFileFromUri(
         resolver: ContentResolver,
@@ -347,52 +366,31 @@ class MainViewModel @Inject constructor(
 
             val content = withContext(Dispatchers.IO) {
 
-                resolver.openInputStream(uri)?.bufferedReader()?.use {
+                when {
 
-                    it.readText()
+                    uri.toString().endsWith(".pdf", true) -> {
 
-                } ?: ""
+                        // 🔥 PDFBox 사용
+                        PdfUtil.extractTextFromPdf(
+                            application,
+                            resolver,
+                            uri
+                        )
+                    }
 
-            }
-
-            _script.value = content
-
-        }
-
-    }
-    /**
-     * 번역 기능
-     *
-     * 한글 포함 → 영어
-     * 영어만 → 한글
-     */
-    fun translate_() {
-
-        viewModelScope.launch {
-
-            val originalText = script.value
-
-            val translated = withContext(Dispatchers.Default) {
-
-                if (containsKorean_(originalText)) {
-
-                    translateToEnglish_(originalText)
-
-                } else {
-
-                    translateToKorean_(originalText)
-
+                    else -> {
+                        // TXT 읽기
+                        resolver.openInputStream(uri)
+                            ?.bufferedReader()
+                            ?.use { it.readText() }
+                            ?: ""
+                    }
                 }
-
             }
 
-            _script.value = translated
-
+            _originalText.value = content
         }
-
     }
-
-
 
     /**
      * 한글 포함 여부 확인
@@ -406,151 +404,6 @@ class MainViewModel @Inject constructor(
     }
 
 
-
-    /**
-     * 한글 → 영어 (데모 번역)
-     */
-    private fun translateToEnglish_(text: String): String {
-
-        return text
-            .replace("안녕하세요", "Hello")
-            .replace("서울", "Seoul")
-            .replace("사랑", "Love")
-            .replace("시간", "Time")
-            .replace("달빛", "Moonlight")
-    }
-
-
-
-    /**
-     * 영어 → 한글 (데모 번역)
-     */
-    private fun translateToKorean_(text: String): String {
-
-        return text
-            .replace("Hello", "안녕하세요")
-            .replace("Seoul", "서울")
-            .replace("Love", "사랑")
-            .replace("Time", "시간")
-            .replace("Moonlight", "달빛")
-    }
-
-    /**
-     * 실제 ML Kit 번역
-     *
-     * 한글 ↔ 영어 자동 감지
-     */
-    fun translate__() {
-
-        viewModelScope.launch(Dispatchers.IO) {   // 🔥 IO로 변경
-
-            val originalText = script.value
-
-            val sourceLang =
-                if (containsKorean(originalText))
-                    TranslateLanguage.KOREAN
-                else
-                    TranslateLanguage.ENGLISH
-
-            val targetLang =
-                if (sourceLang == TranslateLanguage.KOREAN)
-                    TranslateLanguage.ENGLISH
-                else
-                    TranslateLanguage.KOREAN
-
-
-            val options = TranslatorOptions.Builder()
-                .setSourceLanguage(sourceLang)
-                .setTargetLanguage(targetLang)
-                .build()
-
-            val translator = Translation.getClient(options)
-
-            try {
-
-                translator.downloadModelIfNeeded().await()
-
-                val result =
-                    translator.translate(originalText).await()
-
-                withContext(Dispatchers.Main) {
-                    _script.value = result   // 🔥 UI는 Main에서만
-                }
-
-            } catch (e: Exception) {
-
-                withContext(Dispatchers.Main) {
-                    _script.value = "번역 실패: ${e.message}"
-                }
-
-            } finally {
-
-                translator.close()
-
-            }
-
-        }
-
-    }
-
-    fun translate___() {
-
-        viewModelScope.launch(Dispatchers.IO) {
-
-            _isTranslating.value = true   // 🔥 로딩 시작
-
-            val originalText = script.value
-
-            val sourceLang =
-                if (containsKorean(originalText))
-                    TranslateLanguage.KOREAN
-                else
-                    TranslateLanguage.ENGLISH
-
-            val targetLang =
-                if (sourceLang == TranslateLanguage.KOREAN)
-                    TranslateLanguage.ENGLISH
-                else
-                    TranslateLanguage.KOREAN
-
-
-            val options = TranslatorOptions.Builder()
-                .setSourceLanguage(sourceLang)
-                .setTargetLanguage(targetLang)
-                .build()
-
-            val translator = Translation.getClient(options)
-
-            try {
-
-                translator.downloadModelIfNeeded().await()
-
-                val result =
-                    translator.translate(originalText).await()
-
-                withContext(Dispatchers.Main) {
-                    _script.value = result
-                }
-
-            } catch (e: Exception) {
-
-                withContext(Dispatchers.Main) {
-                    _script.value = "번역 실패: ${e.message}"
-                }
-
-            } finally {
-
-                translator.close()
-
-                withContext(Dispatchers.Main) {
-                    _isTranslating.value = false   // 🔥 로딩 종료
-                }
-
-            }
-
-        }
-
-    }
 
     fun translate() {
 

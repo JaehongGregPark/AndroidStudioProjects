@@ -24,7 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scriptaudio.viewmodel.MainViewModel
 import androidx.compose.material3.ExperimentalMaterial3Api
 import java.io.File
-
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,24 +106,24 @@ fun MainScreen(
 
 
         Column(
-
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
-
         ) {
 
             Text("번역 전")
 
             TextField(
                 value = originalText,
-                onValueChange = {
-                    viewModel.updateScript(it)
-                },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { viewModel.updateScript(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                maxLines = Int.MAX_VALUE
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
 
             Text("번역 후")
 
@@ -130,7 +131,10 @@ fun MainScreen(
                 value = translatedText,
                 onValueChange = {},
                 readOnly = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                maxLines = Int.MAX_VALUE
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -140,55 +144,35 @@ fun MainScreen(
                 enabled = !isTranslating,
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 if (isTranslating) {
-
-                    Row {
-
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
                             strokeWidth = 2.dp
                         )
-
                         Spacer(modifier = Modifier.width(8.dp))
-
                         Text("번역 중...")
-
                     }
-
                 } else {
-
                     Text("번역")
-
                 }
-
             }
-
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = {
-                    viewModel.speak()
-                },
+                onClick = { viewModel.speak() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("TTS 읽기")
             }
 
-
-
             Spacer(modifier = Modifier.height(10.dp))
-
-
 
             Button(
                 onClick = {
                     filePickerLauncher.launch(
-                        arrayOf(
-                            "text/plain",
-                            "application/pdf"
-                        )
+                        arrayOf("text/plain", "application/pdf")
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -196,45 +180,22 @@ fun MainScreen(
                 Text("파일 불러오기")
             }
 
-
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-
-
-            Button(
-                onClick = {
-                    viewModel.createSampleNovels()
-                    viewModel.loadFiles()
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("신규소설 생성")
-            }
-
-
-
             Spacer(modifier = Modifier.height(20.dp))
-
-
 
             Text("파일 목록")
 
-
-
-            LazyColumn {
-
-                items(fileList) { file ->
-
-                    FileItem(
-                        file,
-                        viewModel
-                    )
-
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                items(
+                    items = fileList,
+                    key = { it.absolutePath }
+                ) { file ->
+                    FileItem(file, viewModel)
                 }
-
             }
-
         }
 
     }
@@ -280,5 +241,5 @@ fun FileItem(
         }
 
     }
-
 }
+

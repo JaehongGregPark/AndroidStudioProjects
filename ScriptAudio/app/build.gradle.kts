@@ -73,4 +73,6 @@ dependencies {
 
     //Google ML Kit 온디바이스 번역
     implementation("com.google.mlkit:translate:17.0.2")
+    //PdfBox-Android
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 }

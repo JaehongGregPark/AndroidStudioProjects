@@ -73,6 +73,17 @@ fun SettingsScreen(
 
         )
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = {
+                viewModel.createLargeSampleNovels()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("🔥 대용량 샘플 소설 생성 (20개)")
+        }
+
     }
 
 }
