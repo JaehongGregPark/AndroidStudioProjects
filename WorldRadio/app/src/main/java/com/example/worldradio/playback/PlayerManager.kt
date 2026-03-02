@@ -9,6 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.media3.common.MediaItem
 
+
 /**
  * ExoPlayer 관리 전담 클래스
  *
@@ -39,17 +40,27 @@ class PlayerManager @Inject constructor(
             }
             .build()
 
-    fun play(url: String) {
-        audioManager.requestAudioFocus(focusRequest)
 
+    fun play(url: String) {
         val mediaItem = MediaItem.fromUri(url)
         player.setMediaItem(mediaItem)
         player.prepare()
         player.play()
     }
 
+    fun pause() {
+        player.pause()
+    }
+
+    fun resume() {
+        player.play()
+    }
+
+    fun setVolume(volume: Float) {
+        player.volume = volume
+    }
+
     fun release() {
         player.release()
-        audioManager.abandonAudioFocusRequest(focusRequest)
     }
 }
