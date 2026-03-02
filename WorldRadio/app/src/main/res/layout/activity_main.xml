@@ -1,36 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 국가 입력 -->
-    <EditText
-        android:id="@+id/etCountry"
-        android:hint="Country (ex: korea)"
+    <!-- 메인 콘텐츠 영역 -->
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
-    <!-- 검색 버튼 -->
-    <Button
-        android:id="@+id/btnSearch"
-        android:text="Search"
+        <!-- 국가 입력 -->
+        <EditText
+            android:id="@+id/etCountry"
+            android:hint="Country (ex: korea)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- 검색 버튼 -->
+        <Button
+            android:id="@+id/btnSearch"
+            android:text="Search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- 방송 목록 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <!-- 🔥 하단 고정 미니 플레이어 -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        app:cardElevation="8dp">
 
-    <!-- 방송 목록 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="16dp">
 
+            <TextView
+                android:id="@+id/tvMiniTitle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"/>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
-</LinearLayout>
+            <ImageButton
+                android:id="@+id/btnPause"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_pause"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

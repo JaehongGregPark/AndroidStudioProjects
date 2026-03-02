@@ -1,7 +1,7 @@
 package com.example.worldradio.viewmodel
 
 import androidx.lifecycle.*
-import com.example.worldradio.repository.RadioRepository
+import com.example.worldradio.data.repository.RadioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

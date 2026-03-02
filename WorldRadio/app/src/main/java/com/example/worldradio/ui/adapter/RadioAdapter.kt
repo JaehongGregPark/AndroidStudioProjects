@@ -1,7 +1,9 @@
 package com.example.worldradio.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.worldradio.R
@@ -9,22 +11,27 @@ import com.example.worldradio.data.model.RadioStation
 import com.example.worldradio.databinding.ItemRadioBinding
 
 class RadioAdapter(
+    private val context: Context,
     private val onItemClick: (RadioStation) -> Unit
 ) : RecyclerView.Adapter<RadioAdapter.RadioViewHolder>() {
 
     private var stations: List<RadioStation> = emptyList()
-    private val favorites = mutableSetOf<String>() // ❤️ 즐겨찾기 저장
+
+    // 현재 재생 중 URL
+    private var currentlyPlayingUrl: String? = null
 
     inner class RadioViewHolder(
         val binding: ItemRadioBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RadioViewHolder {
+
         val binding = ItemRadioBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
+
         return RadioViewHolder(binding)
     }
 
@@ -35,40 +42,32 @@ class RadioAdapter(
         holder.binding.tvName.text = station.name
         holder.binding.tvCountry.text = station.country
 
-        // 🖼 로고 로딩
-        Glide.with(holder.itemView.context)
-            .load(station.favicon)   // API에 favicon 필드 있어야 함
+        // Glide로 로고 이미지 로딩
+        Glide.with(context)
+            .load(station.favicon)
             .placeholder(R.drawable.logo_bg)
             .into(holder.binding.ivLogo)
 
-        // ❤️ 즐겨찾기 상태 표시
-        val isFavorite = favorites.contains(station.url)
+        // 현재 재생 강조 효과
+        if (station.url == currentlyPlayingUrl) {
 
-        holder.binding.ivFavorite.setImageResource(
-            if (isFavorite) R.drawable.ic_favorite
-            else R.drawable.ic_favorite_border
-        )
+            holder.binding.root.strokeWidth = 4
+            holder.binding.root.strokeColor =
+                ContextCompat.getColor(context, R.color.purple_500)
 
-        // ❤️ 즐겨찾기 클릭
-        holder.binding.ivFavorite.setOnClickListener {
-
-            if (isFavorite) {
-                favorites.remove(station.url)
-            } else {
-                favorites.add(station.url)
-            }
-
-            notifyItemChanged(position)
+        } else {
+            holder.binding.root.strokeWidth = 0
         }
 
-        // 🔘 카드 클릭 애니메이션 포함
+        // 클릭 시 애니메이션
         holder.binding.root.setOnClickListener {
-            holder.binding.root.animate()
-                .scaleX(0.97f)
-                .scaleY(0.97f)
+
+            it.animate()
+                .scaleX(0.96f)
+                .scaleY(0.96f)
                 .setDuration(100)
                 .withEndAction {
-                    holder.binding.root.animate()
+                    it.animate()
                         .scaleX(1f)
                         .scaleY(1f)
                         .duration = 100
@@ -80,8 +79,13 @@ class RadioAdapter(
 
     override fun getItemCount(): Int = stations.size
 
-    fun submitList(newList: List<RadioStation>) {
-        stations = newList
+    fun submitList(list: List<RadioStation>) {
+        stations = list
+        notifyDataSetChanged()
+    }
+
+    fun setCurrentlyPlaying(url: String?) {
+        currentlyPlayingUrl = url
         notifyDataSetChanged()
     }
 }

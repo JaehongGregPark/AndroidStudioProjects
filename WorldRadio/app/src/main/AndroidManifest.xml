@@ -22,7 +22,7 @@
 
         <!-- ✅ 여기 반드시 MainActivity 여야 함 -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
 
             <intent-filter>
