@@ -21,16 +21,9 @@ class RadioViewModel @Inject constructor(
     private val _stations = MutableLiveData<List<RadioStation>>()
     val stations: LiveData<List<RadioStation>> = _stations
 
-    fun searchStations() {
-        viewModelScope.launch {
-            try {
-                _stations.value = repository.getStations()
-            } catch (e: Exception) {
-                _stations.value = emptyList()
-            }
-        }
-    }
-
+    /**
+     * 국가 검색
+     */
     fun searchStations(country: String) {
         viewModelScope.launch {
             try {
