@@ -5,18 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- ========================= -->
     <!-- 메인 콘텐츠 영역 -->
+    <!-- ========================= -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <!-- 국가 입력 -->
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/etCountry"
-            android:hint="Country (ex: korea)"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:hint="국가 입력"
+            android:completionThreshold="1"/>
 
         <!-- 검색 버튼 -->
         <Button
@@ -25,6 +28,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <!-- ========================= -->
+        <!-- 🔥 인기 국가 버튼 영역 -->
+        <!-- ========================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/btnKorea"
+                android:text="🇰🇷 Korea"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnUSA"
+                android:text="🇺🇸 USA"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnJapan"
+                android:text="🇯🇵 Japan"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
         <!-- 방송 목록 -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -32,6 +66,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
+        <!-- 로딩 프로그레스 -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -40,7 +75,9 @@
             android:visibility="gone"/>
     </LinearLayout>
 
+    <!-- ========================= -->
     <!-- 🔥 하단 고정 미니 플레이어 -->
+    <!-- ========================= -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
@@ -68,6 +105,7 @@
                 android:layout_height="40dp"
                 android:src="@drawable/ic_pause"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

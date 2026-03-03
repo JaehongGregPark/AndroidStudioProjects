@@ -2,52 +2,49 @@ package com.example.worldradio.data.repository
 
 import com.example.worldradio.data.model.RadioStation
 import com.example.worldradio.data.remote.RadioApi
+import com.example.worldradio.network.ServerManager
 import kotlinx.coroutines.delay
-import retrofit2.HttpException
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 /**
- * Repository 계층
- *
- * 역할:
- *  - 데이터 소스(API)와 ViewModel 사이 중간 계층
- *  - 네트워크 예외 처리
- *  - 재시도 로직 처리
+ * 서버 장애 대응 + 자동 Failover 적용 Repository
  */
 class RadioRepository @Inject constructor(
-    private val api: RadioApi
+    private val api: RadioApi,
+    private val client: OkHttpClient
 ) {
 
     /**
-     * 국가별 방송 검색
-     *
-     * repeat(3)
-     *  → 최대 3번 재시도
-     *
-     * 502 Bad Gateway 등 서버 일시 오류 대응
+     * CountryCode 방식 사용 (속도 최적화)
      */
-    suspend fun getStations_(country: String): List<RadioStation> {
+    suspend fun getStations(countryCode: String): List<RadioStation> {
 
-        repeat(3) { attempt ->
+        val servers = ServerManager.getShuffledServers()
+
+        servers.forEach { baseUrl ->
 
             try {
-                // API 호출
-                //return api.getStationsByCountry(country)
 
-            } catch (e: HttpException) {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
 
-                // 마지막 시도라면 예외 그대로 던짐
-                if (attempt == 2) throw e
+                val newApi =
+                    retrofit.create(RadioApi::class.java)
 
-                // 1초 대기 후 재시도
-                delay(1000)
+                return newApi
+                    .getStationsByCountryCode(countryCode)
+
+            } catch (e: Exception) {
+                delay(500) // 다음 서버 시도 전 짧은 대기
             }
         }
 
-        return emptyList()
-    }
-
-    suspend fun getStations(countryCode: String): List<RadioStation> {
-        return api.getStationsByCountryCode(countryCode)
+        throw Exception("모든 서버 요청 실패")
     }
 }
