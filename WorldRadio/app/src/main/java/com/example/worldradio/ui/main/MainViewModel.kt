@@ -8,6 +8,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * 메인 화면 ViewModel
+ *
+ * 역할:
+ * 1. 국가 입력값을 CountryCode(2자리)로 변환
+ * 2. Repository 호출
+ * 3. UI 상태 관리 (Loading / Success / Error)
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: RadioRepository
@@ -16,10 +24,13 @@ class MainViewModel @Inject constructor(
     private val _uiState =
         MutableLiveData<UiState<List<RadioStation>>>()
 
-    val uiState: LiveData<UiState<List<RadioStation>>> = _uiState
+    val uiState: LiveData<UiState<List<RadioStation>>> =
+        _uiState
 
     /**
-     * 국가 검색
+     * 🔍 국가 검색
+     *
+     * @param country 사용자가 입력한 국가명
      */
     fun searchStations(country: String) {
 
@@ -29,10 +40,13 @@ class MainViewModel @Inject constructor(
 
             try {
 
-                val formattedCountry = formatCountry(country)
+                // ✅ 반드시 2자리 코드로 변환
+                val countryCode =
+                    formatCountryToCode(country)
 
+                // ✅ Repository에는 코드만 전달
                 val result =
-                    repository.getStations(formattedCountry)
+                    repository.getStations(countryCode)
 
                 _uiState.value =
                     UiState.Success(result)
@@ -46,25 +60,43 @@ class MainViewModel @Inject constructor(
     }
 
     /**
-     * 국가명 변환
+     * 국가 이름 → ISO 2자리 CountryCode 변환
+     *
+     * 예:
+     * South Korea → KR
+     * japan → JP
+     * US → US
      */
-    private fun formatCountry(input: String): String {
+    private fun formatCountryToCode(input: String): String {
 
         val trimmed = input.trim().lowercase()
 
         return when (trimmed) {
-            "korea" -> "South Korea"
-            else -> trimmed.replaceFirstChar { it.uppercase() }
-        }
-    }
 
-    private fun formatCountryToCode(input: String): String {
+            // 한국
+            "korea", "south korea", "대한민국" -> "KR"
 
-        return when (input.trim().lowercase()) {
-            "korea", "south korea" -> "KR"
-            "japan" -> "JP"
-            "united states", "usa" -> "US"
-            else -> input.uppercase()
+            // 일본
+            "japan", "일본" -> "JP"
+
+            // 미국
+            "united states", "usa", "미국" -> "US"
+
+            // 중국
+            "china", "중국" -> "CN"
+
+            // 독일
+            "germany", "독일" -> "DE"
+
+            // 이미 2자리 코드면 그대로 사용
+            else -> {
+                if (trimmed.length == 2)
+                    trimmed.uppercase()
+                else
+                    throw IllegalArgumentException(
+                        "지원하지 않는 국가입니다. (2자리 코드 사용 가능)"
+                    )
+            }
         }
     }
 }

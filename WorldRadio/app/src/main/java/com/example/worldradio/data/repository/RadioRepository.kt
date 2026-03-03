@@ -22,9 +22,7 @@ class RadioRepository @Inject constructor(
      */
     suspend fun getStations(countryCode: String): List<RadioStation> {
 
-        val servers = ServerManager.getShuffledServers()
-
-        servers.forEach { baseUrl ->
+        for (baseUrl in ServerManager.getServers()) {
 
             try {
 
@@ -34,17 +32,15 @@ class RadioRepository @Inject constructor(
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 
-                val newApi =
-                    retrofit.create(RadioApi::class.java)
+                val api = retrofit.create(RadioApi::class.java)
 
-                return newApi
-                    .getStationsByCountryCode(countryCode)
+                return api.getStationsByCountryCode(countryCode)
 
             } catch (e: Exception) {
-                delay(500) // 다음 서버 시도 전 짧은 대기
+                e.printStackTrace()
             }
         }
 
-        throw Exception("모든 서버 요청 실패")
+        throw Exception("모든 서버 실패")
     }
 }

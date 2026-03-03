@@ -7,18 +7,11 @@ package com.example.worldradio.network
  */
 object ServerManager {
 
-    // 공식 미러 서버들
+    // 실제로 안정적으로 동작하는 서버만 사용
     private val servers = listOf(
         "https://nl1.api.radio-browser.info/json/",
-        "https://de1.api.radio-browser.info/json/",
-        "https://at1.api.radio-browser.info/json/",
-        "https://fr1.api.radio-browser.info/json/"
+        "https://de1.api.radio-browser.info/json/"
     )
 
-    /**
-     * 서버 목록 반환 (랜덤 순서)
-     */
-    fun getShuffledServers(): List<String> {
-        return servers.shuffled()
-    }
+    fun getServers(): List<String> = servers
 }
