@@ -11,6 +11,7 @@ import com.example.worldradio.databinding.ActivityMainBinding
 import com.example.worldradio.player.RadioPlayer
 import com.example.worldradio.ui.adapter.RadioAdapter
 import com.example.worldradio.ui.state.UiState
+import com.example.worldradio.util.CountryUtil
 import com.example.worldradio.util.RecentSearchManager
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,6 +49,16 @@ class MainActivity : AppCompatActivity() {
 
         // 최근 검색 관리자 초기화
         recentSearchManager = RecentSearchManager(this)
+        val countries = CountryUtil.getAllCountries()
+
+        val adapterAuto =
+            ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                countries
+            )
+
+        binding.etCountry.setAdapter(adapterAuto)
 
         setupRecyclerView()
         setupAutoComplete()
@@ -115,27 +126,28 @@ class MainActivity : AppCompatActivity() {
 
             when (state) {
 
-                // 🔄 로딩 상태
                 is UiState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.tvError.visibility = View.GONE
                 }
 
-                // ✅ 성공
                 is UiState.Success -> {
                     binding.progressBar.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.tvError.visibility = View.GONE
+
                     adapter.submitList(state.data)
                 }
 
-                // ❌ 에러
                 is UiState.Error -> {
                     binding.progressBar.visibility = View.GONE
-
-                    Toast.makeText(
-                        this,
-                        state.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    binding.recyclerView.visibility = View.GONE
+                    binding.tvError.visibility = View.VISIBLE
+                    binding.tvError.text = state.message
                 }
+
+                else -> Unit
             }
         }
     }

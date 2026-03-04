@@ -18,7 +18,7 @@ object NetworkModule {
 
     // 기본 서버 (실패 시 Repository에서 교체됨)
     private const val BASE_URL =
-        "https://nl1.api.radio-browser.info/json/"
+        "https://all.api.radio-browser.info/json/"
 
     @Provides
     @Singleton

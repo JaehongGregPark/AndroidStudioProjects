@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.example.worldradio.util.CountryUtil
+
 /**
  * 메인 화면 ViewModel
  *
@@ -41,9 +43,10 @@ class MainViewModel @Inject constructor(
             try {
 
                 // ✅ 반드시 2자리 코드로 변환
+                //val countryCode =
+                //    formatCountryToCode(country)
                 val countryCode =
-                    formatCountryToCode(country)
-
+                    CountryUtil.getCountryCode(country)
                 // ✅ Repository에는 코드만 전달
                 val result =
                     repository.getStations(countryCode)
