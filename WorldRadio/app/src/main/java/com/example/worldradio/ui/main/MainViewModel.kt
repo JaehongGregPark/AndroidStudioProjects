@@ -104,21 +104,31 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
+    /**
+     * 국가 목록 LiveData
+     */
     private val _countries = MutableLiveData<List<Country>>()
     val countries: LiveData<List<Country>> = _countries
 
     /**
-     * 국가 리스트 불러오기
+     * 국가 목록 로드
      */
     fun loadCountries() {
 
         viewModelScope.launch {
 
             try {
+
                 val result = repository.getCountries()
 
-                // 방송국 없는 국가는 제거
-                _countries.value = result.filter { it.stationcount > 0 }
+                // 1️⃣ 방송국 없는 국가 제거
+                // 2️⃣ 국가 이름 기준 정렬
+                val filteredList = result
+                    .filter { it.stationcount > 0 }
+                    .sortedBy { it.name }
+
+                _countries.value = filteredList
 
             } catch (e: Exception) {
                 _countries.value = emptyList()

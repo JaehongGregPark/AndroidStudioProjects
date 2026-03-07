@@ -67,9 +67,13 @@ class MainActivity : AppCompatActivity() {
         setupClickListeners()
         setupPopularButtons()
 
-        viewModel.countries.observe(this) {  countries: List<Country> ->
+        viewModel.countries.observe(this) { countries: List<Country> ->
 
-            val countryNames = countries.map { it.name }
+            // 국가 이름 리스트 생성
+            val countryNames = countries.map { it.name }.toMutableList()
+
+            // ⭐ 첫 항목 추가
+            countryNames.add(0, "Select Country")
 
             val adapter = ArrayAdapter(
                 this,
@@ -82,13 +86,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSearch.setOnClickListener {
 
-            val selectedCountry =
-                binding.spinnerCountry.selectedItem.toString()
+            val selectedCountry = binding.spinnerCountry.selectedItem.toString()
+
+            // 첫 항목 선택 방지
+            if (selectedCountry == "Select Country") {
+
+                Toast.makeText(
+                    this,
+                    "Please select a country",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return@setOnClickListener
+            }
 
             viewModel.searchStations(selectedCountry)
         }
-
-        viewModel.loadCountries()
     }
 
     // =====================================================
