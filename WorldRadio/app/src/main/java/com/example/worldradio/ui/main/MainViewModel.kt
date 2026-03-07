@@ -1,6 +1,7 @@
 package com.example.worldradio.ui.main
 
 import androidx.lifecycle.*
+import com.example.worldradio.data.model.Country
 import com.example.worldradio.data.model.RadioStation
 import com.example.worldradio.data.repository.RadioRepository
 import com.example.worldradio.ui.state.UiState
@@ -99,6 +100,28 @@ class MainViewModel @Inject constructor(
                     throw IllegalArgumentException(
                         "지원하지 않는 국가입니다. (2자리 코드 사용 가능)"
                     )
+            }
+        }
+    }
+
+    private val _countries = MutableLiveData<List<Country>>()
+    val countries: LiveData<List<Country>> = _countries
+
+    /**
+     * 국가 리스트 불러오기
+     */
+    fun loadCountries() {
+
+        viewModelScope.launch {
+
+            try {
+                val result = repository.getCountries()
+
+                // 방송국 없는 국가는 제거
+                _countries.value = result.filter { it.stationcount > 0 }
+
+            } catch (e: Exception) {
+                _countries.value = emptyList()
             }
         }
     }

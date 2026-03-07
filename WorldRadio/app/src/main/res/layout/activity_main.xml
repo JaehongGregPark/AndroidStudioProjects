@@ -59,6 +59,13 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+
+        <Spinner
+            android:id="@+id/spinnerCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
         <!-- 방송 목록 -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

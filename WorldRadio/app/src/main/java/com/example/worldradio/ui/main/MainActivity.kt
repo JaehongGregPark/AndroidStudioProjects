@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.worldradio.data.model.Country
 import com.example.worldradio.databinding.ActivityMainBinding
 import com.example.worldradio.player.RadioPlayer
 import com.example.worldradio.ui.adapter.RadioAdapter
@@ -65,6 +66,29 @@ class MainActivity : AppCompatActivity() {
         setupObservers()
         setupClickListeners()
         setupPopularButtons()
+
+        viewModel.countries.observe(this) {  countries: List<Country> ->
+
+            val countryNames = countries.map { it.name }
+
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                countryNames
+            )
+
+            binding.spinnerCountry.adapter = adapter
+        }
+
+        binding.btnSearch.setOnClickListener {
+
+            val selectedCountry =
+                binding.spinnerCountry.selectedItem.toString()
+
+            viewModel.searchStations(selectedCountry)
+        }
+
+        viewModel.loadCountries()
     }
 
     // =====================================================
@@ -220,4 +244,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         player.stop()
     }
+
+
 }

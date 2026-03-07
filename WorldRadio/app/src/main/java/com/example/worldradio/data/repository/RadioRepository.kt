@@ -1,5 +1,6 @@
 package com.example.worldradio.data.repository
 
+import com.example.worldradio.data.model.Country
 import com.example.worldradio.data.model.RadioStation
 import com.example.worldradio.data.remote.RadioApi
 import com.example.worldradio.network.ServerManager
@@ -44,5 +45,10 @@ class RadioRepository @Inject constructor(
         throw Exception("모든 서버 실패")
     }
 
-
+    /**
+     * 전체 국가 리스트 가져오기
+     */
+    suspend fun getCountries(): List<Country> {
+        return api.getCountries()
+    }
 }

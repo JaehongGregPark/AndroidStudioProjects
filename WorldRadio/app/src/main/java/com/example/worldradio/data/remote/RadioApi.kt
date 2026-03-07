@@ -4,6 +4,7 @@ import com.example.worldradio.data.model.RadioStation
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import com.example.worldradio.data.model.Country
 
 /**
  * Radio Browser REST API 인터페이스
@@ -28,6 +29,7 @@ interface RadioApi {
         @Path("country") country: String,
         @Query("limit") limit: Int = 50
     ): List<RadioStation>
+
     /**
      * 가장 빠른 방식
      *
@@ -39,4 +41,10 @@ interface RadioApi {
         @Path("code") countryCode: String,
         @Query("limit") limit: Int = 50
     ): List<RadioStation>
+
+    /**
+     * 국가 리스트 가져오기
+     */
+    @GET("countries")
+    suspend fun getCountries(): List<Country>
 }
