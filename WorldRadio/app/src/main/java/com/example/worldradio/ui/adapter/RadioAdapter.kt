@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.worldradio.R
 import com.example.worldradio.data.model.RadioStation
 import com.example.worldradio.databinding.ItemRadioBinding
 
@@ -53,6 +54,8 @@ class RadioAdapter(
         // 로고 이미지
         Glide.with(context)
             .load(station.favicon)
+            .placeholder(R.drawable.ic_radio)   // 로딩 중
+            .error(R.drawable.ic_radio)         // 로고 없을 때
             .into(holder.binding.ivLogo)
 
         // Play 버튼 클릭
