@@ -1,122 +1,87 @@
 package com.example.worldradio.ui.main
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.worldradio.data.model.Country
 import com.example.worldradio.databinding.ActivityMainBinding
 import com.example.worldradio.player.RadioPlayer
 import com.example.worldradio.ui.adapter.RadioAdapter
 import com.example.worldradio.ui.state.UiState
 import com.example.worldradio.util.CountryUtil
-import com.example.worldradio.util.RecentSearchManager
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * 메인 화면 Activity
+ * 메인 화면
  *
- * 기능:
- * 1️⃣ 국가 검색
- * 2️⃣ 인기 국가 버튼
- * 3️⃣ 자동완성
- * 4️⃣ 최근 검색 저장
- * 5️⃣ 로딩 / 에러 상태 처리
- * 6️⃣ 라디오 재생 (Mini Player)
+ * 흐름
+ *
+ * 국가 입력
+ * ↓
+ * 검색 버튼
+ * ↓
+ * 방송국 리스트 표시
+ * ↓
+ * Play 버튼 클릭
+ * ↓
+ * 라디오 재생
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    // Hilt로 ViewModel 주입
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var adapter: RadioAdapter
+
     private lateinit var player: RadioPlayer
-    private lateinit var recentSearchManager: RecentSearchManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
-        // 라디오 플레이어 초기화
         player = RadioPlayer(this)
 
-        // 최근 검색 관리자 초기화
-        recentSearchManager = RecentSearchManager(this)
-        val countries = CountryUtil.getAllCountries()
-
-        val adapterAuto =
-            ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                countries
-            )
-
-        binding.etCountry.setAdapter(adapterAuto)
+        setupAutoComplete()
 
         setupRecyclerView()
-        setupAutoComplete()
+
         setupObservers()
-        setupClickListeners()
-        setupPopularButtons()
 
-        viewModel.countries.observe(this) { countries: List<Country> ->
-
-            // 국가 이름 리스트 생성
-            val countryNames = countries.map { it.name }.toMutableList()
-
-            // ⭐ 첫 항목 추가
-            countryNames.add(0, "Select Country")
-
-            val adapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                countryNames
-            )
-
-            binding.spinnerCountry.adapter = adapter
-        }
-
-        binding.btnSearch.setOnClickListener {
-
-            val selectedCountry = binding.spinnerCountry.selectedItem.toString()
-
-            // 첫 항목 선택 방지
-            if (selectedCountry == "Select Country") {
-
-                Toast.makeText(
-                    this,
-                    "Please select a country",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                return@setOnClickListener
-            }
-
-            viewModel.searchStations(selectedCountry)
-        }
+        setupSearch()
     }
 
-    // =====================================================
-    // 1️⃣ RecyclerView 설정
-    // =====================================================
+    /**
+     * 국가 자동완성
+     */
+    private fun setupAutoComplete() {
+
+        val countries = CountryUtil.getAllCountries()
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            countries
+        )
+
+        binding.etCountry.setAdapter(adapter)
+    }
+
+    /**
+     * RecyclerView 설정
+     */
     private fun setupRecyclerView() {
 
         adapter = RadioAdapter(this) { station ->
 
-            // 방송국 클릭 시 재생
+            // Play 클릭 → 라디오 재생
             player.play(station.url)
-
-            // Mini Player UI 표시
-            binding.miniPlayer.visibility = View.VISIBLE
-            binding.tvMiniTitle.text = station.name
         }
 
         binding.recyclerView.layoutManager =
@@ -125,38 +90,23 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
     }
 
-    // =====================================================
-    // 2️⃣ 자동완성 설정
-    // =====================================================
-    private fun setupAutoComplete() {
+    /**
+     * 검색 버튼
+     */
+    private fun setupSearch() {
 
-        // 기본 국가 리스트 + 최근 검색 추가
-        val defaultCountries = listOf(
-            "Korea",
-            "South Korea",
-            "Japan",
-            "United States",
-            "Germany",
-            "France",
-            "United Kingdom"
-        )
+        binding.btnSearch.setOnClickListener {
 
-        val recent = recentSearchManager.getRecent()
+            val country =
+                binding.etCountry.text.toString()
 
-        val combined = (recent + defaultCountries).distinct()
-
-        val autoAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            combined
-        )
-
-        binding.etCountry.setAdapter(autoAdapter)
+            viewModel.searchStations(country)
+        }
     }
 
-    // =====================================================
-    // 3️⃣ LiveData 관찰 (UiState 패턴)
-    // =====================================================
+    /**
+     * ViewModel 상태 관찰
+     */
     private fun setupObservers() {
 
         viewModel.uiState.observe(this) { state ->
@@ -164,99 +114,24 @@ class MainActivity : AppCompatActivity() {
             when (state) {
 
                 is UiState.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.recyclerView.visibility = View.GONE
-                    binding.tvError.visibility = View.GONE
+
+                    binding.progressBar.visibility = android.view.View.VISIBLE
                 }
 
                 is UiState.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.tvError.visibility = View.GONE
+
+                    binding.progressBar.visibility = android.view.View.GONE
 
                     adapter.submitList(state.data)
                 }
 
                 is UiState.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.recyclerView.visibility = View.GONE
-                    binding.tvError.visibility = View.VISIBLE
-                    binding.tvError.text = state.message
+
+                    binding.progressBar.visibility = android.view.View.GONE
                 }
 
-                else -> Unit
+                else -> {}
             }
         }
     }
-
-    // =====================================================
-    // 4️⃣ 버튼 클릭 리스너
-    // =====================================================
-    private fun setupClickListeners() {
-
-        // 🔍 검색 버튼
-        binding.btnSearch.setOnClickListener {
-
-            val country =
-                binding.etCountry.text.toString()
-
-            if (country.isNotEmpty()) {
-
-                // 최근 검색 저장
-                recentSearchManager.saveCountry(country)
-
-                viewModel.searchStations(country)
-            }
-        }
-
-        // ⏸ Mini Player 정지 버튼
-        binding.btnPause.setOnClickListener {
-
-            player.stop()
-            binding.miniPlayer.visibility = View.GONE
-        }
-    }
-
-    // =====================================================
-    // 5️⃣ 인기 국가 버튼 설정
-    // =====================================================
-    private fun setupPopularButtons() {
-
-        binding.btnKorea.setOnClickListener {
-            searchFromButton("Korea")
-        }
-
-        binding.btnUSA.setOnClickListener {
-            searchFromButton("United States")
-        }
-
-        binding.btnJapan.setOnClickListener {
-            searchFromButton("Japan")
-        }
-    }
-
-    /**
-     * 인기 국가 버튼 클릭 공통 처리
-     */
-    private fun searchFromButton(country: String) {
-
-        // 입력창에 표시
-        binding.etCountry.setText(country)
-
-        // 최근 검색 저장
-        recentSearchManager.saveCountry(country)
-
-        // 검색 실행
-        viewModel.searchStations(country)
-    }
-
-    // =====================================================
-    // 6️⃣ Activity 종료 시 플레이어 해제
-    // =====================================================
-    override fun onDestroy() {
-        super.onDestroy()
-        player.stop()
-    }
-
-
 }
