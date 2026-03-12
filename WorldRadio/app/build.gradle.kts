@@ -75,7 +75,7 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.4.1")
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.media3:media3-exoplayer-hls:1.4.1")
-
+    implementation("com.google.android.material:material:1.11.0")
 
    // ---------------- Coroutines ----------------
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")

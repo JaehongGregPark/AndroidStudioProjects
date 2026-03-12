@@ -9,56 +9,84 @@
 3. 라디오 리스트
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    android:orientation="vertical"
-
-    android:padding="16dp"
-
+    android:background="#121212"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 국가 입력 -->
-    <AutoCompleteTextView
-        android:id="@+id/etCountry"
-
-        android:hint="Enter Country"
-
+    <!-- 검색 영역 -->
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:orientation="horizontal"
+        android:padding="12dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
 
-    <!-- 검색 버튼 -->
-    <Button
-        android:id="@+id/btnSearch"
+        <AutoCompleteTextView
+            android:id="@+id/etCountry"
+            android:hint="Search Country"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:background="@drawable/search_bg"
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
 
-        android:text="Search"
+        <Button
+            android:id="@+id/btnSearch"
+            android:text="Search"
+            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
-        android:layout_marginTop="8dp"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <!-- 로딩 표시 -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-
-        android:visibility="gone"
-
-        android:layout_marginTop="16dp"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <!-- 방송국 목록 -->
+    <!-- 라디오 리스트 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-
-        android:layout_marginTop="16dp"
-
+        android:layout_below="@id/searchLayout"
+        android:layout_above="@id/miniPlayer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"/>
 
-        android:layout_weight="1"/>
+    <!-- Mini Player -->
+    <LinearLayout
+        android:id="@+id/miniPlayer"
+        android:visibility="gone"
+        android:background="#1DB954"
+        android:padding="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/miniLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/tvMiniTitle"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton
+            android:id="@+id/btnPause"
+            android:src="@drawable/ic_pause"
+            android:background="@null"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+    </LinearLayout>
+
+    <!-- ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.worldradio.ui.main
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -78,10 +79,19 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setupRecyclerView() {
 
-        adapter = RadioAdapter(this) { station ->
+        //adapter = RadioAdapter(this) { station ->
 
             // Play 클릭 → 라디오 재생
+          //  player.play(station.url)
+        //}
+
+        adapter = RadioAdapter(this) { station ->
+
             player.play(station.url)
+
+            binding.miniPlayer.visibility = View.VISIBLE
+
+            binding.tvMiniTitle.text = station.name
         }
 
         binding.recyclerView.layoutManager =
