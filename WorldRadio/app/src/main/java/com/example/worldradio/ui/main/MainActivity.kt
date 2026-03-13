@@ -42,10 +42,12 @@ class MainActivity : AppCompatActivity() {
 
         // 각 기능 초기화
         setupTabs()
-        setupAutoComplete()
         setupRecyclerView()
         setupObservers()
         setupSearch()
+        setupCountrySpinner()
+        setupCountryIcons()
+
     }
 
     /**
@@ -71,15 +73,7 @@ class MainActivity : AppCompatActivity() {
 
                 when (tab?.position) {
 
-                    // ⭐ Radio 검색 탭
-                    0 -> {
 
-                        val country = binding.etCountry.text.toString()
-
-                        if (country.isNotEmpty()) {
-                            viewModel.searchStations(country)
-                        }
-                    }
 
                     // ⭐ 즐겨찾기 탭
                     1 -> {
@@ -94,24 +88,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    /**
-     * ⭐ 국가 자동완성 설정
-     *
-     * WorldRadio API 지원 국가 목록을
-     * AutoCompleteTextView에 연결
-     */
-    private fun setupAutoComplete() {
 
-        val countries = CountryUtil.getAllCountries()
-
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            countries
-        )
-
-        binding.etCountry.setAdapter(adapter)
-    }
 
     /**
      * ⭐ RecyclerView 설정
@@ -163,16 +140,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSearch.setOnClickListener {
 
-            val country = binding.etCountry.text.toString()
+            val countryName =
+                binding.spinnerCountry.selectedItem.toString()
 
-            if (country.isNotEmpty()) {
+            // ⭐ 국가명 → 국가코드 변환
+            val countryCode =
+                CountryUtil.getCountryCode(countryName)
 
-                viewModel.searchStations(country)
-
-            }
+            viewModel.searchStations(countryCode)
         }
     }
-
     /**
      * ⭐ ViewModel 상태 관찰
      *
@@ -220,5 +197,82 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
 
         player.release()
+    }
+
+    private fun setupCountrySpinner() {
+
+        val countries = listOf(
+
+            "South Korea|KR",
+            "United States|US",
+            "Japan|JP",
+            "United Kingdom|GB",
+            "Germany|DE",
+            "France|FR",
+            "Canada|CA",
+            "Australia|AU",
+            "Brazil|BR",
+            "India|IN"
+        )
+
+        val names = countries.map { it.split("|")[0] }
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            names
+        )
+
+        binding.spinnerCountry.adapter = adapter
+
+        binding.spinnerCountry.onItemSelectedListener =
+            object : android.widget.AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    parent: android.widget.AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+
+                    val code = countries[position].split("|")[1]
+
+                    viewModel.searchStations(code)
+                }
+
+                override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+            }
+    }
+    private fun setupCountryIcons() {
+
+        binding.flagKR.setOnClickListener {
+
+            binding.spinnerCountry.setSelection(0)
+            viewModel.searchStations("KR")
+        }
+
+        binding.flagUS.setOnClickListener {
+
+            binding.spinnerCountry.setSelection(1)
+            viewModel.searchStations("US")
+        }
+
+        binding.flagJP.setOnClickListener {
+
+            binding.spinnerCountry.setSelection(2)
+            viewModel.searchStations("JP")
+        }
+
+        binding.flagGB.setOnClickListener {
+
+            binding.spinnerCountry.setSelection(3)
+            viewModel.searchStations("GB")
+        }
+
+        binding.flagDE.setOnClickListener {
+
+            binding.spinnerCountry.setSelection(4)
+            viewModel.searchStations("DE")
+        }
     }
 }

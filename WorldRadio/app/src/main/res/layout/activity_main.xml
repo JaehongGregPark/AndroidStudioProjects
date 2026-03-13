@@ -31,13 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <AutoCompleteTextView
-            android:id="@+id/etCountry"
-            android:hint="Search Country"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#888888"
-            android:background="@drawable/search_bg"
-            android:padding="10dp"
+        <Spinner
+            android:id="@+id/spinnerCountry"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
@@ -49,7 +44,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
+    <!-- 주요 국가 아이콘 -->
+    <HorizontalScrollView
+        android:layout_below="@id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:scrollbars="none">
 
+        <LinearLayout
+            android:id="@+id/countryIcons"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/flagKR"
+                android:src="@drawable/flag_kr"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="6dp"/>
+
+            <ImageView
+                android:id="@+id/flagUS"
+                android:src="@drawable/flag_us"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="6dp"/>
+
+            <ImageView
+                android:id="@+id/flagJP"
+                android:src="@drawable/flag_jp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="6dp"/>
+
+            <ImageView
+                android:id="@+id/flagGB"
+                android:src="@drawable/flag_gb"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="6dp"/>
+
+            <ImageView
+                android:id="@+id/flagDE"
+                android:src="@drawable/flag_de"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="6dp"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
     <!-- 라디오 리스트 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
