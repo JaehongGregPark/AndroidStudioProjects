@@ -64,7 +64,7 @@ class RadioAdapter(
             .into(holder.binding.ivLogo)
 
         // ⭐ 현재 재생 표시
-        if (station.url == playingUrl) {
+        if (station.urlResolved == playingUrl) {
             holder.binding.tvPlaying.visibility = View.VISIBLE
         } else {
             holder.binding.tvPlaying.visibility = View.GONE
@@ -73,7 +73,7 @@ class RadioAdapter(
         // Play 버튼 클릭
         holder.binding.btnPlay.setOnClickListener {
 
-            playingUrl = station.url
+            playingUrl = station.urlResolved
             notifyDataSetChanged()
 
             onPlayClick(station)

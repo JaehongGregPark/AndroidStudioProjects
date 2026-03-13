@@ -12,22 +12,8 @@ import com.example.worldradio.ui.adapter.RadioAdapter
 import com.example.worldradio.ui.state.UiState
 import com.example.worldradio.util.CountryUtil
 import dagger.hilt.android.AndroidEntryPoint
+import android.widget.SeekBar
 
-/**
- * 메인 화면
- *
- * 흐름
- *
- * 국가 입력
- * ↓
- * 검색 버튼
- * ↓
- * 방송국 리스트 표시
- * ↓
- * Play 버튼 클릭
- * ↓
- * 라디오 재생
- */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: RadioAdapter
 
+    // ⭐ 라디오 플레이어
     private lateinit var player: RadioPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,17 +31,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
+        // ⭐ 플레이어 초기화
         player = RadioPlayer(this)
 
+        binding.volumeSeek.setOnSeekBarChangeListener(
+            object : SeekBar.OnSeekBarChangeListener {
+
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+
+                    val volume = progress / 100f
+                    player.setVolume(volume)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            }
+        )
         setupAutoComplete()
-
         setupRecyclerView()
-
         setupObservers()
-
         setupSearch()
     }
 
@@ -79,24 +81,21 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setupRecyclerView() {
 
-        //adapter = RadioAdapter(this) { station ->
-
-            // Play 클릭 → 라디오 재생
-          //  player.play(station.url)
-        //}
-
         adapter = RadioAdapter(this) { station ->
 
-            player.play(station.url)
+            val url = station.urlResolved
 
-            binding.miniPlayer.visibility = View.VISIBLE
+            if (!url.isNullOrEmpty()) {
 
-            binding.tvMiniTitle.text = station.name
+                // ⭐ 라디오 재생
+                player.play(url)
+
+                binding.miniPlayer.visibility = View.VISIBLE
+                binding.tvMiniTitle.text = station.name
+            }
         }
 
-        binding.recyclerView.layoutManager =
-            LinearLayoutManager(this)
-
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
     }
 
@@ -107,8 +106,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSearch.setOnClickListener {
 
-            val country =
-                binding.etCountry.text.toString()
+            val country = binding.etCountry.text.toString()
 
             viewModel.searchStations(country)
         }
@@ -124,24 +122,25 @@ class MainActivity : AppCompatActivity() {
             when (state) {
 
                 is UiState.Loading -> {
-
-                    binding.progressBar.visibility = android.view.View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
                 }
 
                 is UiState.Success -> {
-
-                    binding.progressBar.visibility = android.view.View.GONE
-
+                    binding.progressBar.visibility = View.GONE
                     adapter.submitList(state.data)
                 }
 
                 is UiState.Error -> {
-
-                    binding.progressBar.visibility = android.view.View.GONE
+                    binding.progressBar.visibility = View.GONE
                 }
 
                 else -> {}
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
     }
 }
