@@ -106,7 +106,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
     /**
      * ⭐ 즐겨찾기 추가
      */
@@ -114,20 +113,23 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            val url = station.urlResolved ?: station.url ?: return@launch
+
             val fav = FavoriteStation(
-
-                stationuuid = station.stationuuid,   // ⭐ 추가
-
-                url = station.urlResolved,
-
+                url = url,
+                stationuuid = station.stationuuid,
                 name = station.name,
-
                 country = station.country ?: "",
-
                 favicon = station.favicon
             )
 
-            favoriteRepository.addFavorite(fav)
+            val isFav = favoriteRepository.isFavorite(url)
+
+            if (isFav) {
+                favoriteRepository.removeFavorite(fav)
+            } else {
+                favoriteRepository.addFavorite(fav)
+            }
         }
     }
 

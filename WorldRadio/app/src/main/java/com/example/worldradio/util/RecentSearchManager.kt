@@ -20,23 +20,17 @@ class RecentSearchManager(context: Context) {
     fun saveCountry(country: String) {
 
         val list = getRecent().toMutableList()
-
-        list.remove(country)      // 중복 제거
-        list.add(0, country)      // 맨 앞에 추가
-
-        if (list.size > 5) {
-            list.removeLast()
-        }
-
-        prefs.edit()
-            .putStringSet(KEY, list.toSet())
-            .apply()
+        list.remove(country)
+        list.add(0, country)
+        if (list.size > 5) list.removeLast()
+        prefs.edit().putString(KEY, list.joinToString(",")).apply()
     }
 
     /**
      * 최근 검색 리스트 반환
      */
     fun getRecent(): List<String> {
-        return prefs.getStringSet(KEY, emptySet())?.toList() ?: emptyList()
+        return prefs.getString(KEY, "")
+            ?.split(",")?.filter { it.isNotBlank() } ?: emptyList()
     }
 }

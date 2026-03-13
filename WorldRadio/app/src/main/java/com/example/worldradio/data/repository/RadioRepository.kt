@@ -44,6 +44,16 @@ class RadioRepository @Inject constructor(
 
         throw Exception("모든 서버 실패")
     }
+    // ✅ 수정 — 서버별 Retrofit 캐싱
+    private val retrofitCache = mutableMapOf<String, RadioApi>()
+
+    private fun getApiForServer(baseUrl: String): RadioApi {
+        return retrofitCache.getOrPut(baseUrl) {
+            Retrofit.Builder().baseUrl(baseUrl).client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(RadioApi::class.java)
+        }
+    }
 
     /**
      * 전체 국가 리스트 가져오기

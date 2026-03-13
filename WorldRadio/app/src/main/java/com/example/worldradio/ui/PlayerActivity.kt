@@ -57,6 +57,5 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        playerManager.release()
     }
 }

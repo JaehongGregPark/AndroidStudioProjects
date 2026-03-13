@@ -7,9 +7,8 @@ import com.google.gson.annotations.SerializedName
 data class RadioStation(
     val stationuuid: String,
     val name: String,
-    val url: String,
-    @SerializedName("url_resolved")
-    val urlResolved: String,
+    val country: String?,
     val favicon: String?,
-    val country: String?
+    val url: String,
+    val urlResolved: String?
 )

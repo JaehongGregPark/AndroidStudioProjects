@@ -1,155 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-메인 화면
-
-구성
-1. 국가 입력
-2. 검색 버튼
-3. 라디오 리스트
--->
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#121212"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchLayout"
-        android:background="#121212"
-        app:tabTextColor="#BBBBBB"
-        app:tabSelectedTextColor="#1DB954"/>
-    <!-- 검색 영역 -->
-    <LinearLayout
-        android:id="@+id/searchLayout"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <Spinner
-            android:id="@+id/spinnerCountry"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+        <!-- TOP APP BAR -->
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topBar"
+            android:background="#121212"
+            android:title="World Radio"
+            android:titleTextColor="#FFFFFF"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <Button
-            android:id="@+id/btnSearch"
-            android:text="Search"
-            android:layout_marginStart="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <!-- 주요 국가 아이콘 -->
-    <HorizontalScrollView
-        android:layout_below="@id/searchLayout"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:scrollbars="none">
+        <!-- CONTENT -->
 
         <LinearLayout
-            android:id="@+id/countryIcons"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="56dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/flagKR"
-                android:src="@drawable/flag_kr"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="6dp"/>
+            <!-- SEARCH -->
 
-            <ImageView
-                android:id="@+id/flagUS"
-                android:src="@drawable/flag_us"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="6dp"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Country">
 
-            <ImageView
-                android:id="@+id/flagJP"
-                android:src="@drawable/flag_jp"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="6dp"/>
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerCountry"
+                    android:background="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:id="@+id/flagGB"
-                android:src="@drawable/flag_gb"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="6dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:id="@+id/flagDE"
-                android:src="@drawable/flag_de"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="6dp"/>
+            <!-- COUNTRY GRID -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/countryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:padding="8dp"/>
+
+            <!-- TAB -->
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:background="#121212"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabTextColor="#BBBBBB"
+                app:tabSelectedTextColor="#1DB954"/>
+
+            <!-- RADIO LIST -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingBottom="90dp"/>
 
         </LinearLayout>
-    </HorizontalScrollView>
-    <!-- 라디오 리스트 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_below="@id/searchLayout"
-        android:layout_above="@id/miniPlayer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="80dp"
-        android:clipToPadding="false"
-        android:overScrollMode="never"/>
 
-    <!-- Mini Player -->
-    <LinearLayout
-        android:id="@+id/miniPlayer"
-        android:visibility="gone"
-        android:background="#1DB954"
-        android:padding="12dp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
+        <!-- MINI PLAYER -->
 
-        <ImageView
-            android:id="@+id/miniLogo"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/miniPlayer"
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:cardBackgroundColor="#1DB954"
+            app:cardCornerRadius="14dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/miniLogo"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"/>
+
+                <TextView
+                    android:id="@+id/tvMiniTitle"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:src="@drawable/ic_pause"
+                    android:background="@null"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- LOADING -->
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_gravity="center"
+            android:visibility="gone"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
 
-        <TextView
-            android:id="@+id/tvMiniTitle"
-            android:textColor="#000"
-            android:textStyle="bold"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <ImageButton
-            android:id="@+id/btnPause"
-            android:src="@drawable/ic_pause"
-            android:background="@null"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
-
-        <SeekBar
-            android:id="@+id/volumeSeek"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:max="200"
-            android:progress="120"/>
-    </LinearLayout>
-
-    <!-- ProgressBar -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
-</RelativeLayout>
+</com.google.android.material.appbar.AppBarLayout>

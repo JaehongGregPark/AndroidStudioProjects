@@ -20,6 +20,7 @@ class FavoriteRepository @Inject constructor(
         dao.delete(station)
     }
 
-    suspend fun isFavorite(url: String): Boolean =
-        dao.isFavorite(url)
+    suspend fun isFavorite(url: String): Boolean {
+        return dao.isFavorite(url) > 0
+    }
 }

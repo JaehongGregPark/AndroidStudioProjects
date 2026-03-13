@@ -20,12 +20,9 @@ interface FavoriteDao {
 
     // 전체 즐겨찾기 목록 가져오기
     @Query("SELECT * FROM favorite_stations")
-    suspend fun getAll(): List<FavoriteStation>
-
-    @Query("SELECT * FROM favorite_stations")
     fun getFavorites(): Flow<List<FavoriteStation>>
 
     // 특정 URL이 즐겨찾기인지 확인
-    @Query("SELECT EXISTS(SELECT 1 FROM favorite_stations WHERE url = :url)")
-    suspend fun isFavorite(url: String): Boolean
+    @Query("SELECT COUNT(*) FROM favorite_stations  WHERE url = :url")
+    suspend fun isFavorite(url: String): Int
 }
