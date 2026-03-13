@@ -11,7 +11,7 @@ data class FavoriteStation(
     // 동일 URL 중복 저장 방지
     @PrimaryKey
     val url: String,
-
+    val stationuuid: String,
     val name: String,
     val country: String,
     val favicon: String?

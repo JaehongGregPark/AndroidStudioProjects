@@ -2,38 +2,47 @@ package com.example.worldradio.ui.main
 
 import androidx.lifecycle.*
 import com.example.worldradio.data.model.Country
+import com.example.worldradio.data.model.FavoriteStation
 import com.example.worldradio.data.model.RadioStation
 import com.example.worldradio.data.repository.RadioRepository
+import com.example.worldradio.data.repository.FavoriteRepository
 import com.example.worldradio.ui.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 import com.example.worldradio.util.CountryUtil
 
 /**
  * 메인 화면 ViewModel
  *
- * 역할:
- * 1. 국가 입력값을 CountryCode(2자리)로 변환
- * 2. Repository 호출
- * 3. UI 상태 관리 (Loading / Success / Error)
+ * 역할
+ * 1️⃣ 국가 입력값 → ISO 2자리 코드 변환
+ * 2️⃣ Repository 호출
+ * 3️⃣ UI 상태 관리 (Loading / Success / Error)
+ * 4️⃣ 즐겨찾기 저장 / 로드
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: RadioRepository
+    private val repository: RadioRepository,
+    private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
 
+    /**
+     * 방송국 목록 UI 상태
+     */
     private val _uiState =
         MutableLiveData<UiState<List<RadioStation>>>()
 
     val uiState: LiveData<UiState<List<RadioStation>>> =
         _uiState
 
+
     /**
      * 🔍 국가 검색
      *
-     * @param country 사용자가 입력한 국가명
+     * 사용자가 입력한 국가 이름을
+     * ISO 2자리 코드로 변환 후 API 호출
      */
     fun searchStations(country: String) {
 
@@ -43,12 +52,11 @@ class MainViewModel @Inject constructor(
 
             try {
 
-                // ✅ 반드시 2자리 코드로 변환
-                //val countryCode =
-                //    formatCountryToCode(country)
+                // 국가 이름 → 국가 코드
                 val countryCode =
                     CountryUtil.getCountryCode(country)
-                // ✅ Repository에는 코드만 전달
+
+                // Repository 호출
                 val result =
                     repository.getStations(countryCode)
 
@@ -63,47 +71,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    /**
-     * 국가 이름 → ISO 2자리 CountryCode 변환
-     *
-     * 예:
-     * South Korea → KR
-     * japan → JP
-     * US → US
-     */
-    private fun formatCountryToCode(input: String): String {
-
-        val trimmed = input.trim().lowercase()
-
-        return when (trimmed) {
-
-            // 한국
-            "korea", "south korea", "대한민국" -> "KR"
-
-            // 일본
-            "japan", "일본" -> "JP"
-
-            // 미국
-            "united states", "usa", "미국" -> "US"
-
-            // 중국
-            "china", "중국" -> "CN"
-
-            // 독일
-            "germany", "독일" -> "DE"
-
-            // 이미 2자리 코드면 그대로 사용
-            else -> {
-                if (trimmed.length == 2)
-                    trimmed.uppercase()
-                else
-                    throw IllegalArgumentException(
-                        "지원하지 않는 국가입니다. (2자리 코드 사용 가능)"
-                    )
-            }
-        }
-    }
-
 
     /**
      * 국가 목록 LiveData
@@ -111,8 +78,12 @@ class MainViewModel @Inject constructor(
     private val _countries = MutableLiveData<List<Country>>()
     val countries: LiveData<List<Country>> = _countries
 
+
     /**
-     * 국가 목록 로드
+     * 🌍 국가 목록 로드
+     *
+     * RadioBrowser API에서 국가 목록 조회
+     * 방송국 없는 국가는 제외
      */
     fun loadCountries() {
 
@@ -122,8 +93,6 @@ class MainViewModel @Inject constructor(
 
                 val result = repository.getCountries()
 
-                // 1️⃣ 방송국 없는 국가 제거
-                // 2️⃣ 국가 이름 기준 정렬
                 val filteredList = result
                     .filter { it.stationcount > 0 }
                     .sortedBy { it.name }
@@ -131,7 +100,64 @@ class MainViewModel @Inject constructor(
                 _countries.value = filteredList
 
             } catch (e: Exception) {
+
                 _countries.value = emptyList()
+            }
+        }
+    }
+
+
+    /**
+     * ⭐ 즐겨찾기 추가
+     */
+    fun toggleFavorite(station: RadioStation) {
+
+        viewModelScope.launch {
+
+            val fav = FavoriteStation(
+
+                stationuuid = station.stationuuid,   // ⭐ 추가
+
+                url = station.urlResolved,
+
+                name = station.name,
+
+                country = station.country ?: "",
+
+                favicon = station.favicon
+            )
+
+            favoriteRepository.addFavorite(fav)
+        }
+    }
+
+
+    /**
+     * ⭐ 즐겨찾기 목록 로드
+     *
+     * Room DB → FavoriteStation
+     * FavoriteStation → RadioStation 변환
+     */
+    fun loadFavorites() {
+
+        viewModelScope.launch {
+
+            favoriteRepository.getFavorites().collect { favorites ->
+
+                val stations = favorites.map {
+
+                    RadioStation(
+                        stationuuid = it.stationuuid,
+                        name = it.name,
+                        country = it.country,
+                        favicon = it.favicon,
+                        url = it.url,
+                        urlResolved = it.url
+
+                    )
+                }
+
+                _uiState.value = UiState.Success(stations)
             }
         }
     }

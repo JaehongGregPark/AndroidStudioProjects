@@ -2,6 +2,7 @@ package com.example.worldradio.data.local
 
 import androidx.room.*
 import com.example.worldradio.data.model.FavoriteStation
+import kotlinx.coroutines.flow.Flow
 
 // DAO = Database Access Object
 // 실제 DB와 통신하는 인터페이스
@@ -20,6 +21,9 @@ interface FavoriteDao {
     // 전체 즐겨찾기 목록 가져오기
     @Query("SELECT * FROM favorite_stations")
     suspend fun getAll(): List<FavoriteStation>
+
+    @Query("SELECT * FROM favorite_stations")
+    fun getFavorites(): Flow<List<FavoriteStation>>
 
     // 특정 URL이 즐겨찾기인지 확인
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_stations WHERE url = :url)")
