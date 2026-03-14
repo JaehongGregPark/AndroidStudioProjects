@@ -1,89 +1,69 @@
 package com.example.scriptaudio.ui.settings
 
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-import androidx.hilt.navigation.compose.hiltViewModel
-
-import com.example.scriptaudio.viewmodel.MainViewModel
-
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-
-    onBackClick: () -> Unit,
-
-    viewModel: MainViewModel = hiltViewModel()
-
+    ttsSpeed: Float,
+    fontSize: Float,
+    scrollSpeed: Float,
+    onTtsSpeedChange: (Float) -> Unit,
+    onFontSizeChange: (Float) -> Unit,
+    onScrollSpeedChange: (Float) -> Unit,
+    onBack: () -> Unit
 ) {
-
-    val rate by viewModel.speechRate.collectAsState()
-
-    val pitch by viewModel.pitch.collectAsState()
-
-
-    Column(
-
-        modifier = Modifier.padding(16.dp)
-
-    ) {
-
-        Button(
-
-            onClick = onBackClick
-
-        ) {
-
-            Text("뒤로가기")
-
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Reader Settings") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Text("←")
+                    }
+                }
+            )
         }
-
-
-        Text("속도")
-
-
-        Slider(
-
-            value = rate,
-
-            onValueChange = {
-
-                viewModel.setSpeechRate(it)
-
+    ) { padding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                Text("TTS Speed: ${String.format("%.1f", ttsSpeed)}x")
+                Slider(
+                    value = ttsSpeed,
+                    onValueChange = onTtsSpeedChange,
+                    valueRange = 0.5f..2.0f
+                )
             }
 
-        )
-
-
-        Text("Pitch")
-
-
-        Slider(
-
-            value = pitch,
-
-            onValueChange = {
-
-                viewModel.setPitch(it)
-
+            item {
+                Text("Font Size: ${fontSize.toInt()}")
+                Slider(
+                    value = fontSize,
+                    onValueChange = onFontSizeChange,
+                    valueRange = 12f..40f
+                )
             }
 
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(
-            onClick = {
-                viewModel.createLargeSampleNovels()
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("🔥 대용량 샘플 소설 생성 (20개)")
+            item {
+                Text("Auto Scroll Speed: ${String.format("%.1f", scrollSpeed)}x")
+                Slider(
+                    value = scrollSpeed,
+                    onValueChange = onScrollSpeedChange,
+                    valueRange = 0.5f..5f
+                )
+            }
         }
-
     }
-
 }

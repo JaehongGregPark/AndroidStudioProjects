@@ -1,45 +1,48 @@
 package com.example.scriptaudio
 
-// Android Activity 기본 클래스
-import android.os.Bundle
+/**
+ * ScriptAudio MainActivity
+ *
+ * 앱 진입점
+ * Compose UI 실행
+ */
 
-// Compose Activity
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.hilt.navigation.compose.hiltViewModel
 
-// Hilt Android Entry
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import com.example.scriptaudio.navigation.NavGraph
+import com.example.scriptaudio.viewmodel.MainViewModel
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 
-// Navigation Graph
-import com.example.scriptaudio.navigation.NavGraph
-
-/**
- * MainActivity
- *
- * 앱의 시작 Activity
- *
- * 역할
- * - Compose UI 시작
- * - NavGraph 연결
- *
- * Android App → Activity → Compose → NavGraph
- */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
-        /**
-         * Compose UI 시작
-         */
         setContent {
+            val navController = rememberNavController()
+            /**
+             * ViewModel 생성
+             */
+    // Hilt 주입 사용
+            val viewModel: MainViewModel = hiltViewModel()
+            //val viewModel: MainViewModel = viewModel()
 
             /**
-             * Navigation Graph 호출
+             * Navigation 시작
              */
+
             NavGraph()
 
         }
+
     }
+
 }

@@ -1,80 +1,77 @@
 package com.example.scriptaudio.di
 
+/**
+ * Hilt Dependency Injection Module
+ *
+ * 앱 전체에서 사용하는 Singleton 객체 제공
+ */
+
 import android.content.Context
+import android.speech.tts.TextToSpeech
 import androidx.room.Room
-
-import com.example.scriptaudio.data.local.*
-
-import com.example.scriptaudio.tts.TTSManager
-
+import com.example.scriptaudio.data.local.ScriptDatabase
+import com.example.scriptaudio.data.repository.ScriptRepository
+import com.example.scriptaudio.data.repository.ScriptRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-
+import java.util.Locale
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
     /**
-     * Room DB 제공
+     * Room Database 생성
      */
     @Provides
     @Singleton
     fun provideDatabase(
-
         @ApplicationContext context: Context
-
     ): ScriptDatabase {
 
         return Room.databaseBuilder(
-
             context,
             ScriptDatabase::class.java,
             "script_db"
-
         ).build()
 
     }
 
-
     /**
      * Repository 제공
+     *
+     * ScriptRepository → ScriptRepositoryImpl 매핑
      */
     @Provides
     @Singleton
     fun provideRepository(
-
-        db: ScriptDatabase
-
+        database: ScriptDatabase
     ): ScriptRepository {
 
         return ScriptRepositoryImpl(
-
-            db.scriptDao()
-
+            database.scriptDao()
         )
 
     }
 
-
     /**
-     * TTS 제공
+     * TextToSpeech Singleton 제공
      */
     @Provides
     @Singleton
     fun provideTTS(
-
         @ApplicationContext context: Context
+    ): TextToSpeech {
 
-    ): TTSManager {
+        val tts = TextToSpeech(context, null)
 
-        return TTSManager(context)
+        tts.language = Locale.US
+
+        return tts
 
     }
 
