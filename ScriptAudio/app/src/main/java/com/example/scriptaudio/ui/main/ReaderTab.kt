@@ -26,27 +26,31 @@ fun ReaderTab(
     onTextChange: (String) -> Unit,
     onSpeak: () -> Unit
 ) {
+
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Reader", style = MaterialTheme.typography.titleMedium)
+
+        Text("Reader")
+
         Spacer(Modifier.height(8.dp))
 
-        // 원문 텍스트 입력 필드
         TextField(
             value = text,
             onValueChange = onTextChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f), // 남은 공간 모두 사용
-            maxLines = 10000
+                .weight(1f)
+                .verticalScroll(scrollState),
+            maxLines = Int.MAX_VALUE
         )
 
         Spacer(Modifier.height(10.dp))
 
-        // TTS 읽기 버튼
         Button(
             onClick = onSpeak,
             modifier = Modifier.fillMaxWidth()
