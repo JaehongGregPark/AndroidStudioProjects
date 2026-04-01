@@ -23,6 +23,7 @@ fun TranslationTab(
     originalText: String,
     translatedText: String,
     isTranslating: Boolean,
+    isEnglish: Boolean,
     onTranslate: () -> Unit
 ) {
     Column(

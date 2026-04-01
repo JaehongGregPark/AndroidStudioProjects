@@ -27,19 +27,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val navController = rememberNavController()
+            //val navController = rememberNavController()
             /**
              * ViewModel 생성
              */
-    // Hilt 주입 사용
+            // Hilt 주입 사용
             val viewModel: MainViewModel = hiltViewModel()
-            //val viewModel: MainViewModel = viewModel()
+
 
             /**
              * Navigation 시작
              */
 
-            NavGraph()
+            // navController를 NavGraph에 전달해야
+            // 화면 이동 (settings 이동 등)이 가능함
+            //NavGraph(navController = navController)
+
+            // NavGraph 내부에서 navController를 생성하므로
+            // 여기서는 넘기지 않는다
+            NavGraph(viewModel = viewModel)
 
         }
 

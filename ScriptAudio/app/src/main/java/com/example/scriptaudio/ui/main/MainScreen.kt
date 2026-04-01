@@ -36,6 +36,7 @@ fun MainScreen(
     val translatedText by viewModel.translatedText.collectAsState()
     val isTranslating by viewModel.isTranslating.collectAsState()
     val fileList by viewModel.fileList.collectAsState()
+    val isEnglish by viewModel.isEnglish.collectAsState()
 
     // 현재 선택된 탭 인덱스
     var selectedTab by remember { mutableStateOf(0) }
@@ -88,7 +89,14 @@ fun MainScreen(
             // -----------------------------
             when (selectedTab) {
                 0 -> ReaderTab(originalText, { viewModel.updateScript(it) }, { viewModel.speak() })
-                1 -> TranslationTab(originalText, translatedText, isTranslating) { viewModel.translate() }
+                1 -> TranslationTab(
+                    originalText,
+                    translatedText,
+                    isTranslating,
+                    isEnglish
+                ) {
+                    viewModel.translate()
+                }
                 2 -> LibraryTab(fileList, { viewModel.openFile(it) }, { viewModel.deleteFile(it) }) {
                     filePickerLauncher.launch(arrayOf("text/plain", "application/pdf"))
                 }

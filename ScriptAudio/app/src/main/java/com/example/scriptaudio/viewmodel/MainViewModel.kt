@@ -36,6 +36,14 @@ class MainViewModel @Inject constructor(
     private val _isTranslating = MutableStateFlow(false)
     val isTranslating: StateFlow<Boolean> = _isTranslating
 
+    /**
+    * 번역 방향 상태
+    * true = 영어 → 한글
+    * false = 한글 → 영어
+    */
+    private val _isEnglish = MutableStateFlow(true)
+    val isEnglish: StateFlow<Boolean> = _isEnglish
+
     // -----------------------------
     // Library 상태 (파일 목록)
     // -----------------------------
@@ -61,10 +69,56 @@ class MainViewModel @Inject constructor(
     fun translate() {
         viewModelScope.launch {
             _isTranslating.value = true
-            // TODO: 실제 번역 로직 적용
-            _translatedText.value = _originalText.value.reversed()
-            _isTranslating.value = false
+
+            val text = _originalText.value
+            try {
+                val result = translateText(
+                    text,
+                    if (_isEnglish.value) "en" else "ko",
+                    if (_isEnglish.value) "ko" else "en"
+                     )
+
+                _translatedText.value = result
+
+                // 번역 방향 토글
+                _isEnglish.value = !_isEnglish.value
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    _translatedText.value = "번역 실패"
+                }
+
+                _isTranslating.value = false
         }
+    }
+
+    /**
+    * 실제 번역 함수 (Google 무료 endpoint)
+    */
+    private suspend fun translateText(
+        text: String,
+        from: String,
+        to: String
+        ): String {
+        return try {
+            val url = java.net.URL(
+                "https://translate.googleapis.com/translate_a/single?client=gtx" +
+                       "&sl=$from&tl=$to&dt=t&q=" +
+                        java.net.URLEncoder.encode(text, "UTF-8")
+                        )
+
+            val result = url.readText()
+
+            org.json.JSONArray(result)
+               .getJSONArray(0)
+               .getJSONArray(0)
+               .getString(0)
+
+            } catch (e: Exception) {
+                        e.printStackTrace()
+                        "번역 오류"
+            }
+
     }
 
     // -----------------------------
