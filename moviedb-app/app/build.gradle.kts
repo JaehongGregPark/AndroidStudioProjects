@@ -12,7 +12,11 @@ val localProperties = Properties().apply {
     }
 }
 
-val tmdbApiKey = (localProperties.getProperty("tmdbApiKey") ?: "").trim()
+val tmdbApiKey = (
+    localProperties.getProperty("tmdbApiKey")
+        ?: System.getenv("TMDB_API_KEY")
+        ?: ""
+    ).trim()
 
 android {
     namespace = "com.example.stockquoteapp"

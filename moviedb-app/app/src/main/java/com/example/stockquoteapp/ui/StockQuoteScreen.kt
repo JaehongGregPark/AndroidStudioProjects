@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +25,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,6 +55,8 @@ import com.example.stockquoteapp.MovieDetail
 import com.example.stockquoteapp.MovieSummary
 import com.example.stockquoteapp.MovieUiState
 import com.example.stockquoteapp.StockQuoteViewModel
+import com.example.stockquoteapp.countryFilters
+import com.example.stockquoteapp.filterFor
 
 @Composable
 fun MovieBrowserApp(
@@ -66,7 +71,9 @@ fun MovieBrowserApp(
                 MovieListScreen(
                     uiState = uiState,
                     onMovieClick = { navController.navigate("detail/$it") },
-                    onRefresh = viewModel::refreshMovies
+                    onRefresh = viewModel::refreshMovies,
+                    onCountrySelected = viewModel::selectCountry,
+                    onToggleTranslation = viewModel::toggleTranslation
                 )
             }
 
@@ -75,7 +82,7 @@ fun MovieBrowserApp(
                 arguments = listOf(navArgument("movieId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val movieId = backStackEntry.arguments?.getInt("movieId") ?: return@composable
-                LaunchedEffect(movieId) {
+                LaunchedEffect(movieId, uiState.translationEnabled, uiState.selectedCountryCode) {
                     viewModel.loadMovieDetail(movieId)
                 }
 
@@ -94,7 +101,9 @@ fun MovieBrowserApp(
 private fun MovieListScreen(
     uiState: MovieUiState,
     onMovieClick: (Int) -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onCountrySelected: (String) -> Unit,
+    onToggleTranslation: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -103,7 +112,7 @@ private fun MovieListScreen(
                     Column {
                         Text("Movie DB Browser")
                         Text(
-                            text = "Tap a movie to open details",
+                            text = "${uiState.movies.size} movies in the list",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -122,6 +131,15 @@ private fun MovieListScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             uiState.notice?.let { NoticeBanner(it) }
+            TranslationButtonRow(
+                selectedCountryCode = uiState.selectedCountryCode,
+                translationEnabled = uiState.translationEnabled,
+                onToggleTranslation = onToggleTranslation
+            )
+            CountryFilterRow(
+                selectedCountryCode = uiState.selectedCountryCode,
+                onCountrySelected = onCountrySelected
+            )
 
             when {
                 uiState.isLoading -> LoadingState()
@@ -139,6 +157,67 @@ private fun MovieListScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun TranslationButtonRow(
+    selectedCountryCode: String,
+    translationEnabled: Boolean,
+    onToggleTranslation: () -> Unit
+) {
+    val filter = filterFor(selectedCountryCode)
+    val enabled = selectedCountryCode != "ALL"
+    val label = if (!enabled) {
+        "Select a country to enable translation"
+    } else if (translationEnabled) {
+        "Show original English"
+    } else {
+        filter.translatedButtonLabel
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = if (translationEnabled && enabled) {
+                "Translation mode is on"
+            } else {
+                "Translation mode is off"
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        OutlinedButton(
+            onClick = onToggleTranslation,
+            enabled = enabled
+        ) {
+            Text(label)
+        }
+    }
+}
+
+@Composable
+private fun CountryFilterRow(
+    selectedCountryCode: String,
+    onCountrySelected: (String) -> Unit
+) {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(countryFilters, key = { it.code }) { country ->
+            FilterChip(
+                selected = selectedCountryCode == country.code,
+                onClick = { onCountrySelected(country.code) },
+                label = { Text(country.label) }
+            )
         }
     }
 }
@@ -212,6 +291,7 @@ private fun MovieCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 MetaLine("Release", movie.releaseDate.ifBlank { "Unknown" })
                 MetaLine("Rating", String.format("%.1f / 10", movie.rating))
+                MetaLine("Country", movie.countryCode)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = movie.overview.ifBlank { "No summary available." },
@@ -276,6 +356,7 @@ private fun MovieDetailContent(
             MetaLine("Rating", String.format("%.1f / 10", movie.rating))
             MetaLine("Runtime", movie.runtimeMinutes?.let { "${it} min" } ?: "Unknown")
             MetaLine("Language", movie.language.ifBlank { "Unknown" })
+            MetaLine("Country", movie.countryCode.ifBlank { "Unknown" })
             MetaLine("Genres", movie.genres.joinToString().ifBlank { "Unknown" })
         }
 
