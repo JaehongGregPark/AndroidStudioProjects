@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="screen_background">#F5EADC</color>
+    <color name="sidebar_background">#FFF3E6</color>
+    <color name="item_background">#FFFAF4</color>
+    <color name="edit_status_background">#F6E4D8</color>
+    <color name="empty_state_background">#FFF6EE</color>
+    <color name="card_stroke">#EAD7C0</color>
+    <color name="accent">#C86433</color>
+    <color name="accent_dark">#8F3A1A</color>
+    <color name="danger">#A33131</color>
+    <color name="text_primary">#2C2118</color>
+    <color name="text_secondary">#6B5D51</color>
+    <color name="white">#FFFFFF</color>
+</resources>

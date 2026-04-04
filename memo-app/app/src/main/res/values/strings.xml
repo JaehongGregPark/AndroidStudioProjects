@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Memo Flow</string>
+    <string name="hero_title">&#49373;&#44033;&#51012; &#48736;&#47476;&#44172; &#51201;&#44256; &#54596;&#50836;&#54620; &#47700;&#47784;&#47484; &#48148;&#47196; &#52286;&#51004;&#49464;&#50836;.</string>
+    <string name="hero_subtitle">Android Studio&#50640;&#49436; &#48148;&#47196; &#49892;&#54665;&#46104;&#45716; &#45348;&#51060;&#54000;&#48652; &#47700;&#47784; &#50545;&#51077;&#45768;&#45796;.</string>
+    <string name="total_memo_count">&#51200;&#51109;&#46108; &#47700;&#47784; 0&#44060;</string>
+    <string name="visible_memo_count">&#54788;&#51116; &#54364;&#49884; 0&#44060;</string>
+    <string name="all_memos">&#51204;&#52404; &#47700;&#47784;</string>
+    <string name="search_results">&#44160;&#49353; &#44208;&#44284;</string>
+    <string name="status_new_memo">&#49352; &#47700;&#47784;&#47484; &#51089;&#49457;&#54644; &#48372;&#49464;&#50836;.</string>
+    <string name="cancel_edit">&#49688;&#51221; &#52712;&#49548;</string>
+    <string name="hint_title">&#51228;&#47785;</string>
+    <string name="hint_content">&#45236;&#50857;</string>
+    <string name="save_memo">&#47700;&#47784; &#51200;&#51109;</string>
+    <string name="save_edit">&#49688;&#51221; &#51200;&#51109;</string>
+    <string name="clear_input">&#51077;&#47141; &#51648;&#50864;&#44592;</string>
+    <string name="hint_search">&#51228;&#47785; &#46608;&#45716; &#48376;&#47928; &#44160;&#49353;</string>
+    <string name="delete_all">&#51204;&#52404; &#49325;&#51228;</string>
+    <string name="memo_list">&#51228;&#47785; &#47785;&#47197;</string>
+    <string name="memo_list_subtitle">&#51228;&#47785; &#51473;&#49900;&#51004;&#47196; &#47700;&#47784;&#47484; &#48372;&#44256;, &#53412;&#50892;&#46300;&#45716; &#51228;&#47785;&#44284; &#48376;&#47928;&#50640;&#49436; &#54632;&#44760; &#44160;&#49353;&#46121;&#45768;&#45796;.</string>
+    <string name="empty_state">&#51200;&#51109;&#46108; &#47700;&#47784;&#44032; &#50630;&#49845;&#45768;&#45796;.</string>
+    <string name="edit">&#49688;&#51221;</string>
+    <string name="delete">&#49325;&#51228;</string>
+    <string name="error_content_required">&#45236;&#50857;&#51012; &#51077;&#47141;&#54644; &#51452;&#49464;&#50836;.</string>
+    <string name="error_title_too_long">&#51228;&#47785;&#51008; 60&#51088;&#44620;&#51648; &#51077;&#47141;&#54624; &#49688; &#51080;&#49845;&#45768;&#45796;.</string>
+    <string name="error_content_too_long">&#45236;&#50857;&#51008; 500&#51088;&#44620;&#51648; &#51077;&#47141;&#54624; &#49688; &#51080;&#49845;&#45768;&#45796;.</string>
+    <string name="message_saved">&#47700;&#47784;&#44032; &#51200;&#51109;&#46104;&#50632;&#49845;&#45768;&#45796;.</string>
+    <string name="message_deleted">&#47700;&#47784;&#47484; &#49325;&#51228;&#54664;&#49845;&#45768;&#45796;.</string>
+    <string name="message_all_deleted">&#47784;&#46304; &#47700;&#47784;&#47484; &#49325;&#51228;&#54664;&#49845;&#45768;&#45796;.</string>
+    <string name="message_cleared">&#51077;&#47141; &#45236;&#50857;&#51012; &#48712;&#50864;&#50632;&#49845;&#45768;&#45796;.</string>
+    <string name="dialog_delete_title">&#47700;&#47784; &#49325;&#51228;</string>
+    <string name="dialog_delete_message">%1$s &#47700;&#47784;&#47484; &#49325;&#51228;&#54624;&#44620;&#50836;?</string>
+    <string name="dialog_delete_all_title">&#51204;&#52404; &#49325;&#51228;</string>
+    <string name="dialog_delete_all_message">&#51200;&#51109;&#46108; &#47700;&#47784;&#47484; &#47784;&#46160; &#49325;&#51228;&#54624;&#44620;&#50836;?</string>
+    <string name="dialog_confirm_delete">&#49325;&#51228;</string>
+    <string name="dialog_confirm_delete_all">&#51204;&#52404; &#49325;&#51228;</string>
+    <string name="dialog_cancel">&#52712;&#49548;</string>
+    <string name="status_editing">%1$s &#47700;&#47784;&#47484; &#49688;&#51221;&#54616;&#45716; &#51473;&#51077;&#45768;&#45796;.</string>
+    <string name="count_total_format">&#51200;&#51109;&#46108; &#47700;&#47784; %1$d&#44060;</string>
+    <string name="count_visible_format">&#54788;&#51116; &#54364;&#49884; %1$d&#44060;</string>
+    <string name="toggle_list_open">&#47785;&#47197;&#48372;&#44592;</string>
+    <string name="toggle_list_close">&#47785;&#47197;&#45803;&#44592;</string>
+    <string name="back_to_write">&#51089;&#49457;&#54868;&#47732; &#48372;&#44592;</string>
+    <string name="detail_title">&#47700;&#47784; &#49345;&#49464;</string>
+    <string name="detail_message_format">&#51228;&#47785;: %1$s\n\n&#45236;&#50857;:\n%2$s</string>
+</resources>

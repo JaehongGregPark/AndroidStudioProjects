@@ -1,0 +1,1702 @@
+[
+    {
+        "no": "1",
+        "content": "SQL에서 VIEW를 삭제할 때 사용하는 명령은?",
+        "options": [
+            "KILL",
+            "DROP",
+            "DELETE",
+            "ERASE"
+        ],
+        "answer": null
+    },
+    {
+        "no": "2",
+        "content": "다음 릴레이션의 Degree와 Cardinality는?\n릴레이션 내용:\n13001 홍길동 학년 3 전기\n13002 이순신 학년 4 기계\n13003 강감찬 학년 2 컴퓨터",
+        "options": [
+            "Degree : 4, Cardinality : 3",
+            "Degree : 3, Cardinality : 4",
+            "Degree : 3, Cardinality : 12",
+            "Degree : 12, Cardinality : 3"
+        ],
+        "answer": null
+    },
+    {
+        "no": "3",
+        "content": "모든 응용 프로그램이나 사용자들이 필요로 하는 데이터를 통합한 조직 전체의 데이터베이스 구조를 논리적으로 정의하는 스키마는?",
+        "options": [
+            "개념 스키마",
+            "외부 스키마",
+            "내부 스키마",
+            "처리 스키마"
+        ],
+        "answer": null
+    },
+    {
+        "no": "4",
+        "content": "병행제어의 목적으로 옳지 않은 것은?",
+        "options": [
+            "시스템 활용도를 최대화",
+            "사용자에 대한 응답시간 최소화",
+            "데이터베이스 공유도 최소화",
+            "데이터베이스의 일관성 유지"
+        ],
+        "answer": null
+    },
+    {
+        "no": "5",
+        "content": "한 릴레이션의 기본키를 구성하는 어떠한 속성 값도 널 값이나 (Null) 중복 값을 가질 수 없다는 것을 의미하는 것은?",
+        "options": [
+            "개체 무결성 제약 조건",
+            "참조 무결성 제약 조건",
+            "도메인 무결성 제약 조건",
+            "키 무결성 제약 조건"
+        ],
+        "answer": null
+    },
+    {
+        "no": "6",
+        "content": "학적 테이블에서 전화번호가 Null 값이 아닌 학생명을 모두 검색할 때, SQL 구문으로 옳은 것은?",
+        "options": [
+            "SELECT 학생명 FROM 학적 WHERE 전화번호 DON’T NULL;",
+            "SELECT 학생명 FROM 학적 WHERE 전화번호 != NULL;",
+            "SELECT 학생명 FROM 학적 WHERE 전화번호 IS NOT NULL;",
+            "SELECT 학생명 FROM 학적 WHERE 전화번호 IS 0;"
+        ],
+        "answer": null
+    },
+    {
+        "no": "7",
+        "content": "제 2 정규형에서 제 3 정규형이 되기 위한 조건은?",
+        "options": [
+            "이행적 함수 종속 제거",
+            "부분적 함수 종속 제거",
+            "다치 종속 제거",
+            "결정자이면서 후보키가 아닌 것 제거"
+        ],
+        "answer": null
+    },
+    {
+        "no": "8",
+        "content": "뷰에 대한 설명으로 옳지 않은 것은?",
+        "options": [
+            "뷰는 삽입, 삭제, 갱신 연상에 제약사항이 따른다.",
+            "뷰는 데이터 접근 제어로 보안을 제공한다.",
+            "뷰는 물리적으로 구현되는 테이블이다.",
+            "뷰는 데이터의 논리적 독립성을 제공한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "9",
+        "content": "시스템 카탈로그에 대한 설명으로 옳지 않은 것은?",
+        "options": [
+            "시스템 카탈로그는 DBMS가 생성하고 유지하는 데이터베이스 내의 특별한 테이블들의 집합체이다.",
+            "일반 사용자도 시스템 카탈로그의 내용을 검색할 수 있다.",
+            "시스템 카탈로그 내의 각 테이블은 DBMS에서 지원하는 개체들에 관한 정보를 포함한다.",
+            "시스템 카탈로그에 대한 갱신은 데이터베이스의 무결성 유지를 위하여 사용자가 직접 갱신해야 한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "10",
+        "content": "다음 트리를 후위 순회 (Post Traversal) 한 결과는?\n트리 구조:\n    A (루트)\n   / \\\n  B   C\n /   / \\\nD   E   F",
+        "options": [
+            "D B A E C F",
+            "D B A E C F",
+            "A B C D E F",
+            "D B E F C A"
+        ],
+        "answer": null
+    },
+    {
+        "no": "11",
+        "content": "데이터베이스 설계 단계 중 응답 시간, 저장 공간의 효율화, 트랜잭션 처리도와 가장 밀접한 관계가 있는 것은?",
+        "options": [
+            "물리적 설계",
+            "논리적 설계",
+            "개념적 설계",
+            "요구조건 분석"
+        ],
+        "answer": null
+    },
+    {
+        "no": "12",
+        "content": "Which of the following does not belong to the DDL statement of SQL?",
+        "options": [
+            "CREATE",
+            "DELETE",
+            "DROP",
+            "ALTER"
+        ],
+        "answer": null
+    },
+    {
+        "no": "13",
+        "content": "스택에서 순서가 A, B, C, D로 정해진 입력 자료를 push → pop → push → pop → push → push → pop → pop 했을 때 출력은?",
+        "options": [
+            "C, B, D, A",
+            "B, C, D, A",
+            "B, C, A, D",
+            "C, B, A, D"
+        ],
+        "answer": null
+    },
+    {
+        "no": "14",
+        "content": "해싱 함수 중 주어진 키를 여러 부분으로 나누고, 각 부분의 값을 더하거나 배타적 논리합 연산을 통하여 나온 (XOR; Exclusive OR) 결과로 주소를 취하는 방법은?",
+        "options": [
+            "중간 제곱 방법(Mid-Square Method)",
+            "제산 방법(Division Method)",
+            "폴딩 방법(Folding Method)",
+            "기수 변환법(Radix Conversion Method)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "15",
+        "content": "관계 데이터베이스에 있어서 관계 대수 연산이 아닌 것은?",
+        "options": [
+            "디비전(division)",
+            "프로젝션(projection)",
+            "조인(join)",
+            "포크(fork)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "16",
+        "content": "다음 자료를 버블 정렬을 이용하여 오름차순으로 정렬할 경우 PASS 1 의 결과는?\n9, 6, 7, 3, 5",
+        "options": [
+            "6, 9, 7, 3, 5",
+            "3, 9, 6, 7, 5",
+            "3, 6, 7, 9, 5",
+            "6, 7, 3, 5, 9"
+        ],
+        "answer": null
+    },
+    {
+        "no": "17",
+        "content": "비선형 자료 구조에 해당하는 것은?",
+        "options": [
+            "큐(Queue)",
+            "그래프(Graph)",
+            "데크(Deque)",
+            "스택(stack)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "18",
+        "content": "해싱에서 동일한 홈 주소로 인하여 충돌이 일어난 레코드들의 집합을 무엇이라고 하는가?",
+        "options": [
+            "Overflow",
+            "Bucket",
+            "Synonym",
+            "Collision"
+        ],
+        "answer": null
+    },
+    {
+        "no": "19",
+        "content": "일련의 연산 집합으로 데이터베이스의 상태를 변환시키기 위하여 논리적 기능을 수행하는 하나의 작업 단위는?",
+        "options": [
+            "도메인",
+            "트랜잭션",
+            "모듈",
+            "프로시저"
+        ],
+        "answer": null
+    },
+    {
+        "no": "20",
+        "content": "다음 내용이 설명하고 있는 기술은?\nㆍ일반 컴퓨터로 가상화된 대형 스토로지 형성\nㆍ그 안에 보관된 거대한 데이터 세트를 병렬로 처리할 수 있도록 빅데이터 분산처리를 돕는 자바 소프트웨어 오픈소스 프레임 워크",
+        "options": [
+            "Hadoop",
+            "SQLite",
+            "XSQL",
+            "HMD"
+        ],
+        "answer": null
+    },
+    {
+        "no": "21",
+        "content": "PE(processing element)라는 연산기를 사용하여 동기적 병렬 처리를 수행하는 것은?",
+        "options": [
+            "Pipeline processor",
+            "Vector Processor",
+            "Multi processor",
+            "VLSI Processor"
+        ],
+        "answer": null
+    },
+    {
+        "no": "22",
+        "content": "반가산기에서 입력을 X, Y라 할 때 출력 부분의 캐리 값은 (carry)?",
+        "options": [
+            "XY",
+            "X",
+            "Y",
+            "X+Y"
+        ],
+        "answer": null
+    },
+    {
+        "no": "23",
+        "content": "명령어가 오퍼레이션 코드(OP Code) 6 비트, 어드레스 필드 16 비트로 되어 있다. 이 명령어를 쓰는 컴퓨터의 최대 메모리 용량은?",
+        "options": [
+            "16K Word",
+            "32K Word",
+            "64K Word",
+            "1M Word"
+        ],
+        "answer": null
+    },
+    {
+        "no": "24",
+        "content": "디코더(Decoder)의 출력이 4개일 때 입력 개수는?",
+        "options": [
+            "1",
+            "2",
+            "8",
+            "16"
+        ],
+        "answer": null
+    },
+    {
+        "no": "25",
+        "content": "기억장치에 기억된 정보를 액세스하기 위하여 주소를 사용하는 것이 아니라 기억된 정보의 일부분을 이용하여 원하는 정보를 찾는 것은?",
+        "options": [
+            "Random Access Memory",
+            "Associative Memory",
+            "Read Only Memory",
+            "Virtual Memory"
+        ],
+        "answer": null
+    },
+    {
+        "no": "26",
+        "content": "다음 진리표에 해당하는 논리식은?\n입력 출력\nA B T\n0 0 0\n0 1 1\n1 0 1\n1 1 0",
+        "options": [
+            "T = Aㆍ ㆍB +A Bㆍ",
+            "T = A B +",
+            "T = A",
+            "T = A +BㆍA"
+        ],
+        "answer": null
+    },
+    {
+        "no": "27",
+        "content": "Flynn의 컴퓨터 시스템 분류 제안 중에서 하나의 데이터 흐름이 다수의 프로세서들로 전달되며 각 프로세서는 서로 다른 명령어를 실행하는 구조는?",
+        "options": [
+            "단일 명령어 단일 데이터 흐름",
+            "단일 명령어 다중 데이터 흐름",
+            "다중 명령어 단일 데이터 흐름",
+            "다중 명령어 다중 데이터 흐름"
+        ],
+        "answer": null
+    },
+    {
+        "no": "28",
+        "content": "다음 중 타이머에 의한 인터럽트(Interrupt)는?",
+        "options": [
+            "프로그램 인터럽트",
+            "I/O 인터럽트",
+            "외부 인터럽트",
+            "머신 체크 인터럽트"
+        ],
+        "answer": null
+    },
+    {
+        "no": "29",
+        "content": "제어기에서 DMA와 CPU I/O장치 사이의 통신을 위해 필요한 것이 아닌 것은?",
+        "options": [
+            "Address Register",
+            "Word Count Register",
+            "Address Line",
+            "Device Register"
+        ],
+        "answer": null
+    },
+    {
+        "no": "30",
+        "content": "I/O Operation과 관계가 없는 것은?",
+        "options": [
+            "Channel",
+            "Handshaking",
+            "Interrupt",
+            "Emulation"
+        ],
+        "answer": null
+    },
+    {
+        "no": "31",
+        "content": "블루레이 디스크(Blue-ray Disk)에 관한 설명으로 틀린 것은?",
+        "options": [
+            "저장된 데이터를 읽기 위해 적색 레이저를 사용한다(650nm).",
+            "비디오 포맷은 DVD와 동일한 기반 코덱이 사용된 MPEG-2다.",
+            "단층 기록면을 가지는 직경 12cm에 25GB의 데이터를 저장할 수 있다.",
+            "읽기전용 BD-ROM( ), 기록가능 BD-R( ), 재기록가능 BD-RE( )가 있다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "32",
+        "content": "기억장치를 각 모듈이 번갈아 가며 접근하는 방법은?",
+        "options": [
+            "페이징",
+            "스테이징",
+            "인터리빙",
+            "세그멘팅"
+        ],
+        "answer": null
+    },
+    {
+        "no": "33",
+        "content": "베이스 레지스터 주소지정방식의 특징이 아닌 것은?",
+        "options": [
+            "베이스 레지스터가 필요하다.",
+            "프로그램의 재배치가 용이하다.",
+            "다중 프로그래밍 기법에 많이 사용된다.",
+            "명령어의 길이가 절대 주소지정방식보다 길어야 한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "34",
+        "content": "CPU내부의 레지스터 중 프로그램 제어와 관계가 있는 것은?",
+        "options": [
+            "Memory Address Register",
+            "Index Register",
+            "Accumulator",
+            "Status Register"
+        ],
+        "answer": null
+    },
+    {
+        "no": "35",
+        "content": "Stack 기억장치의 구조와 가장 밀접한 관계가 있는 명령어는?",
+        "options": [
+            "One-Address",
+            "Two-Address",
+            "Three-Address",
+            "Zero-Address"
+        ],
+        "answer": null
+    },
+    {
+        "no": "36",
+        "content": "시프트 레지스터 (shift register) 의 내용을 오른쪽으로 한 번 시프트하면 데이터는 어떻게 변하는가?",
+        "options": [
+            "기존 데이터의 ",
+            "기존 데이터의 ",
+            "기존 데이터의 ",
+            "기존 데이터의 "
+        ],
+        "answer": null
+    },
+    {
+        "no": "37",
+        "content": "가상 기억체제에서 주소 공간이 1024K 이고 기억 공간은 32K 라고 가정할 때 주기억장치의 주소 레지스터는 몇 비트로 구성되는가?",
+        "options": [
+            "12",
+            "13",
+            "14",
+            "15"
+        ],
+        "answer": null
+    },
+    {
+        "no": "38",
+        "content": "채널 (Channel) 에 대한 설명으로 가장 옳지 않은 것은?",
+        "options": [
+            "DMA와 달리 여러 개의 블록을 입출력할 수 있다.",
+            "시스템의 입출력 처리 능력을 향상시키는 기능을 한다.",
+            "멀티플렉서 채널은 저속인 여러 장치를 동시에 제어하는 데 적합하다.",
+            "입출력 동작을 수행하는데 있어서 CPU의 지속적인 개입이 필요하다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "39",
+        "content": "사이클 타임이 750ns 인 기억장치에서는 이론적으로 초당 몇 개의 데이터를 불러 낼 수 있는가?",
+        "options": [
+            "약 750 개",
+            "약 1330 개",
+            "약 1.3 × 10^6 개",
+            "약 750 × 10^6 개"
+        ],
+        "answer": null
+    },
+    {
+        "no": "40",
+        "content": "메모리 버퍼 레지스터 (MBR) 의 설명으로 옳은 것은?",
+        "options": [
+            "다음에 실행할 명령어의 번지를 기억하는 레지스터",
+            "현재 실행 중인 명령의 내용을 기억하는 레지스터",
+            "기억장치를 출입하는 데이터가 일시적으로 저장하는 버퍼 레지스터",
+            "기억장치를 출입하는 데이터의 번지를 기억하는 레지스터"
+        ],
+        "answer": null
+    },
+    {
+        "no": "41",
+        "content": "4개의 페이지를 수용할 수 있는 주기억장치가 있으며 초기에는 모두 비어 있다고 가정한다. 다음의 순서로 페이지 참조가 발생할 때 FIFO 페이지 교체 알고리즘을 사용할 경우 페이지 결함의 발생 횟수는? 페이지 참조 순서 : 1, 2, 3, 1, 2, 4, 5, 1, 2",
+        "options": [
+            "6회",
+            "7회",
+            "8회",
+            "9회"
+        ],
+        "answer": null
+    },
+    {
+        "no": "42",
+        "content": "데이터 발생 즉시 또는 데이터 처리 요구가 있는 즉시 처리하여 결과를 산출하는 방식으로 정해진 시간 내에 결과를 도출하는 시스템은?",
+        "options": [
+            "분산 처리 시스템",
+            "실시간 처리 시스템",
+            "배치 처리 시스템",
+            "시분할 처리 시스템"
+        ],
+        "answer": null
+    },
+    {
+        "no": "43",
+        "content": "운영체제에서 스레드 (Thread) 의 개념으로 가장 옳지 않은 것은?",
+        "options": [
+            "다중 프로그래밍 시스템에서 CPU를 받아서 수행되는 프로그램 단위이다.",
+            "프로세스 (Process) 나 태스크 (Task) 보다 더 작은 단위이다.",
+            "입 출력장치와 같은 자원의 할당에 관계된다.",
+            "한 태스크 (Task) 는 여러 개의 스레드 (Thread) 로 나누어 수행될 수 있다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "44",
+        "content": "파일 디스크립터 (File Descriptor) 에 관한 설명으로 옳지 않은 것은?",
+        "options": [
+            "사용자가 직접 참조할 수 있다.",
+            "파일마다 독립적으로 존재하며 시스템에 따라 다른 구조를 가질 수 있다.",
+            "대개 보조기억장치에 저장되어 있다가 헤딩 파일이 열릴 (Open) 때 주기억장치로 옮겨진다.",
+            "파일 관리를 위해 시스템 (운영체제) 이 필요로 하는 파일에 대한 정보를 갖고 있는 제어블록 (FCB) 이다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "45",
+        "content": "Cryptography 와 가장 관계 없는 것은?",
+        "options": [
+            "RISC",
+            "DES Algorithm",
+            "Public Key System",
+            "RSA Algorithm"
+        ],
+        "answer": null
+    },
+    {
+        "no": "46",
+        "content": "프로세스가 실행되면서 하나의 페이지를 일정 시간 동안 집중적으로 액세스하는 현상은?",
+        "options": [
+            "구역성(Locality)",
+            "스래싱(Thrashing)",
+            "워킹세트(Working Set)",
+            "프리페이징(Prepaging)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "47",
+        "content": "SJF(Shortest Job First) 스케줄링에서 다음과 같은 작업들이 준비상태 큐에 있을 때 평균 반환 시간과 평균 대기 시간은? 프로세스 실행시간: P-1은 6, P-2는 3, P-3은 8, P-4는 7.",
+        "options": [
+            "평균 반환 시간 : 13, 평균 대기 시간 : 7",
+            "평균 반환 시간 : 13, 평균 대기 시간 : 9",
+            "평균 반환 시간 : 15, 평균 대기 시간 : 7",
+            "평균 반환 시간 : 15, 평균 대기 시간 : 9"
+        ],
+        "answer": null
+    },
+    {
+        "no": "48",
+        "content": "UNIX 에서 파일 사용 권한 지정에 관한 명령어는?",
+        "options": [
+            "mv",
+            "ls",
+            "chmod",
+            "fork"
+        ],
+        "answer": null
+    },
+    {
+        "no": "49",
+        "content": "운영체제의 프로세스 (Process) 에 대한 설명으로 옳지 않은 것은?",
+        "options": [
+            "트랩 오류 프로그램 요구 입 출력 인터럽트에 대해 조치를 취한다.",
+            "비동기적 행위를 일으키는 주체로 정의할 수 있다.",
+            "실행중인 프로그램을 말한다.",
+            "프로세스는 각종 자원을 요구한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "50",
+        "content": "공유자원을 어느 시점에서 단지 한 개의 프로세스만이 사용할 수 있도록 하며 다른 프로세스가 공유자원에 대하여 접근하지 못하게 제어하는 기법은?",
+        "options": [
+            "Mutual Exclusion",
+            "Critical Section",
+            "Deadlock",
+            "Scatter Loading"
+        ],
+        "answer": null
+    },
+    {
+        "no": "51",
+        "content": "운영체제의 역할로 가장 옳지 않은 것은?",
+        "options": [
+            "사용자 인터페이스 제공",
+            "입 출력에 대한 보조역할 수행",
+            "사용자들 간 하드웨어 자원의 공동 사용",
+            "원시 프로그램을 목적 프로그램으로 변환"
+        ],
+        "answer": null
+    },
+    {
+        "no": "52",
+        "content": "스케쥴링 방식에서 입력된 작업이 다음과 같을 때 HRN 우선순위가 가장 높은 것은?\n\n| 작업 | 대기 시간 | 서비스 실행 시간 |\n|---|---|---|\n| A | 5 | 20 |\n| B | 40 | 20 |\n| C | 15 | 45 |\n| D | 20 | 2 |",
+        "options": [
+            "① A",
+            "② B",
+            "③ C",
+            "④ D"
+        ],
+        "answer": null
+    },
+    {
+        "no": "53",
+        "content": "작업요구시 150K과 전략을 각각 적용할 경우 First Fit, Best Fit 할당 영역의 연결이 옳은 것은?\n\n| 할당영역 | 크기 | 상태 |\n|---|---|---|\n| 1 | 50k | 사용중 |\n| 2 | 400k | 사용중 |\n| 3 | 200k | - |",
+        "options": [
+            "① First Fit : 2, Best Fit : 3",
+            "② First Fit : 3, Best Fit : 2",
+            "③ First Fit : 1, Best Fit : 2",
+            "④ First Fit : 3, Best Fit : 1"
+        ],
+        "answer": null
+    },
+    {
+        "no": "54",
+        "content": "다음 중 교착상태가 발생할 수 있는 필요 충분 조건은?",
+        "options": [
+            "① 중단 조건(Preemption)",
+            "② 환형 대기(Circular Wait)",
+            "③ 기아 상태(Starvation)",
+            "④ 동기화(Synchronization)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "55",
+        "content": "기억장치의 고정 분할 할당에서 총 24K의 공간이 다음과 같이 나누어져 있고 (사용자 할당 가능 영역: 8K, 8K, 4K, 4K), 작업 큐에는 8K, 8K, 4K, 4K, 5K, 5K, 10K, 10K의 작업이 순차적으로 대기 중이라고 할 때 발생하는 전체 기억공간의 낭비를 계산하면?",
+        "options": [
+            "① 6K",
+            "② 14K",
+            "③ 18K",
+            "④ 20K"
+        ],
+        "answer": null
+    },
+    {
+        "no": "56",
+        "content": "분산 처리 시스템에 대한 설명으로 옳지 않은 것은?",
+        "options": [
+            "① 연산 속도, 신뢰성, 사용 가능도가 향상된다.",
+            "② 시스템의 점진적 확장이 용이하다.",
+            "③ 중앙 집중형 시스템에 비해 시스템 설계가 간단하고 소프트웨어 개발이 쉽다.",
+            "④ 단일 시스템에 비해 처리 능력과 저장용량이 높고 신뢰성이 향상된다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "57",
+        "content": "Microsoft Windows 운영체제의 특징이 아닌 것은?",
+        "options": [
+            "① GUI 기반 운영체제이다.",
+            "② 트리 디렉터리 구조를 가진다.",
+            "③ 선점형 멀티태스킹 방식을 사용한다.",
+            "④ 소스가 공개된 개방형 시스템이다(Open)."
+        ],
+        "answer": null
+    },
+    {
+        "no": "58",
+        "content": "분산 운영체제에 대한 설명을 모두 옳게 나열한 것은?\n가. 분산 시스템이 하나의 운영체제에 의해 구현된다.\n나. 분산된 자원의 위치 정보가 감추어진다.\n다. 하나의 운영체제가 시스템 전체를 관리해야 하므로 구현이 어렵다.",
+        "options": [
+            "① 가",
+            "② 가, 나",
+            "③ 가, 다",
+            "④ 가, 나, 다"
+        ],
+        "answer": null
+    },
+    {
+        "no": "59",
+        "content": "전송 크기가 1KB(Kilo Byte)일 때 이동 헤드 디스크의 데이터 액세스 시간과 고정 헤드의 데이터 액세스 시간을 구한 결과는(ms)?\nㆍ탐색 시간 : 50ms\nㆍ디스크 회전 지연 시간 : 16ms\nㆍ1KB 전송 시간 : 0.96ms",
+        "options": [
+            "① 이동 헤드 : 66.96, 고정 헤드 : 16.96",
+            "② 이동 헤드 : 16.96, 고정 헤드 : 66.96",
+            "③ 이동 헤드 : 50.96, 고정 헤드 : 16.96",
+            "④ 이동 헤드 : 16.96, 고정 헤드 : 50.96"
+        ],
+        "answer": null
+    },
+    {
+        "no": "60",
+        "content": "완전 연결 형 분산 처리 시스템(Fully Connection)에 관한 설명으로 옳지 않은 것은?",
+        "options": [
+            "① 각 사이트들이 시스템 내의 다른 모든 사이트들과 직접 연결된 구조이다.",
+            "② 하나의 링크가 고장 나더라도 다른 링크를 이용할 수 있다.",
+            "③ 사이트 수가 n개이면 링크 연결 수는 n-1개이다.",
+            "④ 기본비용은 많이 들지만 통신비용은 적게 들고 신뢰성이 높다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "61",
+        "content": "소프트웨어 프로젝트 관리의 주요 구성 요소인 3P에 해당하지 않는 것은?",
+        "options": [
+            "① People",
+            "② Problem",
+            "③ Process",
+            "④ Power"
+        ],
+        "answer": null
+    },
+    {
+        "no": "62",
+        "content": "소프트웨어 재공학의 주요 활동 중 역공학에 해당하는 것은?",
+        "options": [
+            "① 소프트웨어 동작 이해 및 재공학 대상 선정",
+            "② 소프트웨어 기능 변경 없이 소프트웨어 형태를 목적에 맞게 수정",
+            "③ 원시 코드로부터 설계 정보 추출 및 절차 설계 표현, 프로그램과 데이터 구조 정보 추출",
+            "④ 기존 소프트웨어 시스템을 새로운 기술 또는 하드웨어 환경에 이식"
+        ],
+        "answer": null
+    },
+    {
+        "no": "63",
+        "content": "소프트웨어 프로젝트 측정에서 신뢰할만한 비용과 노력 측정을 달성하기 위한 선택사항이 아닌 것은?",
+        "options": [
+            "① 프로젝트 비용과 노력 측정을 위해 상대적으로 복잡한 분해기술을 이용한다.",
+            "② 프로젝트의 정확한 측정을 위해 충분한 시간을 갖고 측정한다.",
+            "③ 하나 이상의 자동화 측정도구들을 이용한다.",
+            "④ 소프트웨어 비용과 노력에 대한 실험적 모델을 형성한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "64",
+        "content": "소프트웨어 위기를 가져온 원인으로 가장 옳지 않는 것은?",
+        "options": [
+            "① 소프트웨어 규모 증대와 복잡도에 따른 개발 비용 증가",
+            "② 프로젝트 관리기술의 부재",
+            "③ 소프트웨어 개발기술에 대한 훈련 부족",
+            "④ 소프트웨어 수요의 감소"
+        ],
+        "answer": null
+    },
+    {
+        "no": "65",
+        "content": "객체 지향 개념 중 하나 이상의 유사한 객체들을 묶어 공통된 특성을 표현한 데이터 추상화를 의미하는 것은?",
+        "options": [
+            "① 메소드(Method)",
+            "② 클래스(Class)",
+            "③ 상속성(Inheritance)",
+            "④ 메시지(Message)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "66",
+        "content": "객체들 간에 메시지를 주고받을 떄 각 객체의 세부내용은 알 필요가 없으므로 인터페이스가 단순해지고 데이터와 데이터를 처리하는 함수를 하나로 묶는 것을 의미하는 것은?",
+        "options": [
+            "① Abstraction",
+            "② Class",
+            "③ Encapsulation",
+            "④ Integration"
+        ],
+        "answer": null
+    },
+    {
+        "no": "67",
+        "content": "소프트웨어 재공학은 어떤 유지보수 측면에서 소프트웨어 위기를 해결하려고 하는 방법인가?",
+        "options": [
+            "① Preventive maintenance",
+            "② Corrective maintenance",
+            "③ Perfective maintenance",
+            "④ Adaptive maintenance"
+        ],
+        "answer": null
+    },
+    {
+        "no": "68",
+        "content": "자료 흐름도 의 작성 지침이라고 볼 수 없는 것은 (DFD) ?",
+        "options": [
+            "① 자료는 처리를 거쳐 변환될 때마다 새로운 명칭을 부여해야 한다.",
+            "② 자료 흐름도의 최하위 처리 는 소단위 명세서를 갖는(Process) 다.",
+            "③ 배경도 에도 명칭과 번호를 부여해야 한다(Context Diagram) .",
+            "④ 어떤 처리 가 출력 자료를 산출하기 위해서는 필요한 (Process) 자료가 반드시 입력되어야 한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "69",
+        "content": "소프트웨어 생명주기 모형 중 Spiral Model에 대한 설명으로 가장 옳지 않은 것은?",
+        "options": [
+            "① 대규모 시스템에 적합하다.",
+            "② 개발 순서는 계획 및 정의 위험 분석 공학적 개발 고객 평가 , , , 순으로 진행된다.",
+            "③ 소프트웨어를 개발하면서 발생할 수 있는 위험을 관리하고 최소화하는 것을 목적으로 한다.",
+            "④ 개발 과정의 앞 단계가 완료되어야만 다음 단계로 넘어갈 수 있는 선형 순차적 모형이다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "70",
+        "content": "소프트웨어 공학에 대한 설명으로 가장 옳지 않은 것은?",
+        "options": [
+            "① 소프트웨어의 개발 운영 유지보수 그리고 폐기에 대한 체계, , , 적인 접근이다.",
+            "② 소프트웨어 제품을 체계적으로 생산하고 유지보수와 관련된 기술과 경영에 관한 학문이다.",
+            "③ 과학적인 지식을 컴퓨터 프로그램 설계와 제작에 실제 응용하는 것이며 이를 개발하고 운영하고 유지보수하는데 필요한 , 문서화 작성 과정이다.",
+            "④ 소프트웨어의 위기를 이미 해결한 학문으로 소프트웨어의 개, 발만을 위한 체계적인 접근이다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "71",
+        "content": "구조적 분석에서 자료 사전 작성 시 고려 사항으로 (Data Dictionary) 거리가 먼 것은?",
+        "options": [
+            "① 갱신하기 쉬워야 한다.",
+            "② 이름이 중복되어야 한다.",
+            "③ 이름을 가지고 정의를 쉽게 찾을 수 있어야 한다.",
+            "④ 정의하는 방식이 명확해야 한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "72",
+        "content": "외계인 코드 를 가장 잘 설명한 것은 (Alien Code) ?",
+        "options": [
+            "① 프로그램의 로직이 복잡하여 이해하기 어려운 프로그램을 의미한다.",
+            "② 오류가 없어 디버깅 과정이 필요 없는 프로그램을 의미한다.",
+            "③ 사용자가 직접 작성한 프로그램을 의미한다.",
+            "④ 아주 오래되거나 참고문서 또는 개발자가 없어 유지보수 작업이 어려운 프로그램을 의미한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "73",
+        "content": "다음 중 독립적인 모듈이 되기 위해서 가장 좋은 결합도 상태는?",
+        "options": [
+            "① Control coupling",
+            "② Stamp coupling",
+            "③ Common coupling",
+            "④ Content coupling"
+        ],
+        "answer": null
+    },
+    {
+        "no": "74",
+        "content": "소프트웨어를 재사용함으로써 얻을 수 있는 이점으로 거리가 먼 것은?",
+        "options": [
+            "① 새로운 개발 방법론 도입 용이",
+            "② 생산성 증가",
+            "③ 소프트웨어 품질 향상",
+            "④ 프로젝트 문서 공유"
+        ],
+        "answer": null
+    },
+    {
+        "no": "75",
+        "content": "소프트웨어 생명주기 모형에서 프로토타입 모형의 장점이 아닌 것은?",
+        "options": [
+            "① 단기간 제작 목적으로 인하여 비효율적인 언어나 알고리즘을 사용할 수 있다.",
+            "② 개발과정에서 사용자의 요구를 충분히 반영한다.",
+            "③ 최종 결과물이 만들어지기 전에 의뢰자가 최종결과물의 일부 혹은 모형을 볼 수 있다.",
+            "④ 의뢰자나 개발자 모두에게 공동의 참조 모델을 제공한다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "76",
+        "content": "럼바우의 객체지향 분석에서 분석 활동의 모델링과 관계 없는 것은?",
+        "options": [
+            "① 객체 모델링(Object)",
+            "② 절차 모델링(Procedure)",
+            "③ 동적 모델링(Dynamic)",
+            "④ 기능 모델링(Functional)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "77",
+        "content": "CASE 가 제공하는 기능으로 거리가 먼 것은?",
+        "options": [
+            "① 개발을 신속하게 할 수 있다.",
+            "② 개발 방법론을 생성할 수 있다.",
+            "③ 오류 수정이 쉬워 품질이 향상된다S/W .",
+            "④ 개발 단계의 표준화를 기할 수 있다S/W ."
+        ],
+        "answer": null
+    },
+    {
+        "no": "78",
+        "content": "자료 흐름도 의 각 요소별 표기 형태의 연결이 옳지 않은 (DFD)것은?",
+        "options": [
+            "① 원 Process :",
+            "② 화살표Data Flow :",
+            "③ 삼각형 Data Store :",
+            "④ 사각형 Terminator :"
+        ],
+        "answer": null
+    },
+    {
+        "no": "79",
+        "content": "각 기능의 원시 코드 라인 수의 비관치 낙관치 기대치를 S/W , , 측정하여 예측치를 구하고 이를 이용하여 비용을 산정하는 기법은?",
+        "options": [
+            "① 기법 Effort Per Task",
+            "② 전문가 감정 기법",
+            "③ 델파이 기법",
+            "④ 기법LOC"
+        ],
+        "answer": null
+    },
+    {
+        "no": "80",
+        "content": "소프트웨어 품질 목표 중 사용자의 요구 기능을 충족시키는 정도를 의미하는 것은?",
+        "options": [
+            "① Reliability",
+            "② Portability",
+            "③ Correctness",
+            "④ Efficiency"
+        ],
+        "answer": null
+    },
+    {
+        "no": "81",
+        "content": "자기 정정 부호의 하나로 비트 착오를 검출해서 착오를 정정하는 부호 방식은?",
+        "options": [
+            "① Parity Code",
+            "② Hamming Code",
+            "③ ASCII Code",
+            "④ EBCDIC Code"
+        ],
+        "answer": null
+    },
+    {
+        "no": "82",
+        "content": "채널 대역폭이 150kHz 이고 S/N 비가 15일 때 채널용량 C는 (kbps) ?단 신호 잡음( S : , N : )",
+        "options": [
+            "150",
+            "300",
+            "600",
+            "750"
+        ],
+        "answer": null
+    },
+    {
+        "no": "83",
+        "content": "동일한 네트워크에 있는 목적지 호스트로 IP 패킷을 직접 전달할 수 있도록 IP 주소를 MAC 주소로 변환하는 프로토콜은 ?",
+        "options": [
+            "ARP(Address Resolution Protocol)",
+            "ICMP(Internet Control Message Protocol)",
+            "IGMP(Internet Group Management Protocol)",
+            "SNMP(Simple Network Management Protocol)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "84",
+        "content": "OSI 7 계층에서 TCP는 어떤 계층에 해당하는가?",
+        "options": [
+            "세션 계층",
+            "네트워크 계층",
+            "전송 계층",
+            "데이터 링크 계층"
+        ],
+        "answer": null
+    },
+    {
+        "no": "85",
+        "content": "토큰링 방식에 사용되는 네트워크 표준안은?",
+        "options": [
+            "IEEE 802.2",
+            "IEEE 802.3",
+            "IEEE 802.5",
+            "IEEE 802.6"
+        ],
+        "answer": null
+    },
+    {
+        "no": "86",
+        "content": "QAM(Quadrature Amplitude Modulation) 방식에서 4개의 위상과 4개의 진폭으로 구성되고 2400baud 일 때 전송 속도 C는 (bps) ?",
+        "options": [
+            "300",
+            "4800",
+            "7200",
+            "19200"
+        ],
+        "answer": null
+    },
+    {
+        "no": "87",
+        "content": "IPv6의 주소체계에 해당하지 않은 것은?",
+        "options": [
+            "Broadcast",
+            "Unicast",
+            "Anycast",
+            "Multicast"
+        ],
+        "answer": null
+    },
+    {
+        "no": "88",
+        "content": "최단경로 탐색에는 Bellman-Ford 알고리즘을 사용하는 거리 벡터 라우팅 프로토콜은?",
+        "options": [
+            "ICMP",
+            "RIP",
+            "ARP",
+            "HTTP"
+        ],
+        "answer": null
+    },
+    {
+        "no": "89",
+        "content": "ARQ(Automatic Repeat reQuest) 기법 중 오류가 검출된 해당 블록만을 재전송하는 방식으로 재전송 블록 수가 적은 반면, 수신 측에서 큰 버퍼와 복잡한 논리 회로를 요구하는 기법은?",
+        "options": [
+            "Selective Repeat ARQ",
+            "Stop and Wait ARQ",
+            "Go-Back-N ARQ",
+            "Adaptive ARQ"
+        ],
+        "answer": null
+    },
+    {
+        "no": "90",
+        "content": "PSK에서 반송파 간의 위상차를 구하는 수식은? (단, M은 진수이다.)",
+        "options": [
+            "π/M",
+            "π × M",
+            "2π/M",
+            "5π/(2M)"
+        ],
+        "answer": null
+    },
+    {
+        "no": "91",
+        "content": "주파수 분할 다중화 방식(FDM)에서 Guard Band가 필요한 이유는?",
+        "options": [
+            "주파수 대역폭을 넓히기 위함이다.",
+            "신호의 세기를 크게 하기 위함이다.",
+            "채널 간섭을 막기 위함이다.",
+            "많은 채널을 좁은 주파수 대역에 쓰기 위함이다."
+        ],
+        "answer": null
+    },
+    {
+        "no": "92",
+        "content": "X.25 프로토콜의 3 계층에 해당하지 않는 것은?",
+        "options": [
+            "물리 계층",
+            "네트워크 계층",
+            "데이터링크 계층",
+            "레코드 계층"
+        ],
+        "answer": null
+    },
+    {
+        "no": "93",
+        "content": "최초의 라디오 패킷 통신 방식(Radio Packet)을 적용한 컴퓨터 네트워크 시스템은?",
+        "options": [
+            "DECNET",
+            "ALOHA",
+            "SNA",
+            "ARPANET"
+        ],
+        "answer": null
+    },
+    {
+        "no": "94",
+        "content": "100 BASE T라고도 불리는 이더넷의 고속 버전으로, CSMA/CD 방식을 사용하며 100Mbps의 전송 속도를 지원하는 이더넷은?",
+        "options": [
+            "Fast Ethernet",
+            "Thick Ethernet",
+            "Thin Ethernet",
+            "Gigabit Ethernet"
+        ],
+        "answer": null
+    },
+    {
+        "no": "95",
+        "content": "하나의 정보를 여러 개의 반송파로 분할하고, 분할된 반송파 사이의 주파수 간격을 최소화하기 위해 직교 다중화해서 전송하는 통신방식으로 와이브로 및 디지털 멀티미디어 방송 등에 사용되는 기술은?",
+        "options": [
+            "DTM",
+            "CCM",
+            "OFDM",
+            "IHPS"
+        ],
+        "answer": null
+    },
+    {
+        "no": "96",
+        "content": "IP(Internet Protocol) 데이터그램 구조에 포함되지 않는 것은?",
+        "options": [
+            "Version",
+            "Reserved Len",
+            "Protocol",
+            "Identification"
+        ],
+        "answer": null
+    },
+    {
+        "no": "97",
+        "content": "양자화 비트수가 6비트이면 양자화 계단 수는?",
+        "options": [
+            "6",
+            "16",
+            "32",
+            "64"
+        ],
+        "answer": null
+    },
+    {
+        "no": "98",
+        "content": "OSI 7 계층 중 데이터링크 계층의 프로토콜로 맞지 않는 것은?",
+        "options": [
+            "HTTP",
+            "HDLC",
+            "PPP",
+            "LLC"
+        ],
+        "answer": null
+    },
+    {
+        "no": "99",
+        "content": "HDLC에서 피기백킹 기법(Piggybacking)을 통해 데이터에 대한 확인 응답을 보낼 때 사용되는 프레임은?",
+        "options": [
+            "U-프레임",
+            "I-프레임",
+            "A-프레임",
+            "S-프레임"
+        ],
+        "answer": null
+    },
+    {
+        "no": "100",
+        "content": "실제 전송요구가 있는 채널에만 시간 슬롯을 동적으로 할당하여 전송 효율을 높이는 방식은?",
+        "options": [
+            "주파수 분할 다중화 방식",
+            "베이스밴드 방식",
+            "광대역 다중화 방식",
+            "통계적 시분할 다중화 방식"
+        ],
+        "answer": null
+    },
+    {
+        "no": "1",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "2",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "3",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "4",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "5",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "6",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "7",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "8",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "9",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "10",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "11",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "12",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "13",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "14",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "15",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "16",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "17",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "18",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "19",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "20",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "21",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "22",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "23",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "24",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "25",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "26",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "27",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "28",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "29",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "30",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "31",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "32",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "33",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "34",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "35",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "36",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "37",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "38",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "39",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "40",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "41",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "42",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "43",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "44",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "45",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "46",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "47",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "48",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "49",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "50",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "51",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "52",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "53",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "54",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "55",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "56",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "57",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "58",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "59",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "60",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "61",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "62",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "63",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "64",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "65",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "66",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "67",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "68",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "69",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "70",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "71",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "72",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "73",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "74",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "75",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "76",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "77",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "78",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "79",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "80",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "81",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "82",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "83",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "84",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "85",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "86",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "87",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "88",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "89",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "90",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "91",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "92",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "93",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "94",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "95",
+        "content": null,
+        "options": [],
+        "answer": "3"
+    },
+    {
+        "no": "96",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "97",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    },
+    {
+        "no": "98",
+        "content": null,
+        "options": [],
+        "answer": "1"
+    },
+    {
+        "no": "99",
+        "content": null,
+        "options": [],
+        "answer": "2"
+    },
+    {
+        "no": "100",
+        "content": null,
+        "options": [],
+        "answer": "4"
+    }
+]
