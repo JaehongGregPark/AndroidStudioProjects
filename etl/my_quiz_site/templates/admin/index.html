@@ -1,0 +1,31 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<div id="content-main" style="display: flex; gap: 20px;">
+    <div style="flex: 2;">
+        {{ block.super }}
+    </div>
+
+    <div style="flex: 1; background: #f8f9fa; padding: 20px; border-left: 5px solid #79aec8; border-radius: 10px;">
+        <h3>📘 시스템 운영 매뉴얼</h3>
+        <hr>
+        <ul style="line-height: 1.8;">
+            <li><strong>1단계: PDF 분석</strong>
+                <br><small>`ultimate_parser.py`를 실행하여 JSON을 생성하세요.</small>
+            </li>
+            <li><strong>2단계: 데이터 업로드</strong>
+                <br><small>`db_uploader.py`로 JSON 데이터를 DB에 적재하세요.</small>
+            </li>
+            <li><strong>3단계: 정답 검수</strong>
+                <br><small>왼쪽 'Questions' 메뉴에서 정답 미입력 건을 확인하세요.</small>
+            </li>
+            <li><strong>4단계: 이미지 관리</strong>
+                <br><small>그림이 필요한 문제는 'Question Images'에서 등록하세요.</small>
+            </li>
+        </ul>
+        <div style="margin-top: 20px; padding: 10px; background: #e7f3fe; border-radius: 5px;">
+            <strong>💡 꿀팁:</strong> 문제 지문 수정 시 마크다운 형식을 지원할 예정입니다.
+        </div>
+    </div>
+</div>
+{% endblock %}

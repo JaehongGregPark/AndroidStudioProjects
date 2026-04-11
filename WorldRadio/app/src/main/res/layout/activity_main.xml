@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#121212"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- TOP APP BAR -->
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topBar"
+            android:background="#121212"
+            android:title="World Radio"
+            android:titleTextColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- CONTENT -->
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- SEARCH -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Country">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerCountry"
+                    android:background="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- COUNTRY GRID -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/countryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+            <!-- TAB -->
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:background="#121212"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabTextColor="#BBBBBB"
+                app:tabSelectedTextColor="#1DB954"/>
+
+            <!-- RADIO LIST -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingBottom="90dp"/>
+
+        </LinearLayout>
+
+        <!-- MINI PLAYER -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/miniPlayer"
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:cardBackgroundColor="#1DB954"
+            app:cardCornerRadius="14dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/miniLogo"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"/>
+
+                <TextView
+                    android:id="@+id/tvMiniTitle"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:src="@drawable/ic_pause"
+                    android:background="@null"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- LOADING -->
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

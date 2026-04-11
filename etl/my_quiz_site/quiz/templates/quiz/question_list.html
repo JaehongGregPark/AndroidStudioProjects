@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보처리기사 기출문제</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .quiz-card { margin-bottom: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .option-list { list-style: none; padding-left: 0; }
+        .option-item { padding: 10px; border: 1px solid #dee2e6; margin-bottom: 5px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .option-item:hover { background-color: #e9ecef; }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+    <div class="alert alert-info">
+    디버깅 정보: 
+    분류 수: {{ categories.count }}, 
+    시험지 수: {{ exams.count }}, 
+    문제 수: {{ questions.count }}
+    </div>
+        <h1 class="text-center mb-5">📝 정보처리기사 기출문제 풀이</h1>
+        <form method="GET" class="row g-3 mb-4">
+            <div class="col-md-4">
+                <select name="category" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- 분류 선택 --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|slugify %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select name="exam" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- 시험지 선택 --</option>
+                    {% for ex in exams %}
+                    <option value="{{ ex.id }}" {% if selected_exam == ex.id|slugify %}selected{% endif %}>{{ ex.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>        
+        {% for question in questions %}
+        <div class="card quiz-card">
+            <div class="card-body">
+                <h5 class="card-title">문제 {{ question.number }}</h5>
+                <p class="card-text fs-5">{{ question.content|linebreaksbr }}</p>
+                {% if question.images.exists %}
+                <div class="quiz-image-container my-3 text-center">
+                    {% for img in question.images.all %}
+                    <img src="{{ img.image_file.url }}" class="img-fluid rounded border" alt="문제 이미지" style="max-height: 400px;">
+                    {% endfor %}
+                </div>
+                {% endif %}    
+                <ul class="option-list">
+                    {% for choice in question.choices.all %}
+                    <li class="option-item">
+                        {{ choice.choice_text }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">등록된 문제가 없습니다. DB를 확인해 주세요!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

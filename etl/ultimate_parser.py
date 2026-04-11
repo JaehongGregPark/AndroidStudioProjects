@@ -16,16 +16,16 @@ from tkinter import filedialog, messagebox
 # 후보 3: models/gemini-1.5-flash
 
 # 1. 설정 (모델은 2.0-flash-exp 또는 1.5-flash-latest 추천)
-API_KEY = "AIzaSyBK4gzUuTaGViRWTf2osd2eq5E0eHT9Olo"
-client = genai.Client(api_key=API_KEY)
+API_KEY = "AIzaSyCr3GVqDPqK5OZsYljFOk9iezMhHlYeatA"
+client = genai.Client(api_key=API_KEY, http_options={'api_version': 'v1'})
 MODEL_ID = "models/gemini-2.5-flash-lite" 
 
 def get_ai_response(prompt_content):
-    """모델명을 명확히 지정하여 400/404 에러를 방지합니다."""
-    for _ in range(3):
+    """모델명을 명확히 지정하고 에러 발생 시 상세 내용을 출력합니다."""
+    for attempt in range(3):
         try:
             response = client.models.generate_content(
-                model=MODEL_ID, 
+                model=MODEL_ID, # 위에서 설정한 "gemini-2.0-flash" 사용
                 contents=prompt_content
             )
             if response and response.text:
@@ -33,13 +33,16 @@ def get_ai_response(prompt_content):
                 clean_json = text.replace('```json', '').replace('```', '').strip()
                 return json.loads(clean_json)
         except Exception as e:
-            # 400 에러(이름 오류)가 나면 즉시 중단하고 메시지 출력
-            if "400" in str(e):
-                print(f"   [경고] 모델명 '{MODEL_ID}' 형식이 잘못되었습니다. 다른 후보로 교체하세요.")
-                break
-            elif "429" in str(e):
-                print("   (제한 감지: 20초 휴식...)")
-                time.sleep(20)
+            err_msg = str(e)
+            if "403" in err_msg:
+                print("   [치명적] API 키가 차단되었습니다. 새 키를 발급받으세요.")
+                return None # 키 문제면 즉시 중단
+            elif "400" in err_msg:
+                print(f"   [경고] 모델명 오류 발생: {MODEL_ID}. 이름을 확인하세요.")
+                return None
+            elif "429" in err_msg:
+                print(f"   (제한 감지: {20 + attempt*10}초 휴식 후 재시도...)")
+                time.sleep(20 + attempt*10)
             else:
                 print(f"   (기타 오류: {e})")
                 break
