@@ -29,11 +29,6 @@ import androidx.navigation.NavHostController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-
-    // Hilt에서 MainViewModel 주입
-    // ReaderScreen 과 상태 공유
-    //viewModel: MainViewModel = hiltViewModel(),
-
     // NavGraph에서 전달되는 뒤로가기 콜백
     //onBack: () -> Unit = {}
     navController: NavHostController,
@@ -69,6 +64,11 @@ fun SettingsScreen(
     var scrollSpeed by remember { mutableStateOf(1f) }
 
     val darkMode by viewModel.darkMode.collectAsState()
+
+    val follow by viewModel.followSystem.collectAsState()
+    val amoled by viewModel.amoledBlack.collectAsState()
+    val theme by viewModel.themeColor.collectAsState()
+    val font by viewModel.fontFamily.collectAsState()
 
     /**
      * 전체 화면 레이아웃
@@ -139,6 +139,75 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            item {
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Follow System Theme")
+
+                    Switch(
+                        checked = follow,
+                        onCheckedChange = {
+                            viewModel.setFollowSystem(it)
+                        }
+                    )
+                }
+            }
+
+            item {
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("AMOLED Black")
+
+                    Switch(
+                        checked = amoled,
+                        onCheckedChange = {
+                            viewModel.setAmoledBlack(it)
+                        }
+                    )
+                }
+            }
+
+            item {
+
+                Text("Theme Color")
+
+                Row {
+
+                    listOf("blue","green","purple","orange").forEach {
+
+                        Button(
+                            onClick = { viewModel.setThemeColor(it) }
+                        ) {
+                            Text(it)
+                        }
+                    }
+                }
+            }
+
+            item {
+
+                Text("Font")
+
+                Row {
+
+                    listOf("default","serif","mono","sans").forEach {
+
+                        Button(
+                            onClick = { viewModel.setFontFamily(it) }
+                        ) {
+                            Text(it)
+                        }
+                    }
+                }
+            }
+
         }
     }
 }

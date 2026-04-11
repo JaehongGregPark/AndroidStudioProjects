@@ -8,6 +8,11 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore("settings")
 
+val FOLLOW_SYSTEM = booleanPreferencesKey("follow_system")
+val AMOLED_BLACK = booleanPreferencesKey("amoled_black")
+val THEME_COLOR = stringPreferencesKey("theme_color")
+val FONT_FAMILY = stringPreferencesKey("font_family")
+
 class SettingsDataStore(private val context: Context) {
 
     companion object {
@@ -33,6 +38,22 @@ class SettingsDataStore(private val context: Context) {
         it[DARK_MODE] ?: false
     }
 
+    val followSystem: Flow<Boolean> = context.dataStore.data.map {
+        it[FOLLOW_SYSTEM] ?: true
+    }
+
+    val amoledBlack: Flow<Boolean> = context.dataStore.data.map {
+        it[AMOLED_BLACK] ?: false
+    }
+
+    val themeColor: Flow<String> = context.dataStore.data.map {
+        it[THEME_COLOR] ?: "blue"
+    }
+
+    val fontFamily: Flow<String> = context.dataStore.data.map {
+        it[FONT_FAMILY] ?: "default"
+    }
+
     suspend fun setTtsSpeed(v: Float) {
         context.dataStore.edit { it[TTS_SPEED] = v }
     }
@@ -47,5 +68,29 @@ class SettingsDataStore(private val context: Context) {
 
     suspend fun setDarkMode(v: Boolean) {
         context.dataStore.edit { it[DARK_MODE] = v }
+    }
+
+    suspend fun setFollowSystem(v: Boolean) {
+        context.dataStore.edit {
+            it[FOLLOW_SYSTEM] = v
+        }
+    }
+
+    suspend fun setAmoledBlack(v: Boolean) {
+        context.dataStore.edit {
+            it[AMOLED_BLACK] = v
+        }
+    }
+
+    suspend fun setThemeColor(v: String) {
+        context.dataStore.edit {
+            it[THEME_COLOR] = v
+        }
+    }
+
+    suspend fun setFontFamily(v: String) {
+        context.dataStore.edit {
+            it[FONT_FAMILY] = v
+        }
     }
 }

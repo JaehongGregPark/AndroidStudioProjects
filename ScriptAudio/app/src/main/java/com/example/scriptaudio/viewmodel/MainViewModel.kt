@@ -91,6 +91,34 @@ class MainViewModel @Inject constructor(
     fun setCurrentSentence(i:Int){
         _currentSentence.value = i
     }
+
+    fun setFollowSystem(v: Boolean) {
+        _followSystem.value = v
+        viewModelScope.launch {
+            settings.setFollowSystem(v)
+        }
+    }
+
+    fun setAmoledBlack(v: Boolean) {
+        _amoledBlack.value = v
+        viewModelScope.launch {
+            settings.setAmoledBlack(v)
+        }
+    }
+
+    fun setThemeColor(v: String) {
+        _themeColor.value = v
+        viewModelScope.launch {
+            settings.setThemeColor(v)
+        }
+    }
+
+    fun setFontFamily(v: String) {
+        _fontFamily.value = v
+        viewModelScope.launch {
+            settings.setFontFamily(v)
+        }
+    }
     /**
      * TTS 속도 변경
      */
@@ -115,6 +143,30 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             settings.darkMode.collect { _darkMode.value = it }
         }
+
+        viewModelScope.launch {
+            settings.followSystem.collect {
+                _followSystem.value = it
+            }
+        }
+
+        viewModelScope.launch {
+            settings.amoledBlack.collect {
+                _amoledBlack.value = it
+            }
+        }
+
+        viewModelScope.launch {
+            settings.themeColor.collect {
+                _themeColor.value = it
+            }
+        }
+
+        viewModelScope.launch {
+            settings.fontFamily.collect {
+                _fontFamily.value = it
+            }
+        }
     }
 
     // -----------------------------
@@ -123,6 +175,17 @@ class MainViewModel @Inject constructor(
     private val _fileList = MutableStateFlow<List<File>>(emptyList())
     val fileList: StateFlow<List<File>> = _fileList
 
+    private val _followSystem = MutableStateFlow(true)
+    val followSystem: StateFlow<Boolean> = _followSystem
+
+    private val _amoledBlack = MutableStateFlow(false)
+    val amoledBlack: StateFlow<Boolean> = _amoledBlack
+
+    private val _themeColor = MutableStateFlow("blue")
+    val themeColor: StateFlow<String> = _themeColor
+
+    private val _fontFamily = MutableStateFlow("default")
+    val fontFamily: StateFlow<String> = _fontFamily
 
     // -----------------------------
     // TTS 관리

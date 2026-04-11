@@ -10,18 +10,19 @@ package com.example.scriptaudio
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.collectAsState
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
-
-import com.example.scriptaudio.navigation.NavGraph
-import com.example.scriptaudio.viewmodel.MainViewModel
+import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.scriptaudio.navigation.NavGraph
+import com.example.scriptaudio.ui.theme.AppTheme
+import com.example.scriptaudio.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,33 +37,40 @@ class MainActivity : ComponentActivity() {
             val dark by viewModel.darkMode.collectAsState()
 
             val navController = rememberNavController()
-            /**
-             * ViewModel 생성
-             */
-            // Hilt 주입 사용
-            //val viewModel: MainViewModel = hiltViewModel()
 
+            val followSystem by viewModel.followSystem.collectAsState()
+            val amoled by viewModel.amoledBlack.collectAsState()
+            val themeColor by viewModel.themeColor.collectAsState()
 
-            /**
-             * Navigation 시작
-             */
+            val systemDark = isSystemInDarkTheme()
 
-            // navController를 NavGraph에 전달해야
-            // 화면 이동 (settings 이동 등)이 가능함
+            val useDark = if (followSystem) systemDark else dark
 
-            MaterialTheme(
-                colorScheme = if (dark)
+            val colorScheme = when {
+
+                amoled && useDark ->
+                    darkColorScheme(
+                        background = Color.Black,
+                        surface = Color.Black
+                    )
+
+                useDark ->
                     darkColorScheme()
-                else
+
+                else ->
                     lightColorScheme()
+            }
+
+            AppTheme(
+                darkMode = dark,
+                followSystem = followSystem,
+                amoled = amoled,
+                themeColor = themeColor
             ) {
                 NavGraph(navController = navController)
             }
        
 
-         // NavGraph 내부에서 navController를 생성하므로
-            // 여기서는 넘기지 않는다
-            //NavGraph(viewModel = viewModel)
 
         }
 

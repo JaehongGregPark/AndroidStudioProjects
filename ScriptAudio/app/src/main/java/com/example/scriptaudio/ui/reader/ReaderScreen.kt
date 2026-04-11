@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scriptaudio.engine.tts.SentenceHighlighter
@@ -27,7 +28,15 @@ fun ReaderScreen(viewModel: MainViewModel) {
     val currentSentence by viewModel.currentSentence.collectAsState()
     //val fontSize by viewModel.fontSize.collectAsState()
     val fontSizeValue by viewModel.fontSize.collectAsState()
+    val font by viewModel.fontFamily.collectAsState()
     val speed by viewModel.ttsSpeed.collectAsState()
+
+    val fontFamily = when (font) {
+        "serif" -> FontFamily.Serif
+        "mono" -> FontFamily.Monospace
+        "sans" -> FontFamily.SansSerif
+        else -> FontFamily.Default
+    }
 
     // 현재 문장 자동 스크롤
     LaunchedEffect(currentSentence) {
@@ -53,6 +62,7 @@ fun ReaderScreen(viewModel: MainViewModel) {
                 Text(
                     text = sentence,
                     fontSize = fontSizeValue.sp,
+                    fontFamily = fontFamily,
                     color = if (index == currentSentence)
                         MaterialTheme.colorScheme.primary
                     else
