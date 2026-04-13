@@ -40,7 +40,10 @@ class MainActivity : AppCompatActivity() {
         setupTabs()
         setupRecyclerView()
         setupObservers()
+
+        /** ⭐ 국가 아이콘 가로 스크롤 설정 */
         setupCountryGrid()
+
         observeCountries()
 
         /** ⭐ 전체 국가 로드 */
@@ -68,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
                 when (tab?.position) {
 
+                    // Favorites 탭 선택 시
                     1 -> viewModel.loadFavorites()
 
                 }
@@ -88,20 +92,25 @@ class MainActivity : AppCompatActivity() {
 
             context = this,
 
+            /** ▶ 재생 버튼 클릭 */
             onPlayClick = { station ->
 
                 val url = station.urlResolved
 
                 if (!url.isNullOrEmpty()) {
 
+                    // 라디오 재생
                     player.play(url)
 
+                    // 미니 플레이어 표시
                     binding.miniPlayer.visibility = View.VISIBLE
 
+                    // 방송 이름 표시
                     binding.tvMiniTitle.text = station.name
                 }
             },
 
+            /** ⭐ 즐겨찾기 클릭 */
             onFavoriteClick = { station ->
 
                 viewModel.toggleFavorite(station)
@@ -181,7 +190,7 @@ class MainActivity : AppCompatActivity() {
 
 
     /**
-     * 국가 Grid (빠른 선택)
+     * ⭐ 상단 국가 아이콘 → 한 줄 가로 스크롤
      */
     private fun setupCountryGrid() {
 
@@ -189,13 +198,34 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = CountryAdapter(countries) { country ->
 
+            // 국가 클릭 시 해당 국가 라디오 검색
             viewModel.searchStations(country.iso_3166_1)
 
+            // 미니 플레이어 숨김
             binding.miniPlayer.visibility = View.GONE
         }
 
+        /**
+         * 🔴 기존 코드
+         * GridLayoutManager(this, 5)
+         * → 여러 줄 grid 표시
+         */
+
+        /**
+         * ✅ 수정 코드
+         * 가로 스크롤 한 줄 리스트
+         */
         binding.countryRecycler.layoutManager =
-            GridLayoutManager(this, 5)
+            LinearLayoutManager(
+                this,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+
+        /**
+         * 가로 스크롤 시 좌우 padding 자연스럽게
+         */
+        binding.countryRecycler.setHasFixedSize(true)
 
         binding.countryRecycler.adapter = adapter
     }

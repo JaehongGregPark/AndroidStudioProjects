@@ -51,7 +51,9 @@ class RadioService : Service() {
         val url = intent?.getStringExtra("url") ?: return START_NOT_STICKY
         val name = intent.getStringExtra("name") ?: "Radio"
 
-        playerManager.play(url)
+        if (url != null) {
+            playerManager.play(url)
+        }
 
         val notification =
             NotificationHelper.createNotification(

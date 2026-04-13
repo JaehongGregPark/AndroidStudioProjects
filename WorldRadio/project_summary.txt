@@ -1,0 +1,935 @@
+﻿--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\baseline_10k_24.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
+      
+    <path android:fillColor="@android:color/white" android:pathData="M10,10.5h1.5v3L10,13.5zM19,3L5,3c-1.1,0 -2,0.9 -2,2v14c0,1.1 0.9,2 2,2h14c1.1,0 2,-0.9 2,-2L21,5c0,-1.1 -0.9,-2 -2,-2zM7.5,15L6,15v-4.5L4.5,10.5L4.5,9h3v6zM13,14c0,0.55 -0.45,1 -1,1L9.5,15c-0.55,0 -1,-0.45 -1,-1v-4c0,-0.55 0.45,-1 1,-1L12,9c0.55,0 1,0.45 1,1v4zM19.5,15h-1.75L16,12.75L16,15h-1.5L14.5,9L16,9v2.25L17.75,9h1.75l-2.25,3 2.25,3z"/>
+    
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_au.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#012169" android:pathData="M0,0h64v64h-64z"/>
+
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M40,30l4,8l-8,-4l8,-4z"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_br.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#009B3A" android:pathData="M0,0h64v64h-64z"/>
+
+    <path android:fillColor="#FFDF00"
+        android:pathData="M32,10l22,22l-22,22l-22,-22z"/>
+
+    <path
+        android:fillColor="#002776"
+        android:pathData="M32,22a10,10 0 1,1 0,20a10,10 0 1,1 0,-20"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_ca.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#FF0000" android:pathData="M0,0h16v64h-16z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M16,0h32v64h-32z"/>
+    <path android:fillColor="#FF0000" android:pathData="M48,0h16v64h-16z"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_de.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#000000" android:pathData="M0,0h64v21h-64z"/>
+    <path android:fillColor="#DD0000" android:pathData="M0,21h64v21h-64z"/>
+    <path android:fillColor="#FFCE00" android:pathData="M0,42h64v22h-64z"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_fr.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#0055A4" android:pathData="M0,0h21v64h-21z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M21,0h22v64h-22z"/>
+    <path android:fillColor="#EF4135" android:pathData="M43,0h21v64h-21z"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_gb.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#012169" android:pathData="M0,0h64v64h-64z"/>
+
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M0,28h64v8h-64zM28,0h8v64h-8z"/>
+
+    <path android:fillColor="#C8102E"
+        android:pathData="M0,30h64v4h-64zM30,0h4v64h-4z"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_in.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#FF9933" android:pathData="M0,0h64v21h-64z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M0,21h64v21h-64z"/>
+    <path android:fillColor="#138808" android:pathData="M0,42h64v22h-64z"/>
+
+    <path
+        android:fillColor="#000080"
+        android:pathData="M32,26a6,6 0 1,1 0,12a6,6 0 1,1 0,-12"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_jp.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0h64v64h-64z"/>
+
+    <path
+        android:fillColor="#BC002D"
+        android:pathData="M32,18a14,14 0 1,1 0,28a14,14 0 1,1 0,-28"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_kr.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0h64v64h-64z"/>
+
+    <path
+        android:fillColor="#CD2E3A"
+        android:pathData="M32,18a14,14 0 1,1 0,28a14,14 0 1,1 0,-28"/>
+
+    <path
+        android:fillColor="#0047A0"
+        android:pathData="M32,32a14,14 0 1,0 0,28a14,14 0 1,0 0,-28"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\flag_us.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path android:fillColor="#B22234" android:pathData="M0,0h64v64h-64z"/>
+
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M0,8h64v8h-64zM0,24h64v8h-64zM0,40h64v8h-64zM0,56h64v8h-64z"/>
+
+    <path android:fillColor="#3C3B6E"
+        android:pathData="M0,0h32v32h-32z"/>
+
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_favorite.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
+      
+    <path android:fillAlpha="0.3" android:fillColor="@android:color/white" android:pathData="M16.5,5c-1.54,0 -3.04,0.99 -3.56,2.36h-1.87C10.54,5.99 9.04,5 7.5,5 5.5,5 4,6.5 4,8.5c0,2.89 3.14,5.74 7.9,10.05l0.1,0.1 0.1,-0.1C16.86,14.24 20,11.39 20,8.5c0,-2 -1.5,-3.5 -3.5,-3.5z" android:strokeAlpha="0.3"/>
+      
+    <path android:fillColor="@android:color/white" android:pathData="M16.5,3c-1.74,0 -3.41,0.81 -4.5,2.09C10.91,3.81 9.24,3 7.5,3 4.42,3 2,5.42 2,8.5c0,3.78 3.4,6.86 8.55,11.54L12,21.35l1.45,-1.32C18.6,15.36 22,12.28 22,8.5 22,5.42 19.58,3 16.5,3zM12.1,18.55l-0.1,0.1 -0.1,-0.1C7.14,14.24 4,11.39 4,8.5 4,6.5 5.5,5 7.5,5c1.54,0 3.04,0.99 3.57,2.36h1.87C13.46,5.99 14.96,5 16.5,5c2,0 3.5,1.5 3.5,3.5 0,2.89 -3.14,5.74 -7.9,10.05z"/>
+    
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_favorite_border.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
+      
+    <path android:fillColor="@android:color/white" android:pathData="M16.5,3c-1.74,0 -3.41,0.81 -4.5,2.09C10.91,3.81 9.24,3 7.5,3 4.42,3 2,5.42 2,8.5c0,3.78 3.4,6.86 8.55,11.54L12,21.35l1.45,-1.32C18.6,15.36 22,12.28 22,8.5 22,5.42 19.58,3 16.5,3zM12.1,18.55l-0.1,0.1 -0.1,-0.1C7.14,14.24 4,11.39 4,8.5 4,6.5 5.5,5 7.5,5c1.54,0 3.04,0.99 3.57,2.36h1.87C13.46,5.99 14.96,5 16.5,5c2,0 3.5,1.5 3.5,3.5 0,2.89 -3.14,5.74 -7.9,10.05z"/>
+    
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_launcher_background.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M0,0h108v108h-108z" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M9,0L9,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,0L19,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M29,0L29,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M39,0L39,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M49,0L49,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M59,0L59,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M69,0L69,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M79,0L79,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M89,0L89,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M99,0L99,108"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,9L108,9"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,19L108,19"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,29L108,29"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,39L108,39"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,49L108,49"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,59L108,59"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,69L108,69"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,79L108,79"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,89L108,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,99L108,99"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,29L89,29"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,39L89,39"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,49L89,49"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,59L89,59"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,69L89,69"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M19,79L89,79"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M29,19L29,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M39,19L39,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M49,19L49,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M59,19L59,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M69,19L69,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M79,19L79,89"
+        android:strokeWidth="0.8"
+        android:strokeColor="#33FFFFFF" />
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_launcher_foreground.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M31,63.928c0,0 6.4,-11 12.1,-13.1c7.2,-2.6 26,-1.4 26,-1.4l38.1,38.1L107,108.928l-32,-1L31,63.928z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="85.84757"
+                android:endY="92.4963"
+                android:startX="42.9492"
+                android:startY="49.59793"
+                android:type="linear">
+                <item
+                    android:color="#44000000"
+                    android:offset="0.0" />
+                <item
+                    android:color="#00000000"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:pathData="M65.3,45.828l3.8,-6.6c0.2,-0.4 0.1,-0.9 -0.3,-1.1c-0.4,-0.2 -0.9,-0.1 -1.1,0.3l-3.9,6.7c-6.3,-2.8 -13.4,-2.8 -19.7,0l-3.9,-6.7c-0.2,-0.4 -0.7,-0.5 -1.1,-0.3C38.8,38.328 38.7,38.828 38.9,39.228l3.8,6.6C36.2,49.428 31.7,56.028 31,63.928h46C76.3,56.028 71.8,49.428 65.3,45.828zM43.4,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2c-0.3,-0.7 -0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C45.3,56.528 44.5,57.328 43.4,57.328L43.4,57.328zM64.6,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2s-0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C66.5,56.528 65.6,57.328 64.6,57.328L64.6,57.328z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_pause.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
+      
+    <path android:fillColor="@android:color/white" android:pathData="M2.88,7.88l1.54,1.54C4.15,10.23 4,11.1 4,12c0,4.41 3.59,8 8,8s8,-3.59 8,-8s-3.59,-8 -8,-8c-0.9,0 -1.77,0.15 -2.58,0.42L7.89,2.89C9.15,2.32 10.54,2 12,2c5.52,0 10,4.48 10,10s-4.48,10 -10,10S2,17.52 2,12C2,10.53 2.32,9.14 2.88,7.88zM7,5.5C7,6.33 6.33,7 5.5,7S4,6.33 4,5.5S4.67,4 5.5,4S7,4.67 7,5.5zM11,15H9V9h2V15zM15,15h-2V9h2V15z"/>
+    
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_play.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="960" android:viewportWidth="960" android:width="24dp">
+      
+    <path android:fillColor="@android:color/white" android:pathData="M447,529L603,425Q617,416 617,400Q617,384 603,375L447,271Q432,261 416,269.5Q400,278 400,296L400,504Q400,522 416,530.5Q432,539 447,529ZM240,720L148,812Q129,831 104.5,820.5Q80,810 80,783L80,160Q80,127 103.5,103.5Q127,80 160,80L800,80Q833,80 856.5,103.5Q880,127 880,160L880,640Q880,673 856.5,696.5Q833,720 800,720L240,720ZM206,640L800,640Q800,640 800,640Q800,640 800,640L800,160Q800,160 800,160Q800,160 800,160L160,160Q160,160 160,160Q160,160 160,160L160,685L206,640ZM160,640L160,640L160,160Q160,160 160,160Q160,160 160,160L160,160Q160,160 160,160Q160,160 160,160L160,640Q160,640 160,640Q160,640 160,640Z"/>
+    
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\ic_radio.xml ---
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:fillColor="#888888"
+        android:pathData="M3,10h18v10H3zM7,14h2v2H7zM11,14h2v2h-2zM15,14h2v2h-2zM5,7l14,-4v2L5,9z"/>
+</vector>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\logo_bg.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#EEEEEE"/>
+    <corners android:radius="12dp"/>
+</shape>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\drawable\search_bg.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="#1E1E1E"/>
+
+    <corners android:radius="20dp"/>
+
+    <stroke
+        android:width="1dp"
+        android:color="#333333"/>
+
+    <padding
+        android:left="10dp"
+        android:right="10dp"
+        android:top="8dp"
+        android:bottom="8dp"/>
+
+</shape>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\layout\activity_main.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#121212"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- TOP APP BAR -->
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topBar"
+            android:background="#121212"
+            android:title="World Radio"
+            android:titleTextColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- CONTENT -->
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- SEARCH -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Country">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerCountry"
+                    android:background="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- COUNTRY GRID -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/countryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+            <!-- TAB -->
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:background="#121212"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabTextColor="#BBBBBB"
+                app:tabSelectedTextColor="#1DB954"/>
+
+            <!-- RADIO LIST -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingBottom="90dp"/>
+
+        </LinearLayout>
+
+        <!-- MINI PLAYER -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/miniPlayer"
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:cardBackgroundColor="#1DB954"
+            app:cardCornerRadius="14dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/miniLogo"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"/>
+
+                <TextView
+                    android:id="@+id/tvMiniTitle"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:src="@drawable/ic_pause"
+                    android:background="@null"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- LOADING -->
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</com.google.android.material.appbar.AppBarLayout>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\layout\activity_player.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvCountry"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnPlay"
+        android:text="???ъ깮"
+        android:layout_marginTop="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnPause"
+        android:text="???뺤?"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="蹂쇰ⅷ"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <SeekBar
+        android:id="@+id/seekVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\layout\item_country.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="90dp"
+    android:layout_height="110dp"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 援?? 援?린 -->
+
+        <ImageView
+            android:id="@+id/imgFlag"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="6dp"/>
+
+        <!-- 援?? ?대쫫 -->
+
+        <TextView
+            android:id="@+id/tvCountryName"
+            android:text="Korea"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\layout\item_radio.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+
+    app:cardCornerRadius="14dp"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#181818">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvCountry"
+                android:textColor="#AAAAAA"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvPlaying"
+                android:text="Playing"
+                android:textColor="#1DB954"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:src="@drawable/ic_favorite_border"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnPlay"
+            android:src="@drawable/ic_play"
+            android:background="@null"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\mipmap-anydpi\ic_launcher.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\mipmap-anydpi\ic_launcher_round.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\values\colors.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="spotify_green">#1DB954</color>
+    <color name="spotify_dark">#121212</color>
+    <color name="spotify_card">#181818</color>
+</resources>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\values\strings.xml ---
+<resources>
+    <string name="app_name">WorldRadio</string>
+</resources>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\values\themes.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.WorldRadio"
+        parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+</resources>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\xml\backup_rules.xml ---
+<?xml version="1.0" encoding="utf-8"?><!--
+   Sample backup rules file; uncomment and customize as necessary.
+   See https://developer.android.com/guide/topics/data/autobackup
+   for details.
+   Note: This file is ignored for devices older than API 31
+   See https://developer.android.com/about/versions/12/backup-restore
+-->
+<full-backup-content>
+    <!--
+   <include domain="sharedpref" path="."/>
+   <exclude domain="sharedpref" path="device.xml"/>
+-->
+</full-backup-content>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\res\xml\data_extraction_rules.xml ---
+<?xml version="1.0" encoding="utf-8"?><!--
+   Sample data extraction rules file; uncomment and customize as necessary.
+   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
+   for details.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- TODO: Use <include> and <exclude> to control what is backed up.
+        <include .../>
+        <exclude .../>
+        -->
+    </cloud-backup>
+    <!--
+    <device-transfer>
+        <include .../>
+        <exclude .../>
+    </device-transfer>
+    -->
+</data-extraction-rules>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\app\src\main\AndroidManifest.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.example.worldradio"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ?명꽣???ㅽ듃由щ컢 ?꾩닔 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Foreground Service ?꾩닔 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- Android 13 ?댁긽 ?뚮┝ 沅뚰븳 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".WorldRadioApp"
+        android:allowBackup="true"
+        android:theme="@style/Theme.WorldRadio"
+        android:usesCleartextTraffic="true"
+        android:supportsRtl="true">
+
+        <!-- ???ш린 諛섎뱶??MainActivity ?ъ빞 ??-->
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".playback.RadioService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" />
+
+    </application>
+</manifest>
+
+
+--- FILE: C:\Users\USER\Documents\project\WorldRadio\settings.gradle.kts ---
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "WorldRadio"
+include(":app")
+ 
+
+
