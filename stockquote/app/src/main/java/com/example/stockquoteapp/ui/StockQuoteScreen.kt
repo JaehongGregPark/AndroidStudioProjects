@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,17 +41,25 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.activity.compose.BackHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.stockquoteapp.AssetCategory
 import com.example.stockquoteapp.ChartPoint
+import com.example.stockquoteapp.Language
 import com.example.stockquoteapp.MarketCategory
 import com.example.stockquoteapp.StockQuote
 import com.example.stockquoteapp.StockQuoteViewModel
 import com.example.stockquoteapp.StockUiState
+import com.example.stockquoteapp.currentPage
+import com.example.stockquoteapp.selectedQuote
+import com.example.stockquoteapp.selectedQuotes
+import com.example.stockquoteapp.title
+import com.example.stockquoteapp.totalPages
 import com.example.stockquoteapp.ui.theme.StockQuoteAppTheme
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.max
+import com.example.stockquoteapp.AssetMarketMap
 
 @Composable
 fun StockQuoteScreen(
@@ -64,7 +71,10 @@ fun StockQuoteScreen(
         onMarketSelected = viewModel::selectMarket,
         onQuoteSelected = viewModel::selectQuote,
         onRetry = viewModel::retry,
-        onCloseDetail = viewModel::closeDetail
+        onCloseDetail = viewModel::closeDetail,
+        onPageSelected = viewModel::changePage,
+        onLanguageSelected = viewModel::setLanguage,
+        onAssetSelected = viewModel::selectAsset
     )
 }
 
@@ -75,12 +85,32 @@ private fun StockQuoteScreen(
     onMarketSelected: (MarketCategory) -> Unit,
     onQuoteSelected: (String) -> Unit,
     onRetry: () -> Unit,
-    onCloseDetail: () -> Unit
+    onCloseDetail: () -> Unit,
+    onPageSelected: (Int) -> Unit,
+    onLanguageSelected: (Language) -> Unit,
+    onAssetSelected: (AssetCategory) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
+            AssetCategory.values().forEach { asset ->
+
+                FilterChip(
+                    selected = uiState.selectedAsset == asset,
+                    onClick = { onAssetSelected(asset) },
+                    label = {
+                        Text(asset.title(uiState.language))
+                    }
+                )
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,27 +119,54 @@ private fun StockQuoteScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Market Leaders",
+                text =  if (uiState.language == Language.ENG)
+                            "Market Leaders"
+                        else
+                            "시장 주요 종목",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
+            Row {
 
+                TextButton(
+                    onClick = { onLanguageSelected(Language.ENG) }
+                ) {
+                    Text("ENG")
+                }
+
+                TextButton(
+                    onClick = { onLanguageSelected(Language.KOR) }
+                ) {
+                    Text("KOR")
+                }
+            }
             Text(
                 text = "Tap a stock to open a richer detail section with price chart and trading data.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
+            val markets =
+                AssetMarketMap.map[uiState.selectedAsset]
+                    .orEmpty()
+
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                MarketCategory.entries.forEach { market ->
+                markets.forEach { market ->
                     FilterChip(
                         selected = uiState.selectedMarket == market,
                         onClick = { onMarketSelected(market) },
-                        label = { Text(market.title) }
+                        label = {
+                            Text(
+                                if (uiState.language == Language.KOR)
+                                    market.titleKr
+                                else
+                                    market.titleEn
+                            )
+                        }
                     )
                 }
             }
@@ -142,7 +199,9 @@ private fun StockQuoteScreen(
                 else -> {
                     MarketContent(
                         uiState = uiState,
-                        onQuoteSelected = onQuoteSelected
+                        onQuoteSelected = onQuoteSelected,
+                        onPageSelected = onPageSelected,
+                        language = uiState.language
                     )
                 }
             }
@@ -154,7 +213,8 @@ private fun StockQuoteScreen(
             DetailDialog(
                 quote = quote,
                 isLoading = uiState.isDetailLoading,
-                onClose = onCloseDetail
+                onClose = onCloseDetail,
+                language = uiState.language
             )
         }
     }
@@ -163,8 +223,11 @@ private fun StockQuoteScreen(
 @Composable
 private fun ColumnScope.MarketContent(
     uiState: StockUiState,
-    onQuoteSelected: (String) -> Unit
+    onQuoteSelected: (String) -> Unit,
+    onPageSelected: (Int) -> Unit,
+    language: Language
 ) {
+
     val quotes = uiState.selectedQuotes
     val selectedQuote = uiState.selectedQuote
 
@@ -172,30 +235,46 @@ private fun ColumnScope.MarketContent(
         modifier = Modifier
             .fillMaxWidth()
             .weight(1f)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            text = uiState.selectedMarket.description,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
 
-        quotes.forEach { quote ->
-            QuoteListItem(
-                quote = quote,
-                selected = selectedQuote?.symbol == quote.symbol,
-                onClick = { onQuoteSelected(quote.symbol) }
-            )
+        /**
+         * 종목 리스트 영역
+         */
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            quotes.forEach { quote ->
+                QuoteListItem(
+                    quote = quote,
+                    selected = selectedQuote?.symbol == quote.symbol,
+                    onClick = { onQuoteSelected(quote.symbol) },
+                    language = uiState.language
+                )
+            }
         }
+
+        /**
+         * 페이지네이션 UI
+         */
+        Pagination(
+            currentPage = uiState.currentPage,
+            totalPages = uiState.totalPages,
+            onPageChange = onPageSelected
+        )
     }
 }
+
+
 
 @Composable
 private fun QuoteListItem(
     quote: StockQuote,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    language: Language
 ) {
     val isPositive = (quote.changeAmount ?: 0.0) >= 0.0
     val accent = if (isPositive) Color(0xFF0C7A43) else Color(0xFFB3261E)
@@ -219,7 +298,11 @@ private fun QuoteListItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = quote.shortName ?: quote.symbol,
+                    text =
+                        if (language == Language.KOR)
+                            quote.shortNameKr ?: quote.shortName ?: quote.symbol
+                        else
+                            quote.shortName ?: quote.symbol,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -259,7 +342,8 @@ private fun QuoteListItem(
 @Composable
 private fun QuoteDetailSection(
     quote: StockQuote,
-    isLoading: Boolean
+    isLoading: Boolean,
+    language: Language
 ) {
     val change = quote.changeAmount
     val isPositive = (change ?: 0.0) >= 0.0
@@ -284,7 +368,11 @@ private fun QuoteDetailSection(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = quote.shortName ?: quote.symbol,
+                    text =
+                        if (language == Language.KOR)
+                            quote.shortNameKr ?: quote.shortName ?: quote.symbol
+                        else
+                            quote.shortName ?: quote.symbol,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -330,7 +418,8 @@ private fun QuoteDetailSection(
 private fun DetailDialog(
     quote: StockQuote,
     isLoading: Boolean,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    language: Language
 ) {
     BackHandler(onBack = onClose)
 
@@ -367,7 +456,8 @@ private fun DetailDialog(
 
                 QuoteDetailSection(
                     quote = quote,
-                    isLoading = isLoading
+                    isLoading = isLoading,
+                    language = language
                 )
 
                 Button(
@@ -582,7 +672,10 @@ private fun StockQuoteScreenPreview() {
             onMarketSelected = {},
             onQuoteSelected = {},
             onRetry = {},
-            onCloseDetail = {}
+            onCloseDetail = {},
+            onPageSelected = {},
+            onLanguageSelected = {},
+            onAssetSelected = {}
         )
     }
 }

@@ -1,0 +1,71 @@
+﻿--- FILE: C:\Users\USER\Documents\project\stockquote\app\src\main\res\values\strings.xml ---
+<resources>
+    <string name="app_name">StockQuoteApp</string>
+</resources>
+
+
+--- FILE: C:\Users\USER\Documents\project\stockquote\app\src\main\res\values\themes.xml ---
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.StockQuoteApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+    </style>
+</resources>
+
+
+--- FILE: C:\Users\USER\Documents\project\stockquote\app\src\main\res\xml\backup_rules.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content />
+
+
+--- FILE: C:\Users\USER\Documents\project\stockquote\app\src\main\res\xml\data_extraction_rules.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules />
+
+
+--- FILE: C:\Users\USER\Documents\project\stockquote\app\src\main\AndroidManifest.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.StockQuoteApp">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+
+--- FILE: C:\Users\USER\Documents\project\stockquote\settings.gradle.kts ---
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "StockQuoteApp"
+include(":app")
+
+

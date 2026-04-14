@@ -3,6 +3,7 @@ package com.example.worldradio.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.worldradio.R
@@ -67,10 +68,19 @@ class RadioAdapter(
         holder.binding.tvName.text = station.name
 
         // 방송국 로고
-        Glide.with(context)
-            .load(station.favicon)
+        val logo = station.favicon
+
+        val safeLogo =
+            if (logo.isNullOrBlank()) null
+            else if (logo.endsWith(".pls", true)) null
+            else if (logo.endsWith(".m3u", true)) null
+            else logo
+
+        Glide.with(holder.itemView)
+            .load(safeLogo)
             .placeholder(R.drawable.ic_radio)
             .error(R.drawable.ic_radio)
+            .fallback(R.drawable.ic_radio)
             .into(holder.binding.ivLogo)
 
         /**
@@ -111,12 +121,13 @@ class RadioAdapter(
         }
 
         /**
-         * ⭐ 즐겨찾기 버튼 클릭
+         * 즐겨찾기 클릭
          */
         holder.binding.btnFavorite.setOnClickListener {
 
             onFavoriteClick(station)
         }
+    
     }
 
     override fun getItemCount(): Int = stations.size

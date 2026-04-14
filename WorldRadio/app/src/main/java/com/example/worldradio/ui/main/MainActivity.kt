@@ -1,16 +1,16 @@
 package com.example.worldradio.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.worldradio.R
 import com.example.worldradio.data.model.Country
 import com.example.worldradio.databinding.ActivityMainBinding
-import com.example.worldradio.player.RadioPlayer
+import com.example.worldradio.playback.RadioService
 import com.example.worldradio.ui.adapter.CountryAdapter
 import com.example.worldradio.ui.adapter.RadioAdapter
 import com.example.worldradio.ui.state.UiState
@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: RadioAdapter
 
-    private lateinit var player: RadioPlayer
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +33,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        player = RadioPlayer(this)
-
         setupTabs()
         setupRecyclerView()
         setupObservers()
-
-        /** ⭐ 국가 아이콘 가로 스크롤 설정 */
         setupCountryGrid()
-
         observeCountries()
 
-        /** ⭐ 전체 국가 로드 */
         viewModel.loadCountries()
     }
 
@@ -71,7 +63,6 @@ class MainActivity : AppCompatActivity() {
 
                 when (tab?.position) {
 
-                    // Favorites 탭 선택 시
                     1 -> viewModel.loadFavorites()
 
                 }
@@ -92,25 +83,36 @@ class MainActivity : AppCompatActivity() {
 
             context = this,
 
-            /** ▶ 재생 버튼 클릭 */
+            /**
+             * ▶ 재생 버튼 클릭
+             * RadioService 호출로 변경
+             */
             onPlayClick = { station ->
 
                 val url = station.urlResolved
 
                 if (!url.isNullOrEmpty()) {
 
-                    // 라디오 재생
-                    player.play(url)
+                    /**
+                     * ⭐ RadioService 실행
+                     */
+                    val intent = Intent(this, RadioService::class.java)
+                    intent.putExtra("url", url)
+                    intent.putExtra("name", station.name)
 
-                    // 미니 플레이어 표시
+                    startForegroundService(intent)
+
+                    /**
+                     * ⭐ 미니 플레이어 표시
+                     */
                     binding.miniPlayer.visibility = View.VISIBLE
-
-                    // 방송 이름 표시
                     binding.tvMiniTitle.text = station.name
                 }
             },
 
-            /** ⭐ 즐겨찾기 클릭 */
+            /**
+             * 즐겨찾기 클릭
+             */
             onFavoriteClick = { station ->
 
                 viewModel.toggleFavorite(station)
@@ -141,12 +143,10 @@ class MainActivity : AppCompatActivity() {
                 is UiState.Success -> {
 
                     binding.progressBar.visibility = View.GONE
-
                     adapter.submitList(state.data)
                 }
 
                 is UiState.Error -> {
-
                     binding.progressBar.visibility = View.GONE
                 }
 
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
 
 
     /**
-     * ⭐ RadioBrowser 전체 국가 → Spinner 연결
+     * 국가 Spinner
      */
     private fun observeCountries() {
 
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
 
 
     /**
-     * ⭐ 상단 국가 아이콘 → 한 줄 가로 스크롤
+     * 상단 국가 가로 스크롤
      */
     private fun setupCountryGrid() {
 
@@ -198,23 +198,11 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = CountryAdapter(countries) { country ->
 
-            // 국가 클릭 시 해당 국가 라디오 검색
             viewModel.searchStations(country.iso_3166_1)
 
-            // 미니 플레이어 숨김
             binding.miniPlayer.visibility = View.GONE
         }
 
-        /**
-         * 🔴 기존 코드
-         * GridLayoutManager(this, 5)
-         * → 여러 줄 grid 표시
-         */
-
-        /**
-         * ✅ 수정 코드
-         * 가로 스크롤 한 줄 리스트
-         */
         binding.countryRecycler.layoutManager =
             LinearLayoutManager(
                 this,
@@ -222,23 +210,13 @@ class MainActivity : AppCompatActivity() {
                 false
             )
 
-        /**
-         * 가로 스크롤 시 좌우 padding 자연스럽게
-         */
         binding.countryRecycler.setHasFixedSize(true)
-
         binding.countryRecycler.adapter = adapter
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        player.release()
-    }
-
-
     /**
-     * 상단 빠른 선택 국가
+     * 국가 목록
      */
     private fun getCountryList(): List<Country> {
 

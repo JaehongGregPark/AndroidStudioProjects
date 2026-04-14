@@ -32,7 +32,7 @@ class RadioPlayer(context: Context) {
 
         player.prepare()
 
-        player.volume = 1.5f
+        player.volume = 1.0f
 
         player.play()
     }
