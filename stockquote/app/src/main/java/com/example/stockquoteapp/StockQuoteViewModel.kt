@@ -1,6 +1,7 @@
 package com.example.stockquoteapp
 
 // Compose 상태 관리
+import android.R.attr.delay
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,9 +9,14 @@ import androidx.compose.runtime.setValue
 // ViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
+import com.example.stockquoteapp.data.WebSocketManager
+import com.example.stockquoteapp.data.StockQuoteRepository
+import com.example.stockquoteapp.StockUiState
+import com.example.stockquoteapp.StockQuote
 // Coroutine
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -28,6 +34,8 @@ import kotlinx.coroutines.withContext
  */
 class StockQuoteViewModel(
 
+
+
     /**
      * 데이터 제공 Repository
      * 기본값으로 자동 생성
@@ -35,6 +43,9 @@ class StockQuoteViewModel(
     private val repository: StockQuoteRepository = StockQuoteRepository()
 
 ) : ViewModel() {
+
+
+    private val wsManager = WebSocketManager()
 
     /**
      * Compose UI 상태
@@ -49,10 +60,31 @@ class StockQuoteViewModel(
      * 기본 시장 자동 로드
      */
     init {
-        loadMarket(uiState.selectedMarket)
+
+        wsManager.onMessageReceived = { message ->
+            handleRealtimeData(message)
+        }
+
+        wsManager.connect()
+
+        startAutoRefresh()
     }
 
+    private fun startAutoRefresh() {
 
+        viewModelScope.launch {
+
+            while (isActive) {
+
+                delay(5000)
+
+                loadMarket(
+                    uiState.selectedMarket,
+                    forceRefresh = true
+                )
+            }
+        }
+    }
 
     /**
      * 시장 선택
@@ -68,7 +100,7 @@ class StockQuoteViewModel(
 
             // 마켓 변경시 페이지 0으로 초기화
             currentPageByMarket =
-                uiState.currentPageByMarket + (market to 0)
+                uiState.currentPageByMarket + (market to 1)
         )
 
         if (uiState.quotesByMarket[market].isNullOrEmpty()) {
@@ -89,30 +121,20 @@ class StockQuoteViewModel(
      */
     fun selectQuote(symbol: String) {
 
-        val quotes =
-            uiState.quotesByMarket[uiState.selectedMarket].orEmpty()
-
-        // 존재하지 않는 종목 방어
-        if (quotes.none { it.symbol == symbol }) return
-
-        // 선택 종목 상태 저장
         uiState = uiState.copy(
             selectedSymbolByMarket =
                 uiState.selectedSymbolByMarket +
                         (uiState.selectedMarket to symbol),
 
-            // 상세 화면 표시
             isDetailVisible = true
         )
 
-        // 상세 정보 로딩
         ensureDetailLoaded(
             uiState.selectedMarket,
             symbol,
-            forceRefresh = false
+            forceRefresh = true
         )
     }
-
 
     /**
      * 상세 화면 닫기
@@ -173,6 +195,8 @@ class StockQuoteViewModel(
 
                 result.onSuccess { quotes ->
 
+                    updatePaging(quotes)
+
                     val selected =
                         quotes.firstOrNull()?.symbol
 
@@ -227,6 +251,7 @@ class StockQuoteViewModel(
         // 종목 reference 검색
         val reference =
             StockCatalog.symbolsByMarket[market]
+                ?.take(10)
                 .orEmpty()
                 .firstOrNull { it.symbol == symbol }
                 ?: StockReference(
@@ -269,21 +294,6 @@ class StockQuoteViewModel(
         }
     }
 
-    /**
-     * 페이지 변경
-     *
-     * 예:
-     * 0 -> 1
-     * 1 -> 2
-     */
-    fun changePage(page: Int) {
-
-        uiState = uiState.copy(
-            currentPageByMarket =
-                uiState.currentPageByMarket +
-                        (uiState.selectedMarket to page)
-        )
-    }
 
     fun setLanguage(language: Language) {
         uiState = uiState.copy(language = language)
@@ -301,4 +311,86 @@ class StockQuoteViewModel(
 
         loadMarket(uiState.selectedMarket, true)
     }
+
+
+    fun changePage(page: Int) {
+
+        val safePage = page.coerceAtLeast(1)
+
+        uiState = uiState.copy(
+            currentPageByMarket =
+                uiState.currentPageByMarket +
+                        (uiState.selectedMarket to safePage)
+        )
+    }
+
+
+    private fun updatePaging(quotes: List<StockQuote>) {
+
+        val pageSize = 5
+
+        val totalPages =
+            (quotes.size + pageSize - 1) / pageSize
+
+        uiState = uiState.copy(
+            totalPages = maxOf(totalPages, 1)
+        )
+    }
+
+
+    private fun handleRealtimeData(message: String) {
+
+        /**
+         * 예: JSON → 파싱
+         * {"symbol":"AAPL","price":190.5}
+         */
+
+        try {
+
+            val data = parseMessage(message)
+
+            val updatedMap =
+                uiState.detailsBySymbol.toMutableMap()
+
+            updatedMap[data.symbol] =
+                updatedMap[data.symbol]?.copy(
+                    price = data.price
+                ) ?: return
+
+            uiState = uiState.copy(
+                detailsBySymbol = updatedMap
+            )
+
+        } catch (e: Exception) {
+            // ignore
+        }
+    }
+
+    private fun parseMessage(msg: String): RealtimeData {
+
+        val symbol =
+            Regex("\"symbol\":\"(.*?)\"")
+                .find(msg)
+                ?.groupValues?.get(1)
+                ?: ""
+
+        val price =
+            Regex("\"price\":(\\d+\\.?\\d*)")
+                .find(msg)
+                ?.groupValues?.get(1)
+                ?.toDoubleOrNull()
+                ?: 0.0
+
+        return RealtimeData(symbol, price)
+    }
+
+    /**
+     * WebSocket 실시간 데이터 모델
+     */
+    data class RealtimeData(
+        val symbol: String,
+        val price: Double
+    )
 }
+
+

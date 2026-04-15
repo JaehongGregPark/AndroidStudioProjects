@@ -32,7 +32,9 @@ data class StockUiState(
      * NYSE -> 2
      */
     val currentPageByMarket: Map<MarketCategory, Int> = emptyMap(),
+    val currentPage: Int = 1,
 
+    val totalPages: Int = 1,
     /** 페이지당 표시 개수 (5개) */
     val pageSize: Int = 5,
 

@@ -15,6 +15,10 @@ import androidx.activity.viewModels
 // 메인 UI 화면
 import com.example.stockquoteapp.ui.StockQuoteScreen
 
+// ViewModel
+import com.example.stockquoteapp.StockQuoteViewModel
+
+
 // 앱 테마
 import com.example.stockquoteapp.ui.theme.StockQuoteAppTheme
 
