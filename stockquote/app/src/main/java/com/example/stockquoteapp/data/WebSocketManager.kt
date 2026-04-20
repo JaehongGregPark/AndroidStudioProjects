@@ -14,7 +14,7 @@ import okio.ByteString
 
 class WebSocketManager {
 
-    private val client = OkHttpClient()
+    private val client = HttpClientProvider.client
 
     private var webSocket: WebSocket? = null
 
@@ -71,6 +71,7 @@ class WebSocketManager {
      * 재연결
      */
     private fun reconnect() {
+        Thread.sleep(2000)   // 또는 coroutine delays
         connect()
     }
 

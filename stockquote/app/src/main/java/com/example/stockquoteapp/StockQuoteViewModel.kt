@@ -1,7 +1,6 @@
 package com.example.stockquoteapp
 
 // Compose 상태 관리
-import android.R.attr.delay
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,8 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stockquoteapp.data.WebSocketManager
 import com.example.stockquoteapp.data.StockQuoteRepository
-import com.example.stockquoteapp.StockUiState
-import com.example.stockquoteapp.StockQuote
 // Coroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -65,7 +62,7 @@ class StockQuoteViewModel(
             handleRealtimeData(message)
         }
 
-        wsManager.connect()
+        //wsManager.connect()
 
         startAutoRefresh()
     }
