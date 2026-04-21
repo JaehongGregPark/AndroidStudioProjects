@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders', # 추가
     'rest_framework', # 추가
     'quiz',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # 반드시 최상단 근처에 추가
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +52,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# 모든 도메인에서의 접속을 허용 (개발 단계용)
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'my_quiz_site.urls'
 

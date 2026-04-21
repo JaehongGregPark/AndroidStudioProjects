@@ -23,43 +23,34 @@ def select_json_file():
     return file_path
 
 def insert_quiz_data(json_file_path):
-    """선택된 JSON 파일을 읽어 DB에 저장하는 함수"""
     try:
         with open(json_file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
         count = 0
-        print(f"\n[{os.path.basename(json_file_path)}] 데이터 입력 시작...")
-
         for item in data:
-            # Question(문제) 생성
-            # 번호가 비어있거나 이상할 경우를 대비해 예외처리
-            try:
-                q_num = int(item.get('no', 0))
-            except:
-                q_num = 0
+            q_num = int(item.get('no', 0))
+            content = item.get('content', '').strip()
 
-            q = Question.objects.create(
+            # [핵심] 동일한 번호와 내용이 있으면 새로 만들지 않고 가져옵니다.
+            question, created = Question.objects.get_or_create(
                 number=q_num,
-                content=item.get('content', '')
+                content=content
             )
 
-            # Choice(보기) 생성
-            options = item.get('options', [])
-            for opt_text in options:
-                Choice.objects.create(
-                    question=q,
-                    choice_text=opt_text
-                )
-            
-            count += 1
-            if count % 10 == 0:
-                print(f"{count}개 완료...")
+            if created: # 새로 생성된 경우에만 보기를 추가합니다.
+                options = item.get('options', [])
+                for opt_text in options:
+                    Choice.objects.create(
+                        question=question,
+                        choice_text=opt_text.strip()
+                    )
+                count += 1
 
-        messagebox.showinfo("성공", f"총 {count}개의 문제가 DB에 저장되었습니다!")
+        messagebox.showinfo("완료", f"새로 추가된 문제: {count}개")
         
     except Exception as e:
-        messagebox.showerror("오류", f"데이터 입력 중 문제가 발생했습니다:\n{e}")
+        messagebox.showerror("오류", f"데이터 입력 중 오류: {e}")
 
 if __name__ == "__main__":
     # 1. 파일 선택
