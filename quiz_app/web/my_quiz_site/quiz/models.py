@@ -32,10 +32,11 @@ class Choice(models.Model):
     # 어떤 문제에 딸린 보기인지 연결 (ForeignKey)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')
     choice_text = models.TextField()      # 보기 내용 (① 모듈화 등)
+    image_file = models.ImageField(upload_to='choice_images/', null=True, blank=True)
     is_answer = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.choice_text
+        return f"{self.question.number}번의 보기: {self.choice_text[:20]}"
 
 # 문제와 연결된 이미지를 담는 바구니
 class QuestionImage(models.Model):

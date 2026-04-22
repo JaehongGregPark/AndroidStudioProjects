@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Category, Exam, Question, Choice, QuestionImage
+from django.urls import reverse
 
 # 관리자 페이지 상단 타이틀 변경
 admin.site.site_header = "기출문제 통합 관리 시스템 (CMS)"
@@ -23,8 +24,14 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'created_at']
+    list_display = ['title', 'category', 'created_at', 'bulk_edit_button']
     list_filter = ['category']
+    def bulk_edit_button(self, obj):
+            # 방금 만든 URL로 연결되는 버튼 생성
+            url = reverse('exam_bulk_edit', args=[obj.id])
+            return format_html('<a class="button" href="{}" style="background: #79aec8; color: white; padding: 3px 10px; border-radius: 4px;">🎯 일괄 편집</a>', url)
+        
+    bulk_edit_button.short_description = "작업 도구"
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
