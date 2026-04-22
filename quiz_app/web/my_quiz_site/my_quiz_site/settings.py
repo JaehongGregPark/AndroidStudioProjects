@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# 이미지가 실제로 저장될 컴퓨터 내부 경로
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -61,10 +65,11 @@ ROOT_URLCONF = 'my_quiz_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -76,13 +81,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'my_quiz_site.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'quiz_db',          # 생성한 DB 이름
+        'USER': 'postgres',         # 기본 사용자 이름 (또는 본인이 설정한 이름)
+        'PASSWORD': '1107', # 설정한 비밀번호
+        'HOST': '127.0.0.1',        # 로컬 환경
+        'PORT': '5432',             # PostgreSQL 기본 포트
     }
 }
 

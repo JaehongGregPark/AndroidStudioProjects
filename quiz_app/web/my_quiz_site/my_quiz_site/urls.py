@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+from django.shortcuts import redirect # 리다이렉트 함수 추가
 from quiz.views import QuestionViewSet
 
 router = DefaultRouter()
@@ -24,5 +27,11 @@ router.register(r'questions', QuestionViewSet,  basename='question')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)), # http://127.0.0.1:8000/api/questions/ 주소 생성
+    path('api/', include('quiz.urls')), # http://127.0.0.1:8000/api/questions/ 주소 생성
+    # 추가: 아무것도 입력 안 하고 접속했을 때(localhost:8000/) 퀴즈 리스트로 이동
+    path('', lambda r: redirect('api/list/')),
 ]
+
+# 개발 환경에서 미디어 파일을 서비스하기 위한 설정
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

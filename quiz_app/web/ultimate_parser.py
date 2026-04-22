@@ -11,26 +11,82 @@ from tkinter import filedialog, messagebox
 
 # 1. 설정 (모델은 2.0-flash-exp 또는 1.5-flash-latest 추천)
 API_KEY = "YOUR_GEMINI_API_KEY"
+
+
 client = genai.Client(api_key=API_KEY)
-MODEL_ID = "gemini-1.5-flash-latest" # 가장 범용적인 모델로 설정
+MODEL_ID = "gemini-2.5-flash" 
+
+def get_ai_response_(prompt_content):
+    """모델명을 명확히 지정하고 에러 발생 시 상세 내용을 출력합니다."""
+    for attempt in range(3):
+        try:
+            response = client.models.generate_content(
+                model=MODEL_ID, # 위에서 설정한 "gemini-2.0-flash" 사용
+                contents=prompt_content
+            )
+            if response and response.text:
+                text = response.text
+                clean_json = text.replace('```json', '').replace('```', '').strip()
+                return json.loads(clean_json)
+        except Exception as e:
+            err_msg = str(e)
+            if "403" in err_msg:
+                print("   [치명적] API 키가 차단되었습니다. 새 키를 발급받으세요.")
+                return None # 키 문제면 즉시 중단
+            elif "400" in err_msg:
+                print(f"   [경고] 모델명 오류 발생: {MODEL_ID}. 이름을 확인하세요.")
+                return None
+            elif "429" in err_msg:
+                print(f"   (제한 감지: {20 + attempt*10}초 휴식 후 재시도...)")
+                time.sleep(20 + attempt*10)
+            else:
+                print(f"   (기타 오류: {e})")
+                break
+    return []
 
 def get_ai_response(prompt_content):
-    """재시도 로직이 포함된 AI 요청 함수"""
-    for _ in range(3):
+    """모델명을 확인하고, 404 발생 시 실제 사용 가능한 모델 목록을 출력합니다."""
+    global MODEL_ID
+    for attempt in range(3):
         try:
             response = client.models.generate_content(
                 model=MODEL_ID,
                 contents=prompt_content
             )
             if response and response.text:
-                clean_json = response.text.replace('```json', '').replace('```', '').strip()
+                text = response.text
+                clean_json = text.replace('```json', '').replace('```', '').strip()
                 return json.loads(clean_json)
+        
         except Exception as e:
-            if "429" in str(e):
-                print("   (제한 감지: 20초 휴식...)")
-                time.sleep(20)
+            err_msg = str(e).lower()
+            
+            # 404 오류 처리
+            if "404" in err_msg or "not_found" in err_msg:
+                print(f"\n[오류] 호출한 모델명('{MODEL_ID}')이 존재하지 않습니다.")
+                print("현재 API 키로 사용 가능한 모델 목록:")
+                
+                try:
+                    # 최신 SDK 방식에 맞춰 모델 목록 출력
+                    models = client.models.list()
+                    available_names = []
+                    for m in models:
+                        # m 자체가 문자열이거나 객체일 수 있으므로 안전하게 처리
+                        name = m.name if hasattr(m, 'name') else str(m)
+                        available_names.append(name)
+                        print(f" - {name}")
+                    
+                    print("\n위 목록 중 하나를 복사하여 MODEL_ID에 넣으세요.")
+                except Exception as list_err:
+                    print(f"모델 목록 조회 실패: {list_err}")
+                
+                return [] # None 대신 빈 리스트를 반환하여 TypeError 방지
+
+            elif "429" in err_msg:
+                print(f"   (제한 감지: {20 + attempt*10}초 휴식 후 재시도...)")
+                time.sleep(20 + attempt*10)
             else:
-                print(f"   (오류: {e})")
+                print(f"   (기타 오류: {e})")
                 break
     return []
 
