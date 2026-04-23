@@ -31,7 +31,7 @@ class ExamAdmin(admin.ModelAdmin):
             url = reverse('exam_bulk_edit', args=[obj.id])
             return format_html('<a class="button" href="{}" style="background: #79aec8; color: white; padding: 3px 10px; border-radius: 4px;">🎯 일괄 편집</a>', url)
         
-    bulk_edit_button.short_description = "작업 도구"
+    bulk_edit_button.short_description = "일괄작업"
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):

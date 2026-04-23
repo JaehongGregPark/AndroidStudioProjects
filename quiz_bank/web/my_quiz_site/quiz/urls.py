@@ -7,4 +7,5 @@ urlpatterns = [
     path('bulk-edit/<int:exam_id>/', views.exam_bulk_edit, name='exam_bulk_edit'),
     path('admin-image-matcher/', views.admin_image_matcher, name='admin_image_matcher'),
     path('admin-manual/', views.admin_manual, name='admin_manual'),
+    path('admin-ocr-update/', views.admin_answer_ocr_update, name='admin_answer_ocr_update'),
 ]

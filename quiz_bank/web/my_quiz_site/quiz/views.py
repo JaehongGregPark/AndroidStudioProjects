@@ -2,11 +2,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.files import File
 from rest_framework import viewsets
-from .models import Question
 from .serializers import QuestionSerializer
 from django.shortcuts import render, redirect, get_object_or_404
 import json
 import os
+import re
+from google.cloud import vision
 from .models import Exam, Question, QuestionImage, Choice
 
 class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -108,3 +109,72 @@ def admin_image_matcher(request):
 @staff_member_required
 def admin_manual(request):
     return render(request, 'admin/quiz/admin_manual.html')
+
+# 1. 구글 인증 키 설정 (본인의 JSON 키 파일 경로로 수정하세요)
+# 예: os.path.join(settings.BASE_DIR, 'keys', 'your-google-key.json')
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:/Users/USER/Documents/project/web/my_quiz_site/keys/service-account-key.json"
+
+def admin_answer_ocr_update(request):
+    if request.method == "POST" and request.FILES.get('answer_sheet'):
+        exam_id = request.POST.get('exam_id')
+        exam = get_object_or_404(Exam, id=exam_id)
+        image_file = request.FILES['answer_sheet']
+        
+        # 2. Vision API 클라이언트 초기화
+        client = vision.ImageAnnotatorClient()
+
+        # 3. 이미지 읽기
+        content = image_file.read()
+        image = vision.Image(content=content)
+
+        # 4. 텍스트 감지 실행 (DOCUMENT_TEXT_DETECTION은 문서/표 인식에 최적화됨)
+        response = client.document_text_detection(image=image)
+        full_text = response.full_text_annotation.text
+
+        print("--- [Google Vision] 인식 결과 ---")
+        print(full_text)
+        print("-------------------------------")
+
+        # 5. 데이터 보정 및 추출
+        # 구글은 원문자를 매우 잘 읽으므로 유니코드 대응만 해주면 됩니다.
+        circle_map = {
+            '①': '1', '②': '2', '③': '3', '④': '4', '⑤': '5',
+            '①': '1', '②': '2', '③': '3', '④': '4', '⑤': '5', # 중복 방지
+        }
+        
+        processed_text = full_text
+        for target, val in circle_map.items():
+            processed_text = processed_text.replace(target, val)
+
+        # 6. 정규표현식으로 (문제번호) (정답) 추출
+        # 구글은 보통 "1. 3" 또는 "1 3" 형태로 아주 깔끔하게 반환합니다.
+        matches = re.findall(r'(\d{1,3})\s*[\.\s]*\s*([1-5])', processed_text)
+        
+        update_count = 0
+        updated_nums = set()
+        logs = []
+
+        for q_num, q_ans in matches:
+            num = int(q_num)
+            ans = q_ans
+
+            if num in updated_nums or not (1 <= num <= 100):
+                continue
+
+            question = Question.objects.filter(exam=exam, number=num).first()
+            if question:
+                question.answer = ans
+                question.save()
+                update_count += 1
+                updated_nums.add(num)
+                logs.append(f"{num}:{ans}")
+
+        if response.error.message:
+            messages.error(request, f"Google API 오류: {response.error.message}")
+        elif update_count > 0:
+            print(f"Final Updates: {sorted(logs, key=lambda x: int(x.split(':')[0]))}")
+            messages.success(request, f"Google Vision을 통해 {update_count}개의 정답을 정확히 업데이트했습니다!")
+        else:
+            messages.warning(request, "이미지에서 정답 패턴을 찾지 못했습니다.")
+
+        return redirect('admin_manual')
