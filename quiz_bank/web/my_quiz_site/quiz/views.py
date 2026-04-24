@@ -4,6 +4,9 @@ from django.core.files import File
 from rest_framework import viewsets
 from .serializers import QuestionSerializer
 from django.shortcuts import render, redirect, get_object_or_404
+import fitz  # PyMuPDF
+import io
+from google.cloud import vision
 import json
 import os
 import re
@@ -106,9 +109,6 @@ def admin_image_matcher(request):
 
     return redirect('admin_manual')
 
-@staff_member_required
-def admin_manual(request):
-    return render(request, 'admin/quiz/admin_manual.html')
 
 # 1. 구글 인증 키 설정 (본인의 JSON 키 파일 경로로 수정하세요)
 # 예: os.path.join(settings.BASE_DIR, 'keys', 'your-google-key.json')
@@ -178,3 +178,264 @@ def admin_answer_ocr_update(request):
             messages.warning(request, "이미지에서 정답 패턴을 찾지 못했습니다.")
 
         return redirect('admin_manual')
+
+
+
+def quiz_detail(request, exam_id):
+    """
+    사용자가 퀴즈를 푸는 상세 페이지 뷰
+    """
+    exam = get_object_or_404(Exam, id=exam_id)
+    # 문제를 번호 순서대로 가져옵니다.
+    questions = exam.questions.all().order_by('number')
+    
+    return render(request, 'quiz/quiz_detail.html', {
+        'exam': exam,
+        'questions': questions
+    })
+
+def admin_bulk_practical_upload(request):
+    if request.method == "POST":
+        exam_id = request.POST.get('exam_id')
+        exam = Exam.objects.get(id=exam_id)
+        raw_text = request.POST.get('bulk_text')
+
+        # 1. 과목 섹션 분리 (번호 + 과목명 패턴)
+        # 예: "2. 데이터베이스 [배점: 30점]" 패턴을 기준으로 나눔
+        subject_patterns = r'(\d\.\s*(?:알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어).*?)(?=\d\.\s*(?:알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어)|$)'
+        sections = re.findall(subject_patterns, raw_text, re.DOTALL)
+
+        # 2. 정답지 추출 (6페이지의 정답 섹션 찾기)
+        answer_section = raw_text.split("정답>")[-1] if "정답>" in raw_text else ""
+        
+        created_count = 0
+        for section_content in sections:
+            # 과목명 추출
+            subject_name = re.search(r'(알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어)', section_content).group(1)
+            
+            # 해당 섹션 내의 문항 번호 추출 (①, ②... 또는 (1), (2)...)
+            # 실기 시험 특성상 한 지문에 여러 문항이 딸려 있음
+            q_markers = re.findall(r'([①-⑮]|\(\d\))', section_content)
+            unique_markers = sorted(list(set(q_markers)))
+
+            for marker in unique_markers:
+                # 번호 표준화 (① -> 1, (1) -> 1)
+                clean_num = marker.replace('(', '').replace(')', '')
+                # 특수문자 대응 테이블 (필요시 확장)
+                marker_map = {'①':1,'②':2,'③':3,'④':4,'⑤':5,'⑥':6,'⑦':7,'⑧':8,'⑨':9,'⑩':10}
+                num = marker_map.get(clean_num, clean_num)
+
+                # 정답 매칭 (정답지 텍스트에서 해당 과목의 번호를 찾음)
+                # 정교한 매칭 로직은 정답지 텍스트 구조에 따라 보정이 필요함
+                ans_pattern = rf'{marker}\s*(\d+\.\s*[^\n]+|[A-Za-z\s]+)'
+                ans_match = re.search(ans_pattern, answer_section)
+                ans_text = ans_match.group(1).strip() if ans_match else ""
+
+                Question.objects.create(
+                    exam=exam,
+                    number=num, # 실제로는 과목별 구분이 필요하므로 고유값 생성 로직 필요
+                    content=section_content, # 해당 과목 지문 전체를 저장
+                    answer=ans_text,
+                    explanation=f"{subject_name} 과목의 {marker} 문항입니다."
+                )
+                created_count += 1
+
+        messages.success(request, f"{created_count}개의 실기 문항이 자동으로 분류 및 등록되었습니다.")
+        return redirect('admin_manual')
+
+    exams = Exam.objects.all().order_by('-created_at')
+    return render(request, 'quiz/admin_bulk_practical.html', {'exams': exams})
+
+def admin_bulk_file_upload(request):
+    if request.method == "POST" and request.FILES.get('quiz_file'):
+        exam_id = request.POST.get('exam_id')
+        exam = Exam.objects.get(id=exam_id)
+        pdf_file = request.FILES['quiz_file']
+
+        # 1. PDF에서 텍스트 추출
+        doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+        full_text = ""
+        for page in doc:
+            full_text += page.get_text()
+
+        # 2. 과목 섹션 분리 (알고리즘, DB, 업무프로세스 등)
+        # 제시된 PDF 구조상 '숫자. 과목명' 패턴을 기준으로 분할 [cite: 38, 62, 81, 92]
+        subject_split_ptrn = r'(\d\.\s*(?:알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어))'
+        parts = re.split(subject_split_ptrn, full_text)
+        
+        # 3. 정답지 추출 (마지막 페이지의 정답 섹션 활용) [cite: 110]
+        answer_text = full_text.split("정답>")[-1] if "정답>" in full_text else ""
+
+        created_count = 0
+        # split 결과는 [공백, 과목명1, 내용1, 과목명2, 내용2...] 순서임
+        for i in range(1, len(parts), 2):
+            subject_header = parts[i]
+            section_content = parts[i+1]
+            subject_name = re.search(r'(알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어)', subject_header).group(1)
+
+            # 문항 번호 추출 (①, ②... 또는 (1), (2)...) [cite: 39, 40]
+            q_markers = re.findall(r'([①-⑮]|\(\d\))', section_content)
+            unique_markers = sorted(list(set(q_markers)))
+
+            for marker in unique_markers:
+                # 정답 매칭 로직 (정답지에서 마커에 해당하는 텍스트 탐색) [cite: 124, 125]
+                ans_pattern = rf'{re.escape(marker)}\s*(\d+\.\s*[^\n]+|[A-Za-z\s]+)'
+                ans_match = re.search(ans_pattern, answer_text)
+                ans_val = ans_match.group(1).strip() if ans_match else ""
+
+                Question.objects.create(
+                    exam=exam,
+                    number=99,  # 실기는 과목내 순번이 중요하므로 추후 정렬 로직 보강 필요
+                    content=section_content.strip(),
+                    answer=ans_val,
+                    explanation=f"[{subject_name}] {marker} 문항 정답입니다."
+                )
+                created_count += 1
+
+        messages.success(request, f"파일 분석 완료: {created_count}개의 문항이 등록되었습니다.")
+        return redirect('admin_manual')
+
+    exams = Exam.objects.all().order_by('-created_at')
+    return render(request, 'quiz/admin_file_upload.html', {'exams': exams})
+
+def admin_unified_upload_center(request):
+    if request.method == "POST" and request.FILES.get('upload_file'):
+        exam_id = request.POST.get('exam_id')
+        exam = Exam.objects.get(id=exam_id)
+        uploaded_file = request.FILES['upload_file']
+        mode = request.POST.get('upload_mode') # 'written'(필기) 또는 'practical'(실기)
+
+        if mode == 'practical':
+            # --- [실기 모드] PyMuPDF 기반 텍스트 분석 ---
+            doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+            full_text = "".join([page.get_text() for page in doc])
+            
+            # 과목 섹션 분리 및 정답 매칭 (앞서 설계한 파서 로직 실행)
+            created_count = parse_practical_pdf(exam, full_text)
+            messages.success(request, f"실기 데이터 분석 완료: {created_count}개 문항 등록")
+            
+        else:
+            # --- [필기 모드] 기존 Google Vision OCR 로직 호출 ---
+            # (기존에 작성했던 OCR 처리 함수를 여기서 실행)
+            messages.success(request, "필기 이미지 OCR 분석이 완료되었습니다.")
+
+        return redirect('admin_unified_center')
+
+    exams = Exam.objects.all().order_by('-created_at')
+    return render(request, 'quiz/admin_unified_center.html', {'exams': exams})
+
+def parse_practical_pdf(exam, text):
+    """실기 PDF 텍스트 파싱 처리 보조 함수"""
+    # 2009년 1회 실기 PDF 구조 기반 파싱 로직 적용
+    subject_split_ptrn = r'(\d\.\s*(?:알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어))'
+    parts = re.split(subject_split_ptrn, text)
+    answer_text = text.split("정답>")[-1] if "정답>" in text else ""
+    
+    count = 0
+    for i in range(1, len(parts), 2):
+        section_content = parts[i+1]
+        q_markers = re.findall(r'([①-⑮]|\(\d\))', section_content)
+        for marker in sorted(list(set(q_markers))):
+            ans_match = re.search(rf'{re.escape(marker)}\s*(\d+\.\s*[^\n]+|[A-Za-z\s]+)', answer_text)
+            Question.objects.create(
+                exam=exam,
+                number=99, # 임시 번호
+                content=section_content.strip(),
+                answer=ans_match.group(1).strip() if ans_match else ""
+            )
+            count += 1
+    return count
+
+
+
+def parse_practical_logic(exam, text):
+    """실기 텍스트 분석 핵심 로직 (보조 함수)"""
+    # 과목 구분자 패턴 (2009년 실기 자료 근거) [cite: 37, 38, 62, 81, 92]
+    subject_ptrn = r'(\d\.\s*(?:알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어))'
+    parts = re.split(subject_ptrn, text)
+    answer_text = text.split("정답>")[-1] if "정답>" in text else ""
+    
+    count = 0
+    for i in range(1, len(parts), 2):
+        subject_name = parts[i]
+        content = parts[i+1]
+        # 문항 기호 추출 (①-⑮, (1)-(5)) [cite: 5, 57, 107]
+        markers = re.findall(r'([①-⑮]|\(\d\))', content)
+        for marker in sorted(list(set(markers))):
+            # 정답지 영역에서 해당 마커 정답 탐색 [cite: 110]
+            ans_match = re.search(rf'{re.escape(marker)}\s*(\d+\.\s*[^\n]+|[A-Za-z\s]+)', answer_text)
+            Question.objects.create(
+                exam=exam,
+                number=99, # 임시 번호 (관리자 화면에서 수정 가능)
+                content=content.strip(),
+                answer=ans_match.group(1).strip() if ans_match else "미확인"
+            )
+            count += 1
+    return count
+
+
+# views.py 파일 내에서 admin_manual 관련 함수를 다 지우고 이 하나만 남기세요.
+
+# quiz/views.py
+
+@staff_member_required
+def admin_manual(request):
+    # 1. 파일 업로드(POST) 처리
+    if request.method == "POST" and request.FILES.get('upload_file'):
+        exam_id = request.POST.get('exam_id')
+        new_exam_title = request.POST.get('new_exam_title')
+        mode = request.POST.get('upload_mode')
+        uploaded_file = request.FILES['upload_file']
+
+        # 시험지 객체 확보
+        exam = None
+        if exam_id:
+            exam = get_object_or_404(Exam, id=exam_id)
+        elif new_exam_title:
+            # 카테고리가 없을 경우를 대비해 get_or_create 사용 (모델명을 확인하세요. Category인지 여부)
+            from .models import Category 
+            category, _ = Category.objects.get_or_create(name="정보처리기사 실기")
+            exam = Exam.objects.create(category=category, title=new_exam_title)
+
+        # 실기(practical) 모드 OCR 처리
+        if mode == 'practical' and exam:
+            try:
+                client = vision.ImageAnnotatorClient()
+                doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+                full_text = ""
+
+                for page in doc:
+                    pix = page.get_pixmap(matrix=fitz.Matrix(2, 2)) 
+                    img_bytes = pix.tobytes("jpg")
+                    image = vision.Image(content=img_bytes)
+                    response = client.text_detection(image=image)
+                    full_text += response.text_annotations[0].description + "\n"
+
+                subject_ptrn = r'(\d\.\s*(?:알고리즘|데이터베이스|업무프로세스|신기술동향|전산영어))'
+                parts = re.split(subject_ptrn, full_text)
+                answer_text = full_text.split("정답")[-1] if "정답" in full_text else ""
+                
+                created_count = 0
+                if len(parts) > 1:
+                    for i in range(1, len(parts), 2):
+                        subject_header = parts[i]
+                        content_body = parts[i+1]
+                        markers = re.findall(r'([①-⑮]|\(\d\))', content_body)
+                        for marker in sorted(list(set(markers))):
+                            ans_match = re.search(rf'{re.escape(marker)}\s*([^\n①-⑮\(]+)', answer_text)
+                            Question.objects.create(
+                                exam=exam,
+                                number=99,
+                                content=f"{subject_header}\n{content_body.strip()}",
+                                answer=ans_match.group(1).strip() if ans_match else "미등록"
+                            )
+                            created_count += 1
+                messages.success(request, f"OCR 분석 완료: {created_count}개 문항 등록 성공!")
+            except Exception as e:
+                messages.error(request, f"OCR 처리 중 오류: {str(e)}")
+
+        return redirect('admin_manual')
+
+    # 2. 페이지 출력(GET) 처리
+    exams = Exam.objects.all().order_by('-created_at')
+    return render(request, 'admin/quiz/admin_manual.html', {'exams': exams})

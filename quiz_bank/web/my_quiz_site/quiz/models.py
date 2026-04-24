@@ -23,7 +23,16 @@ class Question(models.Model):
     answer = models.TextField(blank=True, null=True)
     explanation = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    option1 = models.CharField(max_length=200, null=True)
+    option2 = models.CharField(max_length=200, null=True)
+    option3 = models.CharField(max_length=200, null=True)
+    option4 = models.CharField(max_length=200, null=True)
 
+    def get_options(self):
+        # 템플릿에서 {% for option in q.get_options %} 로 사용하기 위함
+        return [self.option1, self.option2, self.option3, self.option4]
+    
     def __str__(self):
         return f"{self.exam.title} - {self.number}번"
     

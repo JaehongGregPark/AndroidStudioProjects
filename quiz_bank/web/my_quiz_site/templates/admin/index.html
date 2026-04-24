@@ -1,7 +1,16 @@
 {% extends "admin/index.html" %}
 
 {% block content %}
+<div style="margin-bottom: 20px; background: #ebf3f7; padding: 15px; border-radius: 8px; border: 1px solid #79aec8; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-weight: bold; color: #333; font-size: 1.1em;">🛠️ 시스템 운영 도구</span>
+        <a href="/api/admin-manual/" 
+           style="background: #79aec8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+           📖 운영 메뉴얼 (OCR/파일 업로드) 바로가기
+        </a>
+    </div>
 <div id="content-main" style="display: flex; gap: 20px;">
+    
+    
     <div style="flex: 2;">
         {{ block.super }}
     </div>

@@ -26,12 +26,14 @@ router = DefaultRouter()
 router.register(r'questions', QuestionViewSet,  basename='question')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('quiz.urls')), # http://127.0.0.1:8000/api/questions/ 주소 생성
-    # 추가: 아무것도 입력 안 하고 접속했을 때(localhost:8000/) 퀴즈 리스트로 이동
-    path('', lambda r: redirect('api/list/')),
+    # 1. admin.site.admin_view가 아니라 admin.site.urls를 사용해야 합니다.
+    path('admin/', admin.site.urls), 
+    
+    path('api/', include('quiz.urls')),
+    
+    # 2. 리다이렉트 주소 수정 (name을 사용하거나 정확한 경로 입력)
+    path('', lambda r: redirect('/api/')), # 또는 redirect('question_list')
 ]
-
 # 개발 환경에서 미디어 파일을 서비스하기 위한 설정
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
