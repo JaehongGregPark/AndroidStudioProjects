@@ -12,7 +12,6 @@ from tkinter import filedialog, messagebox
 # 1. 설정 (모델은 2.0-flash-exp 또는 1.5-flash-latest 추천)
 API_KEY = "YOUR_GEMINI_API_KEY"
 
-
 client = genai.Client(api_key=API_KEY)
 MODEL_ID = "gemini-2.5-flash" 
 

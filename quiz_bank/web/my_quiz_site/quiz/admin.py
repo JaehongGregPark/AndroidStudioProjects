@@ -53,9 +53,8 @@ class QuestionAdmin(admin.ModelAdmin):
 
     def has_answer_check(self, obj):
         if obj.answer:
-            return format_html('<span style="color: green;">✔ 입력됨</span>')
-        return format_html('<span style="color: red;">✘ 미입력</span>')
-    has_answer_check.short_description = "정답 상태"
+            return format_html('<span style="color: green;">{}</span>', "✔ 입력됨")
+        return format_html('<span style="color: red;">{}</span>', "✘ 미입력")
 
 # 이미 Inline으로 Question에 포함되어 있으므로, 
 # 별도로 메뉴에 노출하고 싶지 않다면 아래 두 줄은 주석 처리해도 됩니다.

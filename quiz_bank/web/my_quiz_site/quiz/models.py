@@ -24,10 +24,10 @@ class Question(models.Model):
     explanation = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    option1 = models.CharField(max_length=200, null=True)
-    option2 = models.CharField(max_length=200, null=True)
-    option3 = models.CharField(max_length=200, null=True)
-    option4 = models.CharField(max_length=200, null=True)
+    option1 = models.CharField(max_length=200, null=True, blank=True)
+    option2 = models.CharField(max_length=200, null=True, blank=True)
+    option3 = models.CharField(max_length=200, null=True, blank=True)
+    option4 = models.CharField(max_length=200, null=True, blank=True)
 
     def get_options(self):
         # 템플릿에서 {% for option in q.get_options %} 로 사용하기 위함
